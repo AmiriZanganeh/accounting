@@ -4,29 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سیستم حسابداری هوشمند</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-light: #3b82f6;
-            --primary-dark: #1d4ed8;
-            --secondary: #059669;
+            --primary: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --secondary: #0ea5e9;
             --success: #10b981;
-            --danger: #ef4444;
+            --danger: #f43f5e;
             --warning: #f59e0b;
             --info: #06b6d4;
             --light: #f8fafc;
             --dark: #1e293b;
             --gray: #64748b;
             --border: #e2e8f0;
-            --sidebar-bg: #1e293b;
+            --sidebar-bg: #1e1b4b;
             --sidebar-text: #f1f5f9;
             --card-bg: #ffffff;
-            --header-bg: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --sidebar-width: 260px;
+            --header-bg: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            --bg-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --sidebar-width: 280px;
         }
         
         * {
@@ -44,23 +43,34 @@
         }
         
         body {
-            background-color: #f1f5f9;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
-            display: flex;
         }
         
         /* صفحه ورود */
         .login-container {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
             padding: 40px;
             width: 100%;
-            max-width: 420px;
-            margin: auto;
+            max-width: 440px;
+            margin: 80px auto;
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--bg-gradient);
         }
         
         .login-header {
@@ -70,27 +80,28 @@
         
         .login-icon {
             background: var(--bg-gradient);
-            width: 70px;
-            height: 70px;
-            border-radius: 12px;
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
             color: white;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
         }
         
         .login-title {
             color: var(--primary);
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin-bottom: 8px;
             font-weight: 700;
         }
         
         .login-subtitle {
             color: var(--gray);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
         
         .login-form {
@@ -99,15 +110,15 @@
         }
         
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: var(--dark);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         
         .input-with-icon {
@@ -116,7 +127,7 @@
         
         .input-icon {
             position: absolute;
-            left: 12px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
@@ -124,51 +135,58 @@
         
         input {
             width: 100%;
-            padding: 10px 12px 10px 40px;
+            padding: 12px 15px 12px 45px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-size: 1rem;
             background: var(--light);
+            transition: all 0.2s;
         }
         
         input:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
         
         .login-btn {
             background: var(--bg-gradient);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-top: 8px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
         }
         
         .error-message {
             color: var(--danger);
             text-align: center;
-            margin-top: 12px;
-            font-size: 0.85rem;
+            margin-top: 15px;
+            font-size: 0.9rem;
             display: none;
-            background: rgba(239, 68, 68, 0.05);
-            padding: 10px;
-            border-radius: 6px;
-            border-right: 3px solid var(--danger);
+            background: rgba(244, 63, 94, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            border-right: 4px solid var(--danger);
         }
         
         /* صفحه اصلی */
         #main-app {
             display: none;
-            width: 100%;
         }
         
         .app-container {
@@ -181,87 +199,94 @@
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
             color: var(--sidebar-text);
-            padding: 20px 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
         
         .sidebar-header {
-            padding: 0 20px 20px;
+            padding: 30px 25px;
+            background: rgba(255, 255, 255, 0.05);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
         }
         
         .app-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 5px;
+            gap: 15px;
+            margin-bottom: 8px;
         }
         
         .app-logo-icon {
             background: var(--primary);
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
         }
         
         .app-logo-text {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 700;
         }
         
         .app-description {
-            font-size: 0.8rem;
-            color: #94a3b8;
+            font-size: 0.85rem;
+            color: #c7d2fe;
         }
         
         .sidebar-nav {
             flex: 1;
+            padding: 20px 0;
         }
         
         .nav-item {
-            padding: 12px 20px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             cursor: pointer;
-            transition: background 0.2s;
-            color: #cbd5e1;
-            font-size: 0.9rem;
+            transition: all 0.2s;
+            color: #c7d2fe;
+            font-size: 0.95rem;
+            border-right: 4px solid transparent;
         }
         
         .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(124, 58, 237, 0.2);
             color: white;
-            border-right: 3px solid var(--primary);
+            border-right: 4px solid var(--primary);
         }
         
         .nav-item:hover:not(.active) {
             background: rgba(255, 255, 255, 0.05);
+            color: white;
         }
         
         .nav-item i {
             width: 20px;
             text-align: center;
+            font-size: 1.1rem;
         }
         
         .user-section {
-            padding: 20px;
+            padding: 20px 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: var(--primary);
             display: flex;
@@ -269,6 +294,7 @@
             justify-content: center;
             color: white;
             font-weight: bold;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
         }
         
         .user-info {
@@ -276,58 +302,65 @@
         }
         
         .user-name {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
         }
         
         .user-role {
             font-size: 0.8rem;
-            color: #94a3b8;
+            color: #c7d2fe;
         }
         
         .logout-btn {
             background: transparent;
-            color: #94a3b8;
+            color: #c7d2fe;
             border: none;
             cursor: pointer;
-            font-size: 1.1rem;
-            padding: 5px;
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
         
         /* محتوای اصلی */
         .main-content {
             flex: 1;
-            padding: 20px;
+            padding: 0;
             overflow-y: auto;
+            background: #f8fafc;
         }
         
         .content-header {
             background: var(--header-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
+            color: white;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .page-title {
-            font-size: 1.4rem;
-            color: var(--dark);
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
         
         .page-description {
-            color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            opacity: 0.9;
         }
         
         .content-body {
+            padding: 0 40px 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
         }
         
         @media (max-width: 1200px) {
@@ -338,50 +371,57 @@
         
         .card {
             background: var(--card-bg);
-            border-radius: 10px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
-            padding: 20px;
+            padding: 30px;
             border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
         }
         
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             color: var(--dark);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
         
         .card-title i {
             color: var(--primary);
+            font-size: 1.4rem;
         }
         
         select, textarea {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 15px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-size: 1rem;
             background: var(--light);
+            transition: all 0.2s;
         }
         
         select:focus, textarea:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
         
@@ -389,19 +429,22 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             font-weight: 600;
+            transition: all 0.2s;
         }
         
         button:not(.logout-btn, .login-btn):hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
         }
         
         .btn-success {
@@ -417,7 +460,7 @@
         }
         
         .btn-danger:hover {
-            background: #dc2626;
+            background: #e11d48;
         }
         
         .btn-warning {
@@ -429,25 +472,32 @@
         }
         
         .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.85rem;
+            padding: 8px 15px;
+            font-size: 0.9rem;
         }
         
         .transaction-list, .documents-list, .accounts-list {
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 12px;
+            padding: 15px;
             background: var(--light);
         }
         
         .transaction-item, .document-item, .account-item {
-            padding: 12px;
+            padding: 15px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.2s;
+            border-radius: 8px;
+        }
+        
+        .transaction-item:hover, .document-item:hover, .account-item:hover {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
         
         .transaction-item:last-child, .document-item:last-child, .account-item:last-child {
@@ -462,7 +512,7 @@
         
         .transaction-amount {
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
         
         .payment {
@@ -476,28 +526,28 @@
         .document-preview {
             background: var(--light);
             border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 8px;
-            min-height: 200px;
+            padding: 25px;
+            border-radius: 12px;
+            min-height: 250px;
         }
         
         .actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
         
         .account-management {
-            margin-top: 20px;
-            padding-top: 20px;
+            margin-top: 25px;
+            padding-top: 25px;
             border-top: 1px solid var(--border);
         }
         
         .account-form {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 18px;
         }
         
         .account-form input {
@@ -507,41 +557,59 @@
         .document-summary {
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(37, 99, 235, 0.05);
-            border-radius: 8px;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 12px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             border: 1px solid var(--border);
         }
         
         .summary-item {
             text-align: center;
             flex: 1;
-            min-width: 120px;
+            min-width: 140px;
         }
         
         .summary-value {
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 5px;
+            font-size: 1.4rem;
+            margin-top: 8px;
         }
         
         .empty-state {
             text-align: center;
-            padding: 30px;
+            padding: 40px 20px;
             color: var(--gray);
         }
         
         .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
+            font-size: 3rem;
+            margin-bottom: 15px;
             color: #cbd5e1;
         }
         
         .hidden {
             display: none;
+        }
+        
+        /* استایل مبلغ */
+        .amount-input-container {
+            position: relative;
+        }
+        
+        .amount-input {
+            padding-left: 50px !important;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
         }
         
         /* ریسپانسیو */
@@ -562,25 +630,31 @@
             .sidebar-nav {
                 display: flex;
                 overflow-x: auto;
-                padding: 0 10px;
+                padding: 10px;
             }
             
             .nav-item {
                 white-space: nowrap;
                 border-right: none;
-                border-bottom: 3px solid transparent;
+                border-bottom: 4px solid transparent;
+                padding: 12px 20px;
             }
             
             .nav-item.active {
                 border-right: none;
-                border-bottom: 3px solid var(--primary);
+                border-bottom: 4px solid var(--primary);
             }
             
             .main-content {
-                padding: 15px;
+                padding: 0;
+            }
+            
+            .content-header {
+                padding: 20px;
             }
             
             .content-body {
+                padding: 20px;
                 grid-template-columns: 1fr;
             }
             
@@ -590,7 +664,7 @@
             
             .document-summary {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
             }
             
             .summary-item {
@@ -608,7 +682,7 @@
         
         /* اسکرول بار سفارشی */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         
         ::-webkit-scrollbar-track {
@@ -623,6 +697,17 @@
         
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
+        }
+        
+        /* انیمیشن نوتیفیکیشن */
+        @keyframes slideIn {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100px); opacity: 0; }
         }
     </style>
 </head>
@@ -731,8 +816,8 @@
                         <div id="transaction-tab" class="tab-content">
                             <form id="transaction-form">
                                 <div class="form-group">
-                                    <label for="transaction-date">تاریخ معامله (شمسی)</label>
-                                    <input type="text" id="transaction-date" class="persian-date" required>
+                                    <label for="transaction-date">تاریخ معامله</label>
+                                    <input type="date" id="transaction-date" required>
                                 </div>
                                 
                                 <div class="form-group">
@@ -757,8 +842,12 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="amount">مبلغ (ریال)</label>
-                                    <input type="number" id="amount" min="0" step="1000" placeholder="مبلغ معامله" required>
+                                    <label for="amount">مبلغ</label>
+                                    <div class="amount-input-container">
+                                        <span class="currency-symbol">﷼</span>
+                                        <input type="text" id="amount" class="amount-input" placeholder="0" required>
+                                    </div>
+                                    <small style="color: var(--gray); margin-top: 5px; display: block;">می‌توانید هر نوع فرمت عددی را وارد کنید (مثال: 1,250,000 یا 1250000)</small>
                                 </div>
                                 
                                 <div class="form-group">
@@ -855,9 +944,6 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <script>
         // اطلاعات ورود
         const VALID_USERNAME = "Amiri";
@@ -906,6 +992,7 @@
         const newAccountNameInput = document.getElementById('new-account-name');
         const accountsList = document.getElementById('accounts-list');
         const documentsList = document.getElementById('documents-list');
+        const amountInput = document.getElementById('amount');
         
         // مدیریت ورود به سیستم
         loginForm.addEventListener('submit', function(e) {
@@ -937,12 +1024,9 @@
         
         // مقداردهی اولیه برنامه پس از ورود
         function initializeApp() {
-            // راه‌اندازی تاریخ شمسی
-            $('.persian-date').persianDatepicker({
-                format: 'YYYY/MM/DD',
-                initialValue: true,
-                initialValueType: 'persian'
-            });
+            // تنظیم تاریخ امروز
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transaction-date').value = today;
             
             // بارگذاری حساب‌ها در dropdown
             updateAccountSelect();
@@ -965,12 +1049,20 @@
                 const description = document.getElementById('transaction-description').value;
                 const type = document.getElementById('transaction-type').value;
                 const accountId = document.getElementById('account').value;
-                const amount = document.getElementById('amount').value;
+                const amountText = document.getElementById('amount').value;
                 const notes = document.getElementById('notes').value;
                 
                 // اعتبارسنجی
-                if (!date || !description || !type || !accountId || !amount) {
+                if (!date || !description || !type || !accountId || !amountText) {
                     alert('لطفاً تمام فیلدهای ضروری را پر کنید!');
+                    return;
+                }
+                
+                // تبدیل مبلغ به عدد
+                const amount = parseAmount(amountText);
+                
+                if (isNaN(amount) || amount <= 0) {
+                    alert('لطفاً یک مبلغ معتبر وارد کنید!');
                     return;
                 }
                 
@@ -980,12 +1072,12 @@
                 // ایجاد شیء معامله
                 const transaction = {
                     id: Date.now(),
-                    date,
+                    date: formatDate(date),
                     description,
                     type,
                     accountId,
                     accountName: account ? account.name : 'نامشخص',
-                    amount: parseInt(amount),
+                    amount: amount,
                     notes
                 };
                 
@@ -999,7 +1091,7 @@
                 transactionForm.reset();
                 
                 // تنظیم مجدد تاریخ به امروز
-                $('.persian-date').persianDatepicker('setDate', new Date());
+                document.getElementById('transaction-date').value = today;
                 
                 // نمایش پیام موفقیت
                 showNotification('معامله با موفقیت ثبت شد!', 'success');
@@ -1087,6 +1179,27 @@
                     updatePageTitle(tabId);
                 });
             });
+        }
+        
+        // تابع تبدیل مبلغ به عدد
+        function parseAmount(amountText) {
+            // حذف کاراکترهای غیرعددی به جز نقطه و کاما
+            let cleaned = amountText.replace(/[^\d.,]/g, '');
+            
+            // اگر کاما به عنوان جداکننده هزارگان استفاده شده، حذف شود
+            cleaned = cleaned.replace(/,/g, '');
+            
+            // تبدیل به عدد
+            return parseFloat(cleaned);
+        }
+        
+        // تابع فرمت تاریخ
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}/${month}/${day}`;
         }
         
         // تابع به‌روزرسانی عنوان صفحه
@@ -1259,7 +1372,7 @@
         
         // تابع تولید سند حسابداری
         function generateAccountingDocument() {
-            let documentDate = new persianDate().format('YYYY/MM/DD');
+            let documentDate = new Date().toLocaleDateString('fa-IR');
             
             let html = `
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -1330,7 +1443,7 @@
         
         // تابع ذخیره سند
         function saveAccountingDocument() {
-            const documentDate = new persianDate().format('YYYY/MM/DD');
+            const documentDate = new Date().toLocaleDateString('fa-IR');
             
             // ایجاد سند جدید
             const newDocument = {
@@ -1478,7 +1591,7 @@
                 background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
                 color: white;
                 padding: 15px 20px;
-                border-radius: 8px;
+                border-radius: 10px;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.2);
                 z-index: 1000;
                 display: flex;
@@ -1503,21 +1616,6 @@
                 }, 300);
             }, 3000);
         }
-        
-        // اضافه کردن استایل‌های انیمیشن برای نوتیفیکیشن
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateY(-100px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-            
-            @keyframes slideOut {
-                from { transform: translateY(0); opacity: 1; }
-                to { transform: translateY(-100px); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
