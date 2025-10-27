@@ -881,80 +881,6 @@
             transform: translate(30px, -30px);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid var(--primary);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-gradient);
-            opacity: 0;
-            transition: var(--transition);
-            z-index: 0;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-card:hover::before {
-            opacity: 0.05;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 1.3rem;
-            background: var(--bg-gradient);
-            color: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin: 8px 0;
-            color: var(--dark);
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-label {
-            color: var(--gray);
-            font-weight: 600;
-            font-size: 0.9rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* استایل‌های جدید برای آیتم‌های سند */
         .document-item {
             display: flex;
             justify-content: space-between;
@@ -1107,6 +1033,56 @@
             color: var(--gray);
             line-height: 1.6;
         }
+
+        /* استایل‌های جدید برای بخش آمار */
+        .account-balance {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .account-balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .account-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .account-balance-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .positive-balance {
+            color: var(--success);
+        }
+
+        .negative-balance {
+            color: var(--danger);
+        }
+
+        .balance-chart {
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .balance-fill {
+            height: 100%;
+            background: var(--bg-gradient);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -1171,15 +1147,19 @@
                     </div>
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
-                        مدیریت حساب‌ها
+                        حساب‌ها
                     </div>
                     <div class="nav-item" data-tab="parties">
                         <i class="fas fa-users"></i>
-                        مدیریت طرف‌ها
+                        طرف حساب
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
-                        اسناد ذخیره شده
+                        اسناد
+                    </div>
+                    <div class="nav-item" data-tab="statistics">
+                        <i class="fas fa-chart-bar"></i>
+                        آمار
                     </div>
                 </div>
                 
@@ -1208,31 +1188,6 @@
                 </div>
                 
                 <div class="content-body">
-                    <!-- کارت‌های آمار -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-file-invoice"></i>
-                            </div>
-                            <div class="stat-value" id="total-documents">0</div>
-                            <div class="stat-label">اسناد ذخیره شده</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <div class="stat-value" id="total-accounts">0</div>
-                            <div class="stat-label">حساب‌های تعریف شده</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="stat-value" id="total-parties">0</div>
-                            <div class="stat-label">طرف‌های حساب</div>
-                        </div>
-                    </div>
-                    
                     <div class="card creative-card">
                         <div class="card-header">
                             <h2 class="card-title" id="form-title">
@@ -1295,8 +1250,8 @@
                                 </div>
                                 
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-check"></i>
-                                    ثبت معامله
+                                    <i class="fas fa-file-alt"></i>
+                                    ثبت سند
                                 </button>
                             </form>
                         </div>
@@ -1350,6 +1305,15 @@
                                 <div class="empty-state">
                                     <i class="fas fa-file-invoice"></i>
                                     <p>هیچ سندی ذخیره نشده است</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="statistics-tab" class="tab-content hidden">
+                            <div class="account-balances" id="account-balances">
+                                <div class="empty-state">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
                                 </div>
                             </div>
                         </div>
@@ -1439,12 +1403,8 @@
         const newPartyTypeSelect = document.getElementById('new-party-type');
         const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
+        const accountBalances = document.getElementById('account-balances');
         const amountInput = document.getElementById('amount');
-        
-        // عناصر آمار
-        const totalDocumentsEl = document.getElementById('total-documents');
-        const totalAccountsEl = document.getElementById('total-accounts');
-        const totalPartiesEl = document.getElementById('total-parties');
         
         // توابع localStorage
         function saveToLocalStorage(key, data) {
@@ -1543,9 +1503,6 @@
             // بارگذاری اسناد ذخیره شده
             updateDocumentsList();
             
-            // به‌روزرسانی آمار
-            updateStats();
-            
             // رویداد ثبت فرم معامله
             transactionForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1606,9 +1563,6 @@
                 
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-                
-                // به‌روزرسانی آمار
-                updateStats();
                 
                 // پاک کردن فرم
                 transactionForm.reset();
@@ -1704,7 +1658,6 @@
                 if (confirm('آیا از پاک کردن همه معاملات اطمینان دارید؟')) {
                     transactions = [];
                     saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-                    updateStats();
                     documentPreview.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-file-alt"></i>
@@ -1730,6 +1683,11 @@
                     
                     // به‌روزرسانی عنوان صفحه
                     updatePageTitle(tabId);
+                    
+                    // اگر تب آمار انتخاب شده، آمار را به‌روزرسانی کن
+                    if (tabId === 'statistics') {
+                        updateAccountBalances();
+                    }
                 });
             });
         }
@@ -1786,6 +1744,11 @@
                     title: 'اسناد ذخیره شده',
                     description: 'در این بخش می‌توانید اسناد حسابداری ذخیره شده را مشاهده کنید',
                     formTitle: 'لیست اسناد'
+                },
+                'statistics': {
+                    title: 'آمار و موجودی‌ها',
+                    description: 'در این بخش می‌توانید آمار و موجودی حساب‌های خود را مشاهده کنید',
+                    formTitle: 'آمار حساب‌ها'
                 }
             };
             
@@ -1801,7 +1764,8 @@
                 'transaction': 'edit',
                 'accounts': 'wallet',
                 'parties': 'users',
-                'documents': 'file-invoice'
+                'documents': 'file-invoice',
+                'statistics': 'chart-bar'
             };
             return icons[tabId];
         }
@@ -1945,11 +1909,67 @@
             documentsList.innerHTML = html;
         }
         
-        // تابع به‌روزرسانی آمار
-        function updateStats() {
-            totalDocumentsEl.textContent = toPersianNumbers(savedDocuments.length);
-            totalAccountsEl.textContent = toPersianNumbers(accounts.length);
-            totalPartiesEl.textContent = toPersianNumbers(parties.length);
+        // تابع به‌روزرسانی موجودی حساب‌ها
+        function updateAccountBalances() {
+            if (transactions.length === 0) {
+                accountBalances.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // محاسبه موجودی هر حساب
+            const accountBalancesMap = {};
+            
+            accounts.forEach(account => {
+                accountBalancesMap[account.id] = {
+                    name: account.name,
+                    balance: 0
+                };
+            });
+            
+            transactions.forEach(transaction => {
+                if (transaction.transactionType === 'receipt') {
+                    accountBalancesMap[transaction.accountId].balance += transaction.amount;
+                } else {
+                    accountBalancesMap[transaction.accountId].balance -= transaction.amount;
+                }
+            });
+            
+            let html = '';
+            
+            // محاسبه حداکثر موجودی برای نمودار
+            let maxBalance = 0;
+            Object.values(accountBalancesMap).forEach(account => {
+                if (Math.abs(account.balance) > maxBalance) {
+                    maxBalance = Math.abs(account.balance);
+                }
+            });
+            
+            // نمایش موجودی هر حساب
+            Object.values(accountBalancesMap).forEach(account => {
+                const balance = account.balance;
+                const percentage = maxBalance > 0 ? Math.abs(balance) / maxBalance * 100 : 0;
+                
+                html += `
+                    <div class="account-balance">
+                        <div class="account-balance-header">
+                            <div class="account-name">${account.name}</div>
+                            <div class="account-balance-value ${balance >= 0 ? 'positive-balance' : 'negative-balance'}">
+                                ${formatCurrency(balance)}
+                            </div>
+                        </div>
+                        <div class="balance-chart">
+                            <div class="balance-fill" style="width: ${percentage}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            accountBalances.innerHTML = html;
         }
         
         // تابع حذف حساب
@@ -2150,9 +2170,6 @@
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
             
-            // به‌روزرسانی آمار (بدون پاک کردن معاملات فعلی)
-            updateStats();
-            
             // پاک کردن پیش‌نمایش
             documentPreview.innerHTML = `
                 <div class="empty-state">
@@ -2305,9 +2322,6 @@
                 
                 // به‌روزرسانی لیست اسناد
                 updateDocumentsList();
-                
-                // به‌روزرسانی آمار
-                updateStats();
                 
                 showNotification('سند با موفقیت حذف شد!', 'success');
             }
