@@ -306,11 +306,6 @@
             font-weight: 600;
         }
         
-        .user-role {
-            font-size: 0.8rem;
-            color: #c7d2fe;
-        }
-        
         .logout-btn {
             background: transparent;
             color: #c7d2fe;
@@ -612,6 +607,12 @@
             font-weight: 600;
         }
         
+        /* استایل دکمه‌های اسناد */
+        .document-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
         /* ریسپانسیو */
         @media (max-width: 768px) {
             body {
@@ -676,6 +677,15 @@
             }
             
             .actions button {
+                width: 100%;
+            }
+            
+            .document-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .document-actions button {
                 width: 100%;
             }
         }
@@ -760,9 +770,9 @@
                         <div class="app-logo-icon">
                             <i class="fas fa-calculator"></i>
                         </div>
-                        <div class="app-logo-text">حسابدار</div>
+                        <div class="app-logo-text">سیستم مدیریت مالی</div>
                     </div>
-                    <p class="app-description">سیستم مدیریت مالی هوشمند</p>
+                    <p class="app-description">مدیریت هوشمند امور مالی</p>
                 </div>
                 
                 <div class="sidebar-nav">
@@ -784,7 +794,6 @@
                     <div class="user-avatar">A</div>
                     <div class="user-info">
                         <div class="user-name">Amiri</div>
-                        <div class="user-role">مدیر سیستم</div>
                     </div>
                     <button class="logout-btn" id="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
@@ -847,7 +856,6 @@
                                         <span class="currency-symbol">﷼</span>
                                         <input type="text" id="amount" class="amount-input" placeholder="0" required>
                                     </div>
-                                    <small style="color: var(--gray); margin-top: 5px; display: block;">می‌توانید هر نوع فرمت عددی را وارد کنید (مثال: 1,250,000 یا 1250000)</small>
                                 </div>
                                 
                                 <div class="form-group">
@@ -949,20 +957,19 @@
         const VALID_USERNAME = "Amiri";
         const VALID_PASSWORD = "3647";
         
+        // کلیدهای localStorage
+        const STORAGE_KEYS = {
+            ACCOUNTS: 'accounting_system_accounts',
+            TRANSACTIONS: 'accounting_system_transactions',
+            DOCUMENTS: 'accounting_system_documents',
+            DOCUMENT_COUNTER: 'accounting_system_document_counter'
+        };
+        
         // آرایه برای ذخیره معاملات
         let transactions = [];
         
         // آرایه برای ذخیره حساب‌ها
-        let accounts = [
-            { id: 1, name: 'صندوق' },
-            { id: 2, name: 'بانک ملت' },
-            { id: 3, name: 'بانک ملی' },
-            { id: 4, name: 'دریافت‌های نقدی' },
-            { id: 5, name: 'پرداخت‌های نقدی' },
-            { id: 6, name: 'فروش' },
-            { id: 7, name: 'هزینه اجاره' },
-            { id: 8, name: 'هزینه حقوق' }
-        ];
+        let accounts = [];
         
         // آرایه برای ذخیره اسناد
         let savedDocuments = [];
@@ -994,6 +1001,53 @@
         const documentsList = document.getElementById('documents-list');
         const amountInput = document.getElementById('amount');
         
+        // توابع localStorage
+        function saveToLocalStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+                return true;
+            } catch (error) {
+                console.error('خطا در ذخیره‌سازی داده‌ها:', error);
+                return false;
+            }
+        }
+        
+        function loadFromLocalStorage(key, defaultValue = null) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch (error) {
+                console.error('خطا در بازیابی داده‌ها:', error);
+                return defaultValue;
+            }
+        }
+        
+        // بارگذاری داده‌ها از localStorage
+        function loadAllData() {
+            accounts = loadFromLocalStorage(STORAGE_KEYS.ACCOUNTS, [
+                { id: 1, name: 'صندوق' },
+                { id: 2, name: 'بانک ملت' },
+                { id: 3, name: 'بانک ملی' },
+                { id: 4, name: 'دریافت‌های نقدی' },
+                { id: 5, name: 'پرداخت‌های نقدی' },
+                { id: 6, name: 'فروش' },
+                { id: 7, name: 'هزینه اجاره' },
+                { id: 8, name: 'هزینه حقوق' }
+            ]);
+            
+            transactions = loadFromLocalStorage(STORAGE_KEYS.TRANSACTIONS, []);
+            savedDocuments = loadFromLocalStorage(STORAGE_KEYS.DOCUMENTS, []);
+            documentCounter = loadFromLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, 1);
+        }
+        
+        // ذخیره تمام داده‌ها
+        function saveAllData() {
+            saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
+            saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
+            saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
+            saveToLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, documentCounter);
+        }
+        
         // مدیریت ورود به سیستم
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1024,6 +1078,9 @@
         
         // مقداردهی اولیه برنامه پس از ورود
         function initializeApp() {
+            // بارگذاری داده‌ها از localStorage
+            loadAllData();
+            
             // تنظیم تاریخ امروز
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('transaction-date').value = today;
@@ -1036,6 +1093,9 @@
             
             // بارگذاری اسناد ذخیره شده
             updateDocumentsList();
+            
+            // بارگذاری معاملات
+            updateTransactionList();
             
             // مخفی کردن خلاصه سند در ابتدا
             documentSummary.style.display = 'none';
@@ -1084,6 +1144,9 @@
                 // افزودن به آرایه معاملات
                 transactions.push(transaction);
                 
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
+                
                 // به‌روزرسانی لیست معاملات
                 updateTransactionList();
                 
@@ -1114,6 +1177,9 @@
                 
                 // افزودن به آرایه حساب‌ها
                 accounts.push(newAccount);
+                
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
                 
                 // به‌روزرسانی dropdown و لیست حساب‌ها
                 updateAccountSelect();
@@ -1150,6 +1216,7 @@
             clearAllBtn.addEventListener('click', function() {
                 if (confirm('آیا از پاک کردن همه معاملات اطمینان دارید؟')) {
                     transactions = [];
+                    saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
                     updateTransactionList();
                     documentPreview.innerHTML = `
                         <div class="empty-state">
@@ -1331,7 +1398,7 @@
                             <span>سند شماره ${document.number}</span>
                             <small>تاریخ: ${document.date} - ${document.transactions.length} معامله</small>
                         </div>
-                        <div>
+                        <div class="document-actions">
                             <button class="btn-success btn-sm" onclick="viewDocument(${document.id})">
                                 <i class="fas fa-eye"></i>
                                 مشاهده
@@ -1361,6 +1428,9 @@
                 
                 // حذف حساب از آرایه
                 accounts = accounts.filter(account => account.id !== accountId);
+                
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
                 
                 // به‌روزرسانی dropdown و لیست حساب‌ها
                 updateAccountSelect();
@@ -1456,11 +1526,16 @@
             // افزودن به آرایه اسناد
             savedDocuments.push(newDocument);
             
+            // ذخیره در localStorage
+            saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
+            saveToLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, documentCounter);
+            
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
             
             // پاک کردن معاملات فعلی
             transactions = [];
+            saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
             updateTransactionList();
             
             // پاک کردن پیش‌نمایش
@@ -1566,6 +1641,9 @@
             if (confirm('آیا از حذف این سند اطمینان دارید؟')) {
                 // حذف سند از آرایه
                 savedDocuments = savedDocuments.filter(doc => doc.id !== documentId);
+                
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
                 
                 // به‌روزرسانی لیست اسناد
                 updateDocumentsList();
