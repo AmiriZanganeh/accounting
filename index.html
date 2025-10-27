@@ -1031,6 +1031,63 @@
             box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
             background: white;
         }
+
+        /* استایل‌های جدید برای سند حسابداری */
+        .accounting-document {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .document-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .document-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .document-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .accounting-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .accounting-table th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 12px;
+            text-align: right;
+            border: 1px solid var(--border);
+        }
+
+        .accounting-table td {
+            padding: 10px;
+            border: 1px solid var(--border);
+            text-align: right;
+        }
+
+        .debit {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .credit {
+            color: var(--danger);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -1180,16 +1237,21 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="transaction-description" class="form-label">شرح معامله</label>
-                                    <input type="text" id="transaction-description" class="form-control" placeholder="توضیح مختصر معامله" required>
-                                </div>
-                                
-                                <div class="form-group">
                                     <label for="transaction-type" class="form-label">نوع معامله</label>
                                     <select id="transaction-type" class="form-control" required>
                                         <option value="">انتخاب کنید</option>
                                         <option value="receipt">دریافت</option>
                                         <option value="payment">پرداخت</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="payment-type" class="form-label">نوع پرداخت</label>
+                                    <select id="payment-type" class="form-control" required>
+                                        <option value="">انتخاب کنید</option>
+                                        <option value="cash">نقد</option>
+                                        <option value="credit">نسیه</option>
+                                        <option value="check">چک</option>
                                     </select>
                                 </div>
                                 
@@ -1216,8 +1278,8 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="notes" class="form-label">ملاحظات (اختیاری)</label>
-                                    <textarea id="notes" class="form-control" rows="3" placeholder="توضیحات اضافی"></textarea>
+                                    <label for="description" class="form-label">شرح</label>
+                                    <textarea id="description" class="form-control" rows="3" placeholder="شرح معامله" required></textarea>
                                 </div>
                                 
                                 <button type="submit" class="btn btn-success">
@@ -1285,19 +1347,15 @@
                         <div class="card-header">
                             <h2 class="card-title">
                                 <i class="fas fa-file-alt"></i>
-                                پیش‌نمایش سند حسابداری
+                                سند حسابداری
                             </h2>
                         </div>
                         
                         <div class="document-preview" id="document-preview">
                             <div class="empty-state">
                                 <i class="fas fa-file-alt"></i>
-                                <p>پس از ثبت معامله، پیش‌نمایش سند در اینجا نمایش داده می‌شود</p>
+                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
                             </div>
-                        </div>
-                        
-                        <div class="document-summary" id="document-summary">
-                            <!-- خلاصه سند در اینجا نمایش داده می‌شود -->
                         </div>
                         
                         <div class="actions">
@@ -1373,7 +1431,6 @@
         const transactionForm = document.getElementById('transaction-form');
         const transactionList = document.getElementById('transaction-list');
         const documentPreview = document.getElementById('document-preview');
-        const documentSummary = document.getElementById('document-summary');
         const generateDocumentBtn = document.getElementById('generate-document');
         const saveDocumentBtn = document.getElementById('save-document');
         const clearAllBtn = document.getElementById('clear-all');
@@ -1421,11 +1478,11 @@
         // بارگذاری داده‌ها از localStorage
         function loadAllData() {
             accounts = loadFromLocalStorage(STORAGE_KEYS.ACCOUNTS, [
-                { id: 1, name: 'صندوق' },
-                { id: 2, name: 'بانک ملت' },
-                { id: 3, name: 'بانک ملی' },
-                { id: 4, name: 'دریافت‌های نقدی' },
-                { id: 5, name: 'پرداخت‌های نقدی' },
+                { id: 1, name: 'موجودی نقد' },
+                { id: 2, name: 'حساب دریافتنی' },
+                { id: 3, name: 'اسناد دریافتنی' },
+                { id: 4, name: 'حساب پرداختنی' },
+                { id: 5, name: 'اسناد پرداختنی' },
                 { id: 6, name: 'فروش' },
                 { id: 7, name: 'هزینه اجاره' },
                 { id: 8, name: 'هزینه حقوق' }
@@ -1500,24 +1557,21 @@
             // به‌روزرسانی آمار
             updateStats();
             
-            // مخفی کردن خلاصه سند در ابتدا
-            documentSummary.style.display = 'none';
-            
             // رویداد ثبت فرم معامله
             transactionForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // دریافت مقادیر از فرم
                 const date = document.getElementById('transaction-date').value;
-                const description = document.getElementById('transaction-description').value;
-                const type = document.getElementById('transaction-type').value;
+                const transactionType = document.getElementById('transaction-type').value;
+                const paymentType = document.getElementById('payment-type').value;
                 const accountId = document.getElementById('account').value;
                 const partyId = document.getElementById('party').value;
                 const amountText = document.getElementById('amount').value;
-                const notes = document.getElementById('notes').value;
+                const description = document.getElementById('description').value;
                 
                 // اعتبارسنجی
-                if (!date || !description || !type || !accountId || !amountText) {
+                if (!date || !transactionType || !paymentType || !accountId || !amountText || !description) {
                     alert('لطفاً تمام فیلدهای ضروری را پر کنید!');
                     return;
                 }
@@ -1532,6 +1586,10 @@
                 
                 // پیدا کردن نام حساب
                 const account = accounts.find(acc => acc.id == accountId);
+                if (!account) {
+                    alert('حساب انتخاب شده معتبر نیست!');
+                    return;
+                }
                 
                 // پیدا کردن نام طرف حساب
                 let partyName = '';
@@ -1544,14 +1602,14 @@
                 const transaction = {
                     id: Date.now(),
                     date: formatDate(date),
-                    description,
-                    type,
+                    transactionType,
+                    paymentType,
                     accountId,
-                    accountName: account ? account.name : 'نامشخص',
+                    accountName: account.name,
                     partyId: partyId || null,
                     partyName: partyName,
                     amount: amount,
-                    notes
+                    description
                 };
                 
                 // افزودن به آرایه معاملات
@@ -1574,6 +1632,9 @@
                 
                 // نمایش پیام موفقیت
                 showNotification('معامله با موفقیت ثبت شد!', 'success');
+                
+                // تولید خودکار سند حسابداری
+                generateAccountingDocument();
             });
             
             // رویداد افزودن حساب جدید
@@ -1672,10 +1733,9 @@
                     documentPreview.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-file-alt"></i>
-                            <p>پس از ثبت معامله، پیش‌نمایش سند در اینجا نمایش داده می‌شود</p>
+                            <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
                         </div>
                     `;
-                    documentSummary.style.display = 'none';
                     showNotification('همه معاملات با موفقیت پاک شدند!', 'success');
                 }
             });
@@ -1785,9 +1845,9 @@
             
             let html = '';
             transactions.forEach(transaction => {
-                const typeClass = transaction.type === 'payment' ? 'payment' : 'receipt';
-                const typeText = transaction.type === 'payment' ? 'پرداخت' : 'دریافت';
-                const typeIcon = transaction.type === 'payment' ? 'fa-arrow-up' : 'fa-arrow-down';
+                const typeClass = transaction.transactionType === 'payment' ? 'payment' : 'receipt';
+                const typeText = transaction.transactionType === 'payment' ? 'پرداخت' : 'دریافت';
+                const typeIcon = transaction.transactionType === 'payment' ? 'fa-arrow-up' : 'fa-arrow-down';
                 
                 let partyInfo = '';
                 if (transaction.partyName) {
@@ -1798,7 +1858,7 @@
                     <div class="transaction-item">
                         <div class="transaction-details">
                             <span>${transaction.description}</span>
-                            <small>${transaction.date} - ${typeText} از ${transaction.accountName}</small>
+                            <small>${transaction.date} - ${typeText} (${getPaymentTypeText(transaction.paymentType)}) - ${transaction.accountName}</small>
                             ${partyInfo}
                         </div>
                         <div class="transaction-amount ${typeClass}">
@@ -1810,6 +1870,16 @@
             });
             
             transactionList.innerHTML = html;
+        }
+        
+        // تابع دریافت متن نوع پرداخت
+        function getPaymentTypeText(paymentType) {
+            const types = {
+                'cash': 'نقد',
+                'credit': 'نسیه',
+                'check': 'چک'
+            };
+            return types[paymentType] || paymentType;
         }
         
         // تابع به‌روزرسانی dropdown حساب‌ها
@@ -1916,7 +1986,7 @@
                 
                 document.transactions.forEach(transaction => {
                     totalAmount += transaction.amount;
-                    if (transaction.type === 'receipt') {
+                    if (transaction.transactionType === 'receipt') {
                         totalReceipts += transaction.amount;
                     } else {
                         totalPayments += transaction.amount;
@@ -1964,9 +2034,9 @@
             
             // محاسبه از معاملات فعلی
             transactions.forEach(transaction => {
-                if (transaction.type === 'receipt') {
+                if (transaction.transactionType === 'receipt') {
                     totalIncome += transaction.amount;
-                } else if (transaction.type === 'payment') {
+                } else if (transaction.transactionType === 'payment') {
                     totalExpenses += transaction.amount;
                 }
             });
@@ -1976,9 +2046,9 @@
                 totalTransactionsCount += document.transactions.length;
                 
                 document.transactions.forEach(transaction => {
-                    if (transaction.type === 'receipt') {
+                    if (transaction.transactionType === 'receipt') {
                         totalIncome += transaction.amount;
-                    } else if (transaction.type === 'payment') {
+                    } else if (transaction.transactionType === 'payment') {
                         totalExpenses += transaction.amount;
                     }
                 });
@@ -2041,77 +2111,98 @@
             }
         }
         
-        // تابع تولید سند حسابداری
+        // تابع تولید سند حسابداری با منطق جدید
         function generateAccountingDocument() {
             let documentDate = new Date().toLocaleDateString('fa-IR');
             
             let html = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری</h2>
-                    <p style="color: var(--gray); font-size: 1rem;">تاریخ: ${documentDate}</p>
-                </div>
-                <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);">
-                    <thead>
-                        <tr style="background: var(--bg-gradient); color: white;">
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">تاریخ</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">حساب</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">طرف حساب</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: left;">مبلغ (ریال)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="accounting-document">
+                    <div class="document-header">
+                        <div class="document-title">سند حسابداری</div>
+                        <div class="document-date">تاریخ: ${documentDate}</div>
+                    </div>
+                    <table class="accounting-table">
+                        <thead>
+                            <tr>
+                                <th>شرح حساب</th>
+                                <th>بدهکار (ریال)</th>
+                                <th>بستانکار (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
             
-            let totalReceipts = 0;
-            let totalPayments = 0;
-            
             transactions.forEach(transaction => {
-                const typeText = transaction.type === 'payment' ? 'پرداخت' : 'دریافت';
-                const typeColor = transaction.type === 'payment' ? 'var(--danger)' : 'var(--success)';
+                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                 
-                html += `
-                    <tr>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.date}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.partyName || '-'}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
-                    </tr>
-                `;
-                
-                if (transaction.type === 'receipt') {
-                    totalReceipts += transaction.amount;
-                } else {
-                    totalPayments += transaction.amount;
+                if (transaction.transactionType === 'receipt') {
+                    // دریافت: حساب انتخاب شده بستانکار می‌شود
+                    let debitAccount = '';
+                    
+                    // تعیین حساب بدهکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            debitAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            debitAccount = 'حساب دریافتنی';
+                            break;
+                        case 'check':
+                            debitAccount = 'اسناد دریافتنی';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${debitAccount}</td>
+                            <td class="debit">${formatCurrency(transaction.amount)}</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>${transaction.accountName}</td>
+                            <td>-</td>
+                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                        </tr>
+                    `;
+                } else if (transaction.transactionType === 'payment') {
+                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                    let creditAccount = '';
+                    
+                    // تعیین حساب بستانکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            creditAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            creditAccount = 'حساب پرداختنی';
+                            break;
+                        case 'check':
+                            creditAccount = 'اسناد پرداختنی';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${transaction.accountName}</td>
+                            <td class="debit">${formatCurrency(transaction.amount)}</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>${creditAccount}</td>
+                            <td>-</td>
+                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                        </tr>
+                    `;
                 }
             });
             
             html += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             `;
             
             documentPreview.innerHTML = html;
-            
-            // نمایش خلاصه سند
-            documentSummary.style.display = 'flex';
-            documentSummary.innerHTML = `
-                <div class="summary-item">
-                    <div>جمع دریافت‌ها</div>
-                    <div class="summary-value" style="color: var(--success);">${formatCurrency(totalReceipts)} ریال</div>
-                </div>
-                <div class="summary-item">
-                    <div>جمع پرداخت‌ها</div>
-                    <div class="summary-value" style="color: var(--danger);">${formatCurrency(totalPayments)} ریال</div>
-                </div>
-                <div class="summary-item">
-                    <div>مانده نقدی</div>
-                    <div class="summary-value">${formatCurrency(totalReceipts - totalPayments)} ریال</div>
-                </div>
-            `;
         }
         
         // تابع ذخیره سند
@@ -2143,10 +2234,9 @@
             documentPreview.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-file-alt"></i>
-                    <p>پس از ثبت معامله، پیش‌نمایش سند در اینجا نمایش داده می‌شود</p>
+                    <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
                 </div>
             `;
-            documentSummary.style.display = 'none';
             
             // نمایش پیام موفقیت
             showNotification(`سند شماره ${toPersianNumbers(newDocument.number)} با موفقیت ذخیره شد!`, 'success');
@@ -2163,72 +2253,93 @@
             
             // نمایش سند در پیش‌نمایش
             let html = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری شماره ${toPersianNumbers(document.number)}</h2>
-                    <p style="color: var(--gray); font-size: 1rem;">تاریخ: ${document.date}</p>
-                </div>
-                <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);">
-                    <thead>
-                        <tr style="background: var(--bg-gradient); color: white;">
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">تاریخ</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">حساب</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">طرف حساب</th>
-                            <th style="border: 1px solid var(--border); padding: 12px; text-align: left;">مبلغ (ریال)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="accounting-document">
+                    <div class="document-header">
+                        <div class="document-title">سند حسابداری شماره ${toPersianNumbers(document.number)}</div>
+                        <div class="document-date">تاریخ: ${document.date}</div>
+                    </div>
+                    <table class="accounting-table">
+                        <thead>
+                            <tr>
+                                <th>شرح حساب</th>
+                                <th>بدهکار (ریال)</th>
+                                <th>بستانکار (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
             
-            let totalReceipts = 0;
-            let totalPayments = 0;
-            
             document.transactions.forEach(transaction => {
-                const typeText = transaction.type === 'payment' ? 'پرداخت' : 'دریافت';
-                const typeColor = transaction.type === 'payment' ? 'var(--danger)' : 'var(--success)';
+                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                 
-                html += `
-                    <tr>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.date}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.partyName || '-'}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
-                    </tr>
-                `;
-                
-                if (transaction.type === 'receipt') {
-                    totalReceipts += transaction.amount;
-                } else {
-                    totalPayments += transaction.amount;
+                if (transaction.transactionType === 'receipt') {
+                    // دریافت: حساب انتخاب شده بستانکار می‌شود
+                    let debitAccount = '';
+                    
+                    // تعیین حساب بدهکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            debitAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            debitAccount = 'حساب دریافتنی';
+                            break;
+                        case 'check':
+                            debitAccount = 'اسناد دریافتنی';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${debitAccount}</td>
+                            <td class="debit">${formatCurrency(transaction.amount)}</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>${transaction.accountName}</td>
+                            <td>-</td>
+                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                        </tr>
+                    `;
+                } else if (transaction.transactionType === 'payment') {
+                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                    let creditAccount = '';
+                    
+                    // تعیین حساب بستانکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            creditAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            creditAccount = 'حساب پرداختنی';
+                            break;
+                        case 'check':
+                            creditAccount = 'اسناد پرداختنی';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${transaction.accountName}</td>
+                            <td class="debit">${formatCurrency(transaction.amount)}</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>${creditAccount}</td>
+                            <td>-</td>
+                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                        </tr>
+                    `;
                 }
             });
             
             html += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             `;
             
             documentPreview.innerHTML = html;
-            
-            // نمایش خلاصه سند
-            documentSummary.style.display = 'flex';
-            documentSummary.innerHTML = `
-                <div class="summary-item">
-                    <div>جمع دریافت‌ها</div>
-                    <div class="summary-value" style="color: var(--success);">${formatCurrency(totalReceipts)} ریال</div>
-                </div>
-                <div class="summary-item">
-                    <div>جمع پرداخت‌ها</div>
-                    <div class="summary-value" style="color: var(--danger);">${formatCurrency(totalPayments)} ریال</div>
-                </div>
-                <div class="summary-item">
-                    <div>مانده نقدی</div>
-                    <div class="summary-value">${formatCurrency(totalReceipts - totalPayments)} ریال</div>
-                </div>
-            `;
             
             // تغییر به تب پیش‌نمایش
             navItems.forEach(item => item.classList.remove('active'));
