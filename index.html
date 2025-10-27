@@ -1141,21 +1141,21 @@
                             <div class="stat-icon">
                                 <i class="fas fa-money-bill-wave"></i>
                             </div>
-                            <div class="stat-value" id="total-income">0 ریال</div>
+                            <div class="stat-value" id="total-income">۰ ریال</div>
                             <div class="stat-label">مجموع درآمد</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">
                                 <i class="fas fa-credit-card"></i>
                             </div>
-                            <div class="stat-value" id="total-expenses">0 ریال</div>
+                            <div class="stat-value" id="total-expenses">۰ ریال</div>
                             <div class="stat-label">مجموع هزینه</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">
                                 <i class="fas fa-wallet"></i>
                             </div>
-                            <div class="stat-value" id="net-balance">0 ریال</div>
+                            <div class="stat-value" id="net-balance">۰ ریال</div>
                             <div class="stat-label">مانده خالص</div>
                         </div>
                     </div>
@@ -1611,13 +1611,22 @@
             return parseFloat(cleaned);
         }
         
+        // تابع تبدیل تاریخ میلادی به شمسی
+        function toPersianDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('fa-IR', options);
+        }
+        
         // تابع فرمت تاریخ
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}/${month}/${day}`;
+            return toPersianDate(dateString);
+        }
+        
+        // تابع تبدیل اعداد به فارسی
+        function toPersianNumbers(number) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return number.toString().replace(/\d/g, digit => persianDigits[parseInt(digit)]);
         }
         
         // تابع به‌روزرسانی عنوان صفحه
@@ -1745,26 +1754,30 @@
             savedDocuments.forEach(document => {
                 // محاسبه جمع مبالغ
                 let totalAmount = 0;
+                let totalReceipts = 0;
+                let totalPayments = 0;
+                
                 document.transactions.forEach(transaction => {
                     totalAmount += transaction.amount;
+                    if (transaction.type === 'receipt') {
+                        totalReceipts += transaction.amount;
+                    } else {
+                        totalPayments += transaction.amount;
+                    }
                 });
                 
                 html += `
                     <div class="document-item">
                         <div class="document-info">
-                            <div class="document-title">سند شماره ${document.number}</div>
+                            <div class="document-title">سند شماره ${toPersianNumbers(document.number)}</div>
                             <div class="document-meta">
                                 <div class="document-meta-item">
                                     <i class="fas fa-calendar"></i>
                                     <span>${document.date}</span>
                                 </div>
                                 <div class="document-meta-item">
-                                    <i class="fas fa-list"></i>
-                                    <span>${document.transactions.length} معامله</span>
-                                </div>
-                                <div class="document-meta-item">
                                     <i class="fas fa-money-bill-wave"></i>
-                                    <span>${formatCurrency(totalAmount)} ریال</span>
+                                    <span>${formatCurrency(totalAmount)}</span>
                                 </div>
                             </div>
                         </div>
@@ -1787,15 +1800,17 @@
         
         // تابع به‌روزرسانی آمار
         function updateStats() {
-            totalTransactionsEl.textContent = transactions.length;
+            // تعداد کل معاملات
+            totalTransactionsEl.textContent = toPersianNumbers(transactions.length);
             
+            // محاسبه مجموع درآمد (معاملات نوع دریافت)
             let totalIncome = 0;
             let totalExpenses = 0;
             
             transactions.forEach(transaction => {
                 if (transaction.type === 'receipt') {
                     totalIncome += transaction.amount;
-                } else {
+                } else if (transaction.type === 'payment') {
                     totalExpenses += transaction.amount;
                 }
             });
@@ -1939,7 +1954,7 @@
             documentSummary.style.display = 'none';
             
             // نمایش پیام موفقیت
-            showNotification(`سند شماره ${newDocument.number} با موفقیت ذخیره شد!`, 'success');
+            showNotification(`سند شماره ${toPersianNumbers(newDocument.number)} با موفقیت ذخیره شد!`, 'success');
         }
         
         // تابع مشاهده سند
@@ -1954,7 +1969,7 @@
             // نمایش سند در پیش‌نمایش
             let html = `
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری شماره ${document.number}</h2>
+                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری شماره ${toPersianNumbers(document.number)}</h2>
                     <p style="color: var(--gray); font-size: 1rem;">تاریخ: ${document.date}</p>
                 </div>
                 <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);">
@@ -2043,9 +2058,10 @@
             }
         }
         
-        // تابع فرمت ارز
+        // تابع فرمت ارز به فارسی
         function formatCurrency(amount) {
-            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const formatted = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return toPersianNumbers(formatted);
         }
         
         // تابع نمایش نوتیفیکیشن
