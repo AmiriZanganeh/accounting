@@ -1957,16 +1957,12 @@
         
         // تابع به‌روزرسانی آمار
         function updateStats() {
-            // تعداد کل معاملات
-            totalTransactionsEl.textContent = toPersianNumbers(transactions.length);
-            
-            // تعداد اسناد ذخیره شده
-            totalDocumentsEl.textContent = toPersianNumbers(savedDocuments.length);
-            
-            // محاسبه مجموع درآمد (معاملات نوع دریافت)
+            // محاسبه آمار از تمام معاملات (هم معاملات فعلی و هم معاملات ذخیره شده در اسناد)
+            let totalTransactionsCount = transactions.length;
             let totalIncome = 0;
             let totalExpenses = 0;
             
+            // محاسبه از معاملات فعلی
             transactions.forEach(transaction => {
                 if (transaction.type === 'receipt') {
                     totalIncome += transaction.amount;
@@ -1975,8 +1971,24 @@
                 }
             });
             
+            // محاسبه از اسناد ذخیره شده
+            savedDocuments.forEach(document => {
+                totalTransactionsCount += document.transactions.length;
+                
+                document.transactions.forEach(transaction => {
+                    if (transaction.type === 'receipt') {
+                        totalIncome += transaction.amount;
+                    } else if (transaction.type === 'payment') {
+                        totalExpenses += transaction.amount;
+                    }
+                });
+            });
+            
+            // به‌روزرسانی آمار
+            totalTransactionsEl.textContent = toPersianNumbers(totalTransactionsCount);
             totalIncomeEl.textContent = formatCurrency(totalIncome) + ' ریال';
             totalExpensesEl.textContent = formatCurrency(totalExpenses) + ' ریال';
+            totalDocumentsEl.textContent = toPersianNumbers(savedDocuments.length);
         }
         
         // تابع حذف حساب
@@ -2124,10 +2136,7 @@
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
             
-            // پاک کردن معاملات فعلی
-            transactions = [];
-            saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-            updateTransactionList();
+            // به‌روزرسانی آمار (بدون پاک کردن معاملات فعلی)
             updateStats();
             
             // پاک کردن پیش‌نمایش
@@ -2241,6 +2250,9 @@
                 
                 // به‌روزرسانی لیست اسناد
                 updateDocumentsList();
+                
+                // به‌روزرسانی آمار
+                updateStats();
                 
                 showNotification('سند با موفقیت حذف شد!', 'success');
             }
