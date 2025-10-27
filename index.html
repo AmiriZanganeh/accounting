@@ -3,67 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیستم حسابداری هوشمند</title>
+    <title>Aura | سیستم حسابداری خلاق</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #7c3aed;
-            --primary-light: #8b5cf6;
-            --primary-dark: #6d28d9;
-            --secondary: #0ea5e9;
-            --success: #10b981;
-            --danger: #f43f5e;
-            --warning: #f59e0b;
-            --info: #06b6d4;
-            --light: #f8fafc;
-            --dark: #1e293b;
-            --gray: #64748b;
-            --border: #e2e8f0;
-            --sidebar-bg: #1e1b4b;
-            --sidebar-text: #f1f5f9;
-            --card-bg: #ffffff;
-            --header-bg: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
-            --bg-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --primary: #FF6B6B;
+            --primary-light: #FF8E8E;
+            --primary-dark: #FF5252;
+            --secondary: #4ECDC4;
+            --accent: #FFD166;
+            --success: #06D6A0;
+            --danger: #EF476F;
+            --warning: #FFD166;
+            --info: #118AB2;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --darker: #1A1D23;
+            --gray: #6C757D;
+            --border: #E9ECEF;
+            --card-bg: #FFFFFF;
+            --sidebar-bg: #2D3047;
+            --header-bg: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
             --sidebar-width: 280px;
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Vazirmatn', 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        @font-face {
-            font-family: 'Vazir';
-            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/Vazir.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-        }
-        
+
         body {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
+
         /* صفحه ورود */
-        .login-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            padding: 40px;
-            width: 100%;
-            max-width: 440px;
-            margin: 80px auto;
-            border: 1px solid var(--border);
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             position: relative;
             overflow: hidden;
         }
-        
-        .login-container::before {
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 10px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 107, 0.1);
+        }
+
+        .login-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -72,209 +94,226 @@
             height: 6px;
             background: var(--bg-gradient);
         }
-        
-        .login-header {
+
+        .brand {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        
-        .login-icon {
-            background: var(--bg-gradient);
+
+        .brand-icon {
             width: 80px;
             height: 80px;
-            border-radius: 16px;
+            background: var(--bg-gradient);
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
             color: white;
-            font-size: 2rem;
-            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+            font-size: 2.2rem;
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+            transform: rotate(-5deg);
         }
-        
-        .login-title {
-            color: var(--primary);
-            font-size: 1.8rem;
+
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--bg-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 8px;
-            font-weight: 700;
         }
-        
-        .login-subtitle {
+
+        .brand-tagline {
             color: var(--gray);
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
-        
-        .login-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 0.95rem;
-        }
-        
-        .input-with-icon {
+
+        .input-group {
+            margin-bottom: 25px;
             position: relative;
         }
-        
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            background: white;
+        }
+
         .input-icon {
             position: absolute;
-            left: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
+            font-size: 1.2rem;
         }
-        
-        input {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 1rem;
-            background: var(--light);
-            transition: all 0.2s;
-        }
-        
-        input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-        }
-        
+
         .login-btn {
+            width: 100%;
             background: var(--bg-gradient);
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 18px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+            gap: 12px;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
         }
-        
+
         .error-message {
             color: var(--danger);
             text-align: center;
-            margin-top: 15px;
-            font-size: 0.9rem;
+            margin-top: 20px;
+            font-size: 1rem;
             display: none;
-            background: rgba(244, 63, 94, 0.05);
-            padding: 12px;
-            border-radius: 8px;
-            border-right: 4px solid var(--danger);
+            background: rgba(239, 71, 111, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 3px solid var(--danger);
         }
-        
+
         /* صفحه اصلی */
         #main-app {
             display: none;
         }
-        
-        .app-container {
+
+        .app-layout {
             display: flex;
             min-height: 100vh;
         }
-        
+
         /* نوار کناری */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
-            color: var(--sidebar-text);
+            color: white;
             padding: 0;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .sidebar-header {
             padding: 30px 25px;
-            background: rgba(255, 255, 255, 0.05);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
-        
+
         .app-logo {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 8px;
         }
-        
+
         .app-logo-icon {
-            background: var(--primary);
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-gradient);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+            transform: rotate(-5deg);
         }
-        
+
         .app-logo-text {
             font-size: 1.4rem;
-            font-weight: 700;
+            font-weight: 800;
+            color: white;
         }
-        
-        .app-description {
-            font-size: 0.85rem;
-            color: #c7d2fe;
-        }
-        
+
         .sidebar-nav {
             flex: 1;
-            padding: 20px 0;
+            padding: 25px 0;
         }
-        
+
         .nav-item {
-            padding: 15px 25px;
+            padding: 16px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
             cursor: pointer;
-            transition: all 0.2s;
-            color: #c7d2fe;
-            font-size: 0.95rem;
-            border-right: 4px solid transparent;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05rem;
+            margin: 5px 15px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
         .nav-item.active {
-            background: rgba(124, 58, 237, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border-right: 4px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
+        .nav-item.active::before {
+            right: 0;
+        }
+
         .nav-item:hover:not(.active) {
             background: rgba(255, 255, 255, 0.05);
             color: white;
+            transform: translateX(-5px);
         }
-        
+
         .nav-item i {
-            width: 20px;
+            width: 24px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
-        
+
         .user-section {
             padding: 20px 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -283,145 +322,179 @@
             gap: 15px;
             background: rgba(255, 255, 255, 0.05);
         }
-        
+
         .user-avatar {
-            width: 44px;
-            height: 44px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--bg-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
-        
+
         .user-info {
             flex: 1;
         }
-        
+
         .user-name {
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
         }
-        
+
+        .user-role {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
         .logout-btn {
             background: transparent;
-            color: #c7d2fe;
+            color: rgba(255, 255, 255, 0.8);
             border: none;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             padding: 8px;
-            border-radius: 6px;
-            transition: all 0.2s;
+            border-radius: 8px;
+            transition: var(--transition);
         }
-        
+
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: white;
+            transform: scale(1.1);
         }
-        
+
         /* محتوای اصلی */
         .main-content {
             flex: 1;
             padding: 0;
             overflow-y: auto;
-            background: #f8fafc;
+            background: var(--light);
         }
-        
+
         .content-header {
             background: var(--header-bg);
-            color: white;
-            padding: 30px 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        
+
         .page-title {
             font-size: 1.8rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        
+
         .page-description {
             font-size: 1rem;
-            opacity: 0.9;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        
+
         .content-body {
-            padding: 0 40px 40px;
+            padding: 25px 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 25px;
         }
-        
+
         @media (max-width: 1200px) {
             .content-body {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            padding: 30px;
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
-            transition: all 0.2s;
         }
-        
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--bg-gradient);
+        }
+
         .card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
-        
+
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .card-title {
             font-size: 1.3rem;
             color: var(--dark);
             display: flex;
             align-items: center;
             gap: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        
+
         .card-title i {
             color: var(--primary);
             font-size: 1.4rem;
         }
-        
+
         select, textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border);
+            padding: 12px 16px;
+            background: var(--light);
+            border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 1rem;
-            background: var(--light);
-            transition: all 0.2s;
+            color: var(--dark);
+            transition: var(--transition);
         }
-        
+
         select:focus, textarea:focus {
-            border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            background: white;
         }
-        
+
         textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
-        
-        button:not(.logout-btn, .login-btn) {
-            background: var(--primary);
+
+        .btn {
+            background: var(--bg-gradient);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -433,336 +506,577 @@
             justify-content: center;
             gap: 8px;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        
-        button:not(.logout-btn, .login-btn):hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.4);
         }
-        
+
         .btn-success {
-            background: var(--success);
+            background: linear-gradient(135deg, var(--success), #05C78F);
         }
-        
+
         .btn-success:hover {
-            background: #0da271;
+            box-shadow: 0 12px 25px rgba(6, 214, 160, 0.4);
         }
-        
+
         .btn-danger {
-            background: var(--danger);
+            background: linear-gradient(135deg, var(--danger), #E83E6D);
         }
-        
+
         .btn-danger:hover {
-            background: #e11d48;
+            box-shadow: 0 12px 25px rgba(239, 71, 111, 0.4);
         }
-        
+
         .btn-warning {
-            background: var(--warning);
+            background: linear-gradient(135deg, var(--warning), #FFC857);
         }
-        
+
         .btn-warning:hover {
-            background: #d97706;
+            box-shadow: 0 12px 25px rgba(255, 209, 102, 0.4);
         }
-        
+
         .btn-sm {
-            padding: 8px 15px;
+            padding: 8px 16px;
             font-size: 0.9rem;
         }
-        
+
         .transaction-list, .documents-list, .accounts-list {
             max-height: 350px;
             overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
             padding: 15px;
             background: var(--light);
         }
-        
+
         .transaction-item, .document-item, .account-item {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
+            padding: 14px;
+            border-bottom: 2px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s;
+            transition: var(--transition);
             border-radius: 8px;
+            margin-bottom: 8px;
         }
-        
+
         .transaction-item:hover, .document-item:hover, .account-item:hover {
             background: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
         }
-        
+
         .transaction-item:last-child, .document-item:last-child, .account-item:last-child {
             border-bottom: none;
+            margin-bottom: 0;
         }
-        
+
         .transaction-details, .document-details {
             display: flex;
             flex-direction: column;
             flex: 1;
         }
-        
+
         .transaction-amount {
             font-weight: bold;
             font-size: 1.1rem;
         }
-        
+
         .payment {
             color: var(--danger);
         }
-        
+
         .receipt {
             color: var(--success);
         }
-        
+
         .document-preview {
             background: var(--light);
-            border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 12px;
+            border: 2px solid var(--border);
+            padding: 20px;
+            border-radius: var(--border-radius);
             min-height: 250px;
         }
-        
+
         .actions {
             display: flex;
             gap: 12px;
-            margin-top: 25px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
-        
+
         .account-management {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid var(--border);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
         }
-        
+
         .account-form {
             display: flex;
             gap: 12px;
-            margin-top: 18px;
+            margin-top: 15px;
         }
-        
+
         .account-form input {
             flex: 1;
         }
-        
+
         .document-summary {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-            padding: 20px;
-            background: rgba(124, 58, 237, 0.05);
-            border-radius: 12px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.05);
+            border-radius: var(--border-radius);
             flex-wrap: wrap;
-            gap: 20px;
-            border: 1px solid var(--border);
+            gap: 15px;
+            border: 2px solid var(--border);
         }
-        
+
         .summary-item {
             text-align: center;
             flex: 1;
-            min-width: 140px;
+            min-width: 120px;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
-        
+
         .summary-value {
             font-weight: bold;
-            font-size: 1.4rem;
-            margin-top: 8px;
+            font-size: 1.3rem;
+            margin-top: 6px;
         }
-        
+
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             color: var(--gray);
         }
-        
+
         .empty-state i {
             font-size: 3rem;
-            margin-bottom: 15px;
-            color: #cbd5e1;
+            margin-bottom: 12px;
+            color: #CED4DA;
+            opacity: 0.5;
         }
-        
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
         .hidden {
             display: none;
         }
-        
+
         /* استایل مبلغ */
         .amount-input-container {
             position: relative;
         }
-        
+
         .amount-input {
-            padding-left: 50px !important;
+            padding-left: 45px !important;
         }
-        
+
         .currency-symbol {
             position: absolute;
-            left: 15px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
-        
+
         /* استایل دکمه‌های اسناد */
         .document-actions {
             display: flex;
             gap: 8px;
         }
-        
+
+        .document-action-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .document-action-btn.view {
+            background: linear-gradient(135deg, var(--success), #05C78F);
+            color: white;
+        }
+
+        .document-action-btn.delete {
+            background: linear-gradient(135deg, var(--danger), #E83E6D);
+            color: white;
+        }
+
+        .document-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .document-action-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .document-action-btn i {
+            font-size: 0.85rem;
+        }
+
         /* ریسپانسیو */
         @media (max-width: 768px) {
-            body {
-                padding: 0;
-            }
-            
-            .app-container {
+            .app-layout {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: auto;
             }
-            
+
             .sidebar-nav {
                 display: flex;
                 overflow-x: auto;
-                padding: 10px;
+                padding: 15px;
             }
-            
+
             .nav-item {
                 white-space: nowrap;
-                border-right: none;
-                border-bottom: 4px solid transparent;
-                padding: 12px 20px;
+                border-bottom: 3px solid transparent;
+                padding: 10px 18px;
             }
-            
+
             .nav-item.active {
-                border-right: none;
-                border-bottom: 4px solid var(--primary);
+                border-bottom: 3px solid var(--primary);
             }
-            
+
             .main-content {
                 padding: 0;
             }
-            
+
             .content-header {
-                padding: 20px;
+                padding: 15px;
             }
-            
+
             .content-body {
-                padding: 20px;
+                padding: 15px;
                 grid-template-columns: 1fr;
             }
-            
+
             .account-form {
                 flex-direction: column;
             }
-            
+
             .document-summary {
                 flex-direction: column;
-                gap: 20px;
+                gap: 12px;
             }
-            
+
             .summary-item {
                 min-width: 100%;
             }
-            
+
             .actions {
                 flex-direction: column;
             }
-            
-            .actions button {
+
+            .actions .btn {
                 width: 100%;
             }
-            
+
             .document-actions {
                 flex-direction: column;
                 width: 100%;
             }
-            
-            .document-actions button {
+
+            .document-actions .document-action-btn {
                 width: 100%;
             }
         }
-        
+
         /* اسکرول بار سفارشی */
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #F1F1F1;
             border-radius: 10px;
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
         }
-        
-        /* انیمیشن نوتیفیکیشن */
+
+        /* انیمیشن‌ها */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @keyframes slideIn {
             from { transform: translateY(-100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        
+
         @keyframes slideOut {
             from { transform: translateY(0); opacity: 1; }
             to { transform: translateY(-100px); opacity: 0; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* استایل‌های جدید برای طراحی خلاق */
+        .creative-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .creative-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--bg-gradient);
+        }
+
+        .creative-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.3rem;
+            background: var(--bg-gradient);
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 8px 0;
+            color: var(--dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* استایل‌های جدید برای آیتم‌های سند */
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .document-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .document-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .document-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .document-meta-item i {
+            font-size: 0.75rem;
+        }
+
+        /* استایل‌های جدید برای فرم‌ها */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            background: white;
         }
     </style>
 </head>
 <body>
     <!-- صفحه ورود -->
-    <div class="login-container" id="login-page">
-        <div class="login-header">
-            <div class="login-icon">
-                <i class="fas fa-calculator"></i>
+    <div class="auth-container" id="login-page">
+        <div class="login-card creative-card fade-in">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h1 class="brand-name">Aura</h1>
+                <p class="brand-tagline">سیستم حسابداری خلاق و مدرن</p>
             </div>
-            <h1 class="login-title">سیستم حسابداری هوشمند</h1>
-            <p class="login-subtitle">لطفاً برای ورود اطلاعات خود را وارد کنید</p>
+            <form class="login-form" id="login-form">
+                <div class="input-group">
+                    <label for="username" class="input-label">نام کاربری</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="username" class="input-field" placeholder="نام کاربری خود را وارد کنید" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password" class="input-label">رمز عبور</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" class="input-field" placeholder="رمز عبور خود را وارد کنید" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    ورود به سیستم
+                </button>
+                
+                <div class="error-message" id="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    نام کاربری یا رمز عبور اشتباه است!
+                </div>
+            </form>
         </div>
-        <form class="login-form" id="login-form">
-            <div class="form-group">
-                <label for="username">نام کاربری</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید" required>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">رمز عبور</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-lock input-icon"></i>
-                    <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید" required>
-                </div>
-            </div>
-            
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i>
-                ورود به سیستم
-            </button>
-            
-            <div class="error-message" id="error-message">
-                <i class="fas fa-exclamation-circle"></i>
-                نام کاربری یا رمز عبور اشتباه است!
-            </div>
-        </form>
     </div>
 
     <!-- صفحه اصلی سیستم -->
     <div id="main-app">
-        <div class="app-container">
+        <div class="app-layout">
             <!-- نوار کناری -->
             <div class="sidebar">
                 <div class="sidebar-header">
@@ -770,9 +1084,8 @@
                         <div class="app-logo-icon">
                             <i class="fas fa-calculator"></i>
                         </div>
-                        <div class="app-logo-text">سیستم مدیریت مالی</div>
+                        <div class="app-logo-text">Aura</div>
                     </div>
-                    <p class="app-description">مدیریت هوشمند امور مالی</p>
                 </div>
                 
                 <div class="sidebar-nav">
@@ -794,6 +1107,7 @@
                     <div class="user-avatar">A</div>
                     <div class="user-info">
                         <div class="user-name">Amiri</div>
+                        <div class="user-role">مدیر سیستم</div>
                     </div>
                     <button class="logout-btn" id="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
@@ -814,7 +1128,39 @@
                 </div>
                 
                 <div class="content-body">
-                    <div class="card">
+                    <!-- کارت‌های آمار -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="stat-value" id="total-transactions">0</div>
+                            <div class="stat-label">معاملات ثبت شده</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-value" id="total-income">0 ریال</div>
+                            <div class="stat-label">مجموع درآمد</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="stat-value" id="total-expenses">0 ریال</div>
+                            <div class="stat-label">مجموع هزینه</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="stat-value" id="net-balance">0 ریال</div>
+                            <div class="stat-label">مانده خالص</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card creative-card">
                         <div class="card-header">
                             <h2 class="card-title" id="form-title">
                                 <i class="fas fa-edit"></i>
@@ -825,18 +1171,18 @@
                         <div id="transaction-tab" class="tab-content">
                             <form id="transaction-form">
                                 <div class="form-group">
-                                    <label for="transaction-date">تاریخ معامله</label>
-                                    <input type="date" id="transaction-date" required>
+                                    <label for="transaction-date" class="form-label">تاریخ معامله</label>
+                                    <input type="date" id="transaction-date" class="form-control" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="transaction-description">شرح معامله</label>
-                                    <input type="text" id="transaction-description" placeholder="توضیح مختصر معامله" required>
+                                    <label for="transaction-description" class="form-label">شرح معامله</label>
+                                    <input type="text" id="transaction-description" class="form-control" placeholder="توضیح مختصر معامله" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="transaction-type">نوع معامله</label>
-                                    <select id="transaction-type" required>
+                                    <label for="transaction-type" class="form-label">نوع معامله</label>
+                                    <select id="transaction-type" class="form-control" required>
                                         <option value="">انتخاب کنید</option>
                                         <option value="receipt">دریافت</option>
                                         <option value="payment">پرداخت</option>
@@ -844,26 +1190,26 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="account">حساب</label>
-                                    <select id="account" required>
+                                    <label for="account" class="form-label">حساب</label>
+                                    <select id="account" class="form-control" required>
                                         <option value="">انتخاب کنید</option>
                                     </select>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="amount">مبلغ</label>
+                                    <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
-                                        <input type="text" id="amount" class="amount-input" placeholder="0" required>
+                                        <input type="text" id="amount" class="form-control amount-input" placeholder="0" required>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="notes">ملاحظات (اختیاری)</label>
-                                    <textarea id="notes" rows="3" placeholder="توضیحات اضافی"></textarea>
+                                    <label for="notes" class="form-label">ملاحظات (اختیاری)</label>
+                                    <textarea id="notes" class="form-control" rows="3" placeholder="توضیحات اضافی"></textarea>
                                 </div>
                                 
-                                <button type="submit" class="btn-success">
+                                <button type="submit" class="btn btn-success">
                                     <i class="fas fa-check"></i>
                                     ثبت معامله
                                 </button>
@@ -874,8 +1220,8 @@
                             <div class="account-management">
                                 <h3>افزودن حساب جدید</h3>
                                 <div class="account-form">
-                                    <input type="text" id="new-account-name" placeholder="نام حساب جدید">
-                                    <button type="button" id="add-account" class="btn-success">
+                                    <input type="text" id="new-account-name" class="form-control" placeholder="نام حساب جدید">
+                                    <button type="button" id="add-account" class="btn btn-success">
                                         <i class="fas fa-plus"></i>
                                         افزودن
                                     </button>
@@ -900,7 +1246,7 @@
                         </div>
                     </div>
                     
-                    <div class="card">
+                    <div class="card creative-card">
                         <div class="card-header">
                             <h2 class="card-title">
                                 <i class="fas fa-file-alt"></i>
@@ -920,15 +1266,15 @@
                         </div>
                         
                         <div class="actions">
-                            <button id="generate-document" class="btn-success">
+                            <button id="generate-document" class="btn btn-success">
                                 <i class="fas fa-file-invoice-dollar"></i>
                                 تولید سند حسابداری
                             </button>
-                            <button id="save-document" class="btn-warning">
+                            <button id="save-document" class="btn btn-warning">
                                 <i class="fas fa-save"></i>
                                 ذخیره سند
                             </button>
-                            <button id="clear-all" class="btn-danger">
+                            <button id="clear-all" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i>
                                 پاک کردن همه
                             </button>
@@ -959,10 +1305,10 @@
         
         // کلیدهای localStorage
         const STORAGE_KEYS = {
-            ACCOUNTS: 'accounting_system_accounts',
-            TRANSACTIONS: 'accounting_system_transactions',
-            DOCUMENTS: 'accounting_system_documents',
-            DOCUMENT_COUNTER: 'accounting_system_document_counter'
+            ACCOUNTS: 'aura_accounting_system_accounts',
+            TRANSACTIONS: 'aura_accounting_system_transactions',
+            DOCUMENTS: 'aura_accounting_system_documents',
+            DOCUMENT_COUNTER: 'aura_accounting_system_document_counter'
         };
         
         // آرایه برای ذخیره معاملات
@@ -1001,6 +1347,12 @@
         const documentsList = document.getElementById('documents-list');
         const amountInput = document.getElementById('amount');
         
+        // عناصر آمار
+        const totalTransactionsEl = document.getElementById('total-transactions');
+        const totalIncomeEl = document.getElementById('total-income');
+        const totalExpensesEl = document.getElementById('total-expenses');
+        const netBalanceEl = document.getElementById('net-balance');
+        
         // توابع localStorage
         function saveToLocalStorage(key, data) {
             try {
@@ -1038,14 +1390,6 @@
             transactions = loadFromLocalStorage(STORAGE_KEYS.TRANSACTIONS, []);
             savedDocuments = loadFromLocalStorage(STORAGE_KEYS.DOCUMENTS, []);
             documentCounter = loadFromLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, 1);
-        }
-        
-        // ذخیره تمام داده‌ها
-        function saveAllData() {
-            saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
-            saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-            saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
-            saveToLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, documentCounter);
         }
         
         // مدیریت ورود به سیستم
@@ -1096,6 +1440,9 @@
             
             // بارگذاری معاملات
             updateTransactionList();
+            
+            // به‌روزرسانی آمار
+            updateStats();
             
             // مخفی کردن خلاصه سند در ابتدا
             documentSummary.style.display = 'none';
@@ -1149,6 +1496,9 @@
                 
                 // به‌روزرسانی لیست معاملات
                 updateTransactionList();
+                
+                // به‌روزرسانی آمار
+                updateStats();
                 
                 // پاک کردن فرم
                 transactionForm.reset();
@@ -1218,6 +1568,7 @@
                     transactions = [];
                     saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
                     updateTransactionList();
+                    updateStats();
                     documentPreview.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-file-alt"></i>
@@ -1367,7 +1718,7 @@
                 html += `
                     <div class="account-item">
                         <span>${account.name}</span>
-                        <button class="btn-danger btn-sm" onclick="deleteAccount(${account.id})">
+                        <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">
                             <i class="fas fa-trash"></i>
                             حذف
                         </button>
@@ -1392,18 +1743,37 @@
             
             let html = '';
             savedDocuments.forEach(document => {
+                // محاسبه جمع مبالغ
+                let totalAmount = 0;
+                document.transactions.forEach(transaction => {
+                    totalAmount += transaction.amount;
+                });
+                
                 html += `
                     <div class="document-item">
-                        <div class="document-details">
-                            <span>سند شماره ${document.number}</span>
-                            <small>تاریخ: ${document.date} - ${document.transactions.length} معامله</small>
+                        <div class="document-info">
+                            <div class="document-title">سند شماره ${document.number}</div>
+                            <div class="document-meta">
+                                <div class="document-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${document.date}</span>
+                                </div>
+                                <div class="document-meta-item">
+                                    <i class="fas fa-list"></i>
+                                    <span>${document.transactions.length} معامله</span>
+                                </div>
+                                <div class="document-meta-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>${formatCurrency(totalAmount)} ریال</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="document-actions">
-                            <button class="btn-success btn-sm" onclick="viewDocument(${document.id})">
+                            <button class="document-action-btn view" onclick="viewDocument(${document.id})">
                                 <i class="fas fa-eye"></i>
                                 مشاهده
                             </button>
-                            <button class="btn-danger btn-sm" onclick="deleteDocument(${document.id})">
+                            <button class="document-action-btn delete" onclick="deleteDocument(${document.id})">
                                 <i class="fas fa-trash"></i>
                                 حذف
                             </button>
@@ -1413,6 +1783,26 @@
             });
             
             documentsList.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی آمار
+        function updateStats() {
+            totalTransactionsEl.textContent = transactions.length;
+            
+            let totalIncome = 0;
+            let totalExpenses = 0;
+            
+            transactions.forEach(transaction => {
+                if (transaction.type === 'receipt') {
+                    totalIncome += transaction.amount;
+                } else {
+                    totalExpenses += transaction.amount;
+                }
+            });
+            
+            totalIncomeEl.textContent = formatCurrency(totalIncome) + ' ریال';
+            totalExpensesEl.textContent = formatCurrency(totalExpenses) + ' ریال';
+            netBalanceEl.textContent = formatCurrency(totalIncome - totalExpenses) + ' ریال';
         }
         
         // تابع حذف حساب
@@ -1446,12 +1836,12 @@
             
             let html = `
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: var(--primary);">سند حسابداری</h2>
-                    <p style="color: var(--gray);">تاریخ: ${documentDate}</p>
+                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری</h2>
+                    <p style="color: var(--gray); font-size: 1rem;">تاریخ: ${documentDate}</p>
                 </div>
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid var(--border);">
+                <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);">
                     <thead>
-                        <tr style="background-color: var(--primary); color: white;">
+                        <tr style="background: var(--bg-gradient); color: white;">
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">تاریخ</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
@@ -1473,9 +1863,9 @@
                     <tr>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.date}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}">${typeText}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left;">${formatCurrency(transaction.amount)}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
                     </tr>
                 `;
                 
@@ -1537,6 +1927,7 @@
             transactions = [];
             saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
             updateTransactionList();
+            updateStats();
             
             // پاک کردن پیش‌نمایش
             documentPreview.innerHTML = `
@@ -1563,12 +1954,12 @@
             // نمایش سند در پیش‌نمایش
             let html = `
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <h2 style="color: var(--primary);">سند حسابداری شماره ${document.number}</h2>
-                    <p style="color: var(--gray);">تاریخ: ${document.date}</p>
+                    <h2 style="color: var(--primary); font-size: 1.6rem;">سند حسابداری شماره ${document.number}</h2>
+                    <p style="color: var(--gray); font-size: 1rem;">تاریخ: ${document.date}</p>
                 </div>
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid var(--border);">
+                <table style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);">
                     <thead>
-                        <tr style="background-color: var(--primary); color: white;">
+                        <tr style="background: var(--bg-gradient); color: white;">
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">تاریخ</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
@@ -1590,9 +1981,9 @@
                     <tr>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.date}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}">${typeText}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
-                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left;">${formatCurrency(transaction.amount)}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
                     </tr>
                 `;
                 
@@ -1663,19 +2054,20 @@
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
-                top: 20px;
-                left: 20px;
-                right: 20px;
+                top: 30px;
+                left: 30px;
+                right: 30px;
                 background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
                 color: white;
                 padding: 15px 20px;
                 border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                 z-index: 1000;
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 font-weight: 600;
+                font-size: 1rem;
                 animation: slideIn 0.3s ease;
             `;
             
