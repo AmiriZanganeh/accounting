@@ -546,7 +546,7 @@
             font-size: 0.9rem;
         }
 
-        .transaction-list, .documents-list, .accounts-list {
+        .transaction-list, .documents-list, .accounts-list, .parties-list {
             max-height: 350px;
             overflow-y: auto;
             border: 2px solid var(--border);
@@ -555,7 +555,7 @@
             background: var(--light);
         }
 
-        .transaction-item, .document-item, .account-item {
+        .transaction-item, .document-item, .account-item, .party-item {
             padding: 14px;
             border-bottom: 2px solid var(--border);
             display: flex;
@@ -566,13 +566,13 @@
             margin-bottom: 8px;
         }
 
-        .transaction-item:hover, .document-item:hover, .account-item:hover {
+        .transaction-item:hover, .document-item:hover, .account-item:hover, .party-item:hover {
             background: white;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transform: translateY(-2px);
         }
 
-        .transaction-item:last-child, .document-item:last-child, .account-item:last-child {
+        .transaction-item:last-child, .document-item:last-child, .account-item:last-child, .party-item:last-child {
             border-bottom: none;
             margin-bottom: 0;
         }
@@ -611,19 +611,19 @@
             flex-wrap: wrap;
         }
 
-        .account-management {
+        .account-management, .party-management {
             margin-top: 20px;
             padding-top: 20px;
             border-top: 2px solid var(--border);
         }
 
-        .account-form {
+        .account-form, .party-form {
             display: flex;
             gap: 12px;
             margin-top: 15px;
         }
 
-        .account-form input {
+        .account-form input, .party-form input {
             flex: 1;
         }
 
@@ -778,7 +778,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .account-form {
+            .account-form, .party-form {
                 flex-direction: column;
             }
 
@@ -1097,6 +1097,10 @@
                         <i class="fas fa-wallet"></i>
                         مدیریت حساب‌ها
                     </div>
+                    <div class="nav-item" data-tab="parties">
+                        <i class="fas fa-users"></i>
+                        مدیریت طرف‌ها
+                    </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
                         اسناد ذخیره شده
@@ -1153,10 +1157,10 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon">
-                                <i class="fas fa-wallet"></i>
+                                <i class="fas fa-file-invoice"></i>
                             </div>
-                            <div class="stat-value" id="net-balance">۰ ریال</div>
-                            <div class="stat-label">مانده خالص</div>
+                            <div class="stat-value" id="total-documents">0</div>
+                            <div class="stat-label">اسناد ذخیره شده</div>
                         </div>
                     </div>
                     
@@ -1197,6 +1201,13 @@
                                 </div>
                                 
                                 <div class="form-group">
+                                    <label for="party" class="form-label">طرف حساب</label>
+                                    <select id="party" class="form-control">
+                                        <option value="">انتخاب کنید (اختیاری)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
@@ -1231,6 +1242,30 @@
                                     <div class="empty-state">
                                         <i class="fas fa-wallet"></i>
                                         <p>هیچ حسابی ثبت نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="parties-tab" class="tab-content hidden">
+                            <div class="party-management">
+                                <h3>افزودن طرف حساب جدید</h3>
+                                <div class="party-form">
+                                    <input type="text" id="new-party-name" class="form-control" placeholder="نام طرف حساب">
+                                    <select id="new-party-type" class="form-control">
+                                        <option value="buyer">خریدار</option>
+                                        <option value="seller">فروشنده</option>
+                                    </select>
+                                    <button type="button" id="add-party" class="btn btn-success">
+                                        <i class="fas fa-plus"></i>
+                                        افزودن
+                                    </button>
+                                </div>
+                                
+                                <div class="parties-list" id="parties-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <p>هیچ طرف حسابی ثبت نشده است</p>
                                     </div>
                                 </div>
                             </div>
@@ -1308,7 +1343,8 @@
             ACCOUNTS: 'aura_accounting_system_accounts',
             TRANSACTIONS: 'aura_accounting_system_transactions',
             DOCUMENTS: 'aura_accounting_system_documents',
-            DOCUMENT_COUNTER: 'aura_accounting_system_document_counter'
+            DOCUMENT_COUNTER: 'aura_accounting_system_document_counter',
+            PARTIES: 'aura_accounting_system_parties'
         };
         
         // آرایه برای ذخیره معاملات
@@ -1316,6 +1352,9 @@
         
         // آرایه برای ذخیره حساب‌ها
         let accounts = [];
+        
+        // آرایه برای ذخیره طرف‌های حساب
+        let parties = [];
         
         // آرایه برای ذخیره اسناد
         let savedDocuments = [];
@@ -1339,11 +1378,16 @@
         const saveDocumentBtn = document.getElementById('save-document');
         const clearAllBtn = document.getElementById('clear-all');
         const accountSelect = document.getElementById('account');
+        const partySelect = document.getElementById('party');
         const navItems = document.querySelectorAll('.nav-item');
         const tabContents = document.querySelectorAll('.tab-content');
         const addAccountBtn = document.getElementById('add-account');
         const newAccountNameInput = document.getElementById('new-account-name');
         const accountsList = document.getElementById('accounts-list');
+        const addPartyBtn = document.getElementById('add-party');
+        const newPartyNameInput = document.getElementById('new-party-name');
+        const newPartyTypeSelect = document.getElementById('new-party-type');
+        const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
         const amountInput = document.getElementById('amount');
         
@@ -1351,7 +1395,7 @@
         const totalTransactionsEl = document.getElementById('total-transactions');
         const totalIncomeEl = document.getElementById('total-income');
         const totalExpensesEl = document.getElementById('total-expenses');
-        const netBalanceEl = document.getElementById('net-balance');
+        const totalDocumentsEl = document.getElementById('total-documents');
         
         // توابع localStorage
         function saveToLocalStorage(key, data) {
@@ -1385,6 +1429,12 @@
                 { id: 6, name: 'فروش' },
                 { id: 7, name: 'هزینه اجاره' },
                 { id: 8, name: 'هزینه حقوق' }
+            ]);
+            
+            parties = loadFromLocalStorage(STORAGE_KEYS.PARTIES, [
+                { id: 1, name: 'شرکت البرز', type: 'buyer' },
+                { id: 2, name: 'شرکت پارس', type: 'seller' },
+                { id: 3, name: 'فروشگاه مرکزی', type: 'buyer' }
             ]);
             
             transactions = loadFromLocalStorage(STORAGE_KEYS.TRANSACTIONS, []);
@@ -1432,8 +1482,14 @@
             // بارگذاری حساب‌ها در dropdown
             updateAccountSelect();
             
+            // بارگذاری طرف‌های حساب در dropdown
+            updatePartySelect();
+            
             // بارگذاری لیست حساب‌ها
             updateAccountsList();
+            
+            // بارگذاری لیست طرف‌های حساب
+            updatePartiesList();
             
             // بارگذاری اسناد ذخیره شده
             updateDocumentsList();
@@ -1456,6 +1512,7 @@
                 const description = document.getElementById('transaction-description').value;
                 const type = document.getElementById('transaction-type').value;
                 const accountId = document.getElementById('account').value;
+                const partyId = document.getElementById('party').value;
                 const amountText = document.getElementById('amount').value;
                 const notes = document.getElementById('notes').value;
                 
@@ -1476,6 +1533,13 @@
                 // پیدا کردن نام حساب
                 const account = accounts.find(acc => acc.id == accountId);
                 
+                // پیدا کردن نام طرف حساب
+                let partyName = '';
+                if (partyId) {
+                    const party = parties.find(p => p.id == partyId);
+                    partyName = party ? party.name : '';
+                }
+                
                 // ایجاد شیء معامله
                 const transaction = {
                     id: Date.now(),
@@ -1484,6 +1548,8 @@
                     type,
                     accountId,
                     accountName: account ? account.name : 'نامشخص',
+                    partyId: partyId || null,
+                    partyName: partyName,
                     amount: amount,
                     notes
                 };
@@ -1531,7 +1597,7 @@
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
                 
-                // به‌روزرسانی dropdown و لیست حساب‌ها
+                // به‌روزرسالی dropdown و لیست حساب‌ها
                 updateAccountSelect();
                 updateAccountsList();
                 
@@ -1540,6 +1606,40 @@
                 
                 // نمایش پیام موفقیت
                 showNotification('حساب جدید با موفقیت افزوده شد!', 'success');
+            });
+            
+            // رویداد افزودن طرف حساب جدید
+            addPartyBtn.addEventListener('click', function() {
+                const partyName = newPartyNameInput.value.trim();
+                const partyType = newPartyTypeSelect.value;
+                
+                if (!partyName) {
+                    showNotification('لطفاً نام طرف حساب را وارد کنید!', 'error');
+                    return;
+                }
+                
+                // ایجاد طرف حساب جدید
+                const newParty = {
+                    id: Date.now(),
+                    name: partyName,
+                    type: partyType
+                };
+                
+                // افزودن به آرایه طرف‌های حساب
+                parties.push(newParty);
+                
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
+                
+                // به‌روزرسانی dropdown و لیست طرف‌های حساب
+                updatePartySelect();
+                updatePartiesList();
+                
+                // پاک کردن فیلد ورودی
+                newPartyNameInput.value = '';
+                
+                // نمایش پیام موفقیت
+                showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
             });
             
             // رویداد تولید سند حسابداری
@@ -1642,6 +1742,11 @@
                     description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
                     formTitle: 'لیست حساب‌ها'
                 },
+                'parties': {
+                    title: 'مدیریت طرف‌های حساب',
+                    description: 'در این بخش می‌توانید خریداران و فروشندگان را مدیریت کنید',
+                    formTitle: 'لیست طرف‌های حساب'
+                },
                 'documents': {
                     title: 'اسناد ذخیره شده',
                     description: 'در این بخش می‌توانید اسناد حسابداری ذخیره شده را مشاهده کنید',
@@ -1660,6 +1765,7 @@
             const icons = {
                 'transaction': 'edit',
                 'accounts': 'wallet',
+                'parties': 'users',
                 'documents': 'file-invoice'
             };
             return icons[tabId];
@@ -1683,11 +1789,17 @@
                 const typeText = transaction.type === 'payment' ? 'پرداخت' : 'دریافت';
                 const typeIcon = transaction.type === 'payment' ? 'fa-arrow-up' : 'fa-arrow-down';
                 
+                let partyInfo = '';
+                if (transaction.partyName) {
+                    partyInfo = `<small>طرف حساب: ${transaction.partyName}</small>`;
+                }
+                
                 html += `
                     <div class="transaction-item">
                         <div class="transaction-details">
                             <span>${transaction.description}</span>
                             <small>${transaction.date} - ${typeText} از ${transaction.accountName}</small>
+                            ${partyInfo}
                         </div>
                         <div class="transaction-amount ${typeClass}">
                             <i class="fas ${typeIcon}"></i>
@@ -1708,6 +1820,17 @@
             });
             
             accountSelect.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی dropdown طرف‌های حساب
+        function updatePartySelect() {
+            let html = '<option value="">انتخاب کنید (اختیاری)</option>';
+            parties.forEach(party => {
+                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
+                html += `<option value="${party.id}">${party.name} (${typeText})</option>`;
+            });
+            
+            partySelect.innerHTML = html;
         }
         
         // تابع به‌روزرسانی لیست حساب‌ها
@@ -1736,6 +1859,40 @@
             });
             
             accountsList.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی لیست طرف‌های حساب
+        function updatePartiesList() {
+            if (parties.length === 0) {
+                partiesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p>هیچ طرف حسابی ثبت نشده است</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            parties.forEach(party => {
+                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
+                const typeClass = party.type === 'buyer' ? 'success' : 'warning';
+                
+                html += `
+                    <div class="party-item">
+                        <div>
+                            <span>${party.name}</span>
+                            <small style="color: var(--${typeClass});">(${typeText})</small>
+                        </div>
+                        <button class="btn btn-danger btn-sm" onclick="deleteParty(${party.id})">
+                            <i class="fas fa-trash"></i>
+                            حذف
+                        </button>
+                    </div>
+                `;
+            });
+            
+            partiesList.innerHTML = html;
         }
         
         // تابع به‌روزرسانی لیست اسناد
@@ -1803,6 +1960,9 @@
             // تعداد کل معاملات
             totalTransactionsEl.textContent = toPersianNumbers(transactions.length);
             
+            // تعداد اسناد ذخیره شده
+            totalDocumentsEl.textContent = toPersianNumbers(savedDocuments.length);
+            
             // محاسبه مجموع درآمد (معاملات نوع دریافت)
             let totalIncome = 0;
             let totalExpenses = 0;
@@ -1817,7 +1977,6 @@
             
             totalIncomeEl.textContent = formatCurrency(totalIncome) + ' ریال';
             totalExpensesEl.textContent = formatCurrency(totalExpenses) + ' ریال';
-            netBalanceEl.textContent = formatCurrency(totalIncome - totalExpenses) + ' ریال';
         }
         
         // تابع حذف حساب
@@ -1845,6 +2004,31 @@
             }
         }
         
+        // تابع حذف طرف حساب
+        function deleteParty(partyId) {
+            if (confirm('آیا از حذف این طرف حساب اطمینان دارید؟')) {
+                // بررسی استفاده از طرف حساب در معاملات
+                const partyInUse = transactions.some(transaction => transaction.partyId == partyId);
+                
+                if (partyInUse) {
+                    showNotification('این طرف حساب در معاملات استفاده شده و قابل حذف نیست!', 'error');
+                    return;
+                }
+                
+                // حذف طرف حساب از آرایه
+                parties = parties.filter(party => party.id !== partyId);
+                
+                // ذخیره در localStorage
+                saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
+                
+                // به‌روزرسانی dropdown و لیست طرف‌های حساب
+                updatePartySelect();
+                updatePartiesList();
+                
+                showNotification('طرف حساب با موفقیت حذف شد!', 'success');
+            }
+        }
+        
         // تابع تولید سند حسابداری
         function generateAccountingDocument() {
             let documentDate = new Date().toLocaleDateString('fa-IR');
@@ -1861,6 +2045,7 @@
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">حساب</th>
+                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">طرف حساب</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: left;">مبلغ (ریال)</th>
                         </tr>
                     </thead>
@@ -1880,6 +2065,7 @@
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
                         <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.partyName || '-'}</td>
                         <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
                     </tr>
                 `;
@@ -1979,6 +2165,7 @@
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">شرح</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">نوع</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">حساب</th>
+                            <th style="border: 1px solid var(--border); padding: 12px; text-align: right;">طرف حساب</th>
                             <th style="border: 1px solid var(--border); padding: 12px; text-align: left;">مبلغ (ریال)</th>
                         </tr>
                     </thead>
@@ -1998,6 +2185,7 @@
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.description}</td>
                         <td style="border: 1px solid var(--border); padding: 10px; color: ${typeColor}; font-weight: 600;">${typeText}</td>
                         <td style="border: 1px solid var(--border); padding: 10px;">${transaction.accountName}</td>
+                        <td style="border: 1px solid var(--border); padding: 10px;">${transaction.partyName || '-'}</td>
                         <td style="border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 600;">${formatCurrency(transaction.amount)}</td>
                     </tr>
                 `;
