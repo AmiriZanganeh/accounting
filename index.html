@@ -1088,6 +1088,25 @@
             color: var(--danger);
             font-weight: 600;
         }
+
+        .document-description {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+        }
+
+        .description-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .description-content {
+            color: var(--gray);
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -1193,31 +1212,24 @@
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-icon">
-                                <i class="fas fa-receipt"></i>
-                            </div>
-                            <div class="stat-value" id="total-transactions">0</div>
-                            <div class="stat-label">معاملات ثبت شده</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="stat-value" id="total-income">۰ ریال</div>
-                            <div class="stat-label">مجموع درآمد</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-credit-card"></i>
-                            </div>
-                            <div class="stat-value" id="total-expenses">۰ ریال</div>
-                            <div class="stat-label">مجموع هزینه</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
                                 <i class="fas fa-file-invoice"></i>
                             </div>
                             <div class="stat-value" id="total-documents">0</div>
                             <div class="stat-label">اسناد ذخیره شده</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="stat-value" id="total-accounts">0</div>
+                            <div class="stat-label">حساب‌های تعریف شده</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-value" id="total-parties">0</div>
+                            <div class="stat-label">طرف‌های حساب</div>
                         </div>
                     </div>
                     
@@ -1359,11 +1371,7 @@
                         </div>
                         
                         <div class="actions">
-                            <button id="generate-document" class="btn btn-success">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                تولید سند حسابداری
-                            </button>
-                            <button id="save-document" class="btn btn-warning">
+                            <button id="save-document" class="btn btn-success">
                                 <i class="fas fa-save"></i>
                                 ذخیره سند
                             </button>
@@ -1371,19 +1379,6 @@
                                 <i class="fas fa-trash-alt"></i>
                                 پاک کردن همه
                             </button>
-                        </div>
-                        
-                        <div style="margin-top: 25px;">
-                            <h3 class="card-title">
-                                <i class="fas fa-list"></i>
-                                لیست معاملات ثبت شده
-                            </h3>
-                            <div class="transaction-list" id="transaction-list">
-                                <div class="empty-state">
-                                    <i class="fas fa-receipt"></i>
-                                    <p>هیچ معامله‌ای ثبت نشده است</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1429,9 +1424,7 @@
         const formTitle = document.getElementById('form-title');
         
         const transactionForm = document.getElementById('transaction-form');
-        const transactionList = document.getElementById('transaction-list');
         const documentPreview = document.getElementById('document-preview');
-        const generateDocumentBtn = document.getElementById('generate-document');
         const saveDocumentBtn = document.getElementById('save-document');
         const clearAllBtn = document.getElementById('clear-all');
         const accountSelect = document.getElementById('account');
@@ -1449,10 +1442,9 @@
         const amountInput = document.getElementById('amount');
         
         // عناصر آمار
-        const totalTransactionsEl = document.getElementById('total-transactions');
-        const totalIncomeEl = document.getElementById('total-income');
-        const totalExpensesEl = document.getElementById('total-expenses');
         const totalDocumentsEl = document.getElementById('total-documents');
+        const totalAccountsEl = document.getElementById('total-accounts');
+        const totalPartiesEl = document.getElementById('total-parties');
         
         // توابع localStorage
         function saveToLocalStorage(key, data) {
@@ -1551,9 +1543,6 @@
             // بارگذاری اسناد ذخیره شده
             updateDocumentsList();
             
-            // بارگذاری معاملات
-            updateTransactionList();
-            
             // به‌روزرسانی آمار
             updateStats();
             
@@ -1617,9 +1606,6 @@
                 
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-                
-                // به‌روزرسانی لیست معاملات
-                updateTransactionList();
                 
                 // به‌روزرسانی آمار
                 updateStats();
@@ -1703,16 +1689,6 @@
                 showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
             });
             
-            // رویداد تولید سند حسابداری
-            generateDocumentBtn.addEventListener('click', function() {
-                if (transactions.length === 0) {
-                    showNotification('هیچ معامله‌ای برای تولید سند وجود ندارد!', 'error');
-                    return;
-                }
-                
-                generateAccountingDocument();
-            });
-            
             // رویداد ذخیره سند
             saveDocumentBtn.addEventListener('click', function() {
                 if (transactions.length === 0) {
@@ -1728,7 +1704,6 @@
                 if (confirm('آیا از پاک کردن همه معاملات اطمینان دارید؟')) {
                     transactions = [];
                     saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
-                    updateTransactionList();
                     updateStats();
                     documentPreview.innerHTML = `
                         <div class="empty-state">
@@ -1829,47 +1804,6 @@
                 'documents': 'file-invoice'
             };
             return icons[tabId];
-        }
-        
-        // تابع به‌روزرسانی لیست معاملات
-        function updateTransactionList() {
-            if (transactions.length === 0) {
-                transactionList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-receipt"></i>
-                        <p>هیچ معامله‌ای ثبت نشده است</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            transactions.forEach(transaction => {
-                const typeClass = transaction.transactionType === 'payment' ? 'payment' : 'receipt';
-                const typeText = transaction.transactionType === 'payment' ? 'پرداخت' : 'دریافت';
-                const typeIcon = transaction.transactionType === 'payment' ? 'fa-arrow-up' : 'fa-arrow-down';
-                
-                let partyInfo = '';
-                if (transaction.partyName) {
-                    partyInfo = `<small>طرف حساب: ${transaction.partyName}</small>`;
-                }
-                
-                html += `
-                    <div class="transaction-item">
-                        <div class="transaction-details">
-                            <span>${transaction.description}</span>
-                            <small>${transaction.date} - ${typeText} (${getPaymentTypeText(transaction.paymentType)}) - ${transaction.accountName}</small>
-                            ${partyInfo}
-                        </div>
-                        <div class="transaction-amount ${typeClass}">
-                            <i class="fas ${typeIcon}"></i>
-                            ${formatCurrency(transaction.amount)} ریال
-                        </div>
-                    </div>
-                `;
-            });
-            
-            transactionList.innerHTML = html;
         }
         
         // تابع دریافت متن نوع پرداخت
@@ -1979,20 +1913,6 @@
             
             let html = '';
             savedDocuments.forEach(document => {
-                // محاسبه جمع مبالغ
-                let totalAmount = 0;
-                let totalReceipts = 0;
-                let totalPayments = 0;
-                
-                document.transactions.forEach(transaction => {
-                    totalAmount += transaction.amount;
-                    if (transaction.transactionType === 'receipt') {
-                        totalReceipts += transaction.amount;
-                    } else {
-                        totalPayments += transaction.amount;
-                    }
-                });
-                
                 html += `
                     <div class="document-item">
                         <div class="document-info">
@@ -2004,7 +1924,7 @@
                                 </div>
                                 <div class="document-meta-item">
                                     <i class="fas fa-money-bill-wave"></i>
-                                    <span>${formatCurrency(totalAmount)}</span>
+                                    <span>${formatCurrency(document.totalAmount)}</span>
                                 </div>
                             </div>
                         </div>
@@ -2027,38 +1947,9 @@
         
         // تابع به‌روزرسانی آمار
         function updateStats() {
-            // محاسبه آمار از تمام معاملات (هم معاملات فعلی و هم معاملات ذخیره شده در اسناد)
-            let totalTransactionsCount = transactions.length;
-            let totalIncome = 0;
-            let totalExpenses = 0;
-            
-            // محاسبه از معاملات فعلی
-            transactions.forEach(transaction => {
-                if (transaction.transactionType === 'receipt') {
-                    totalIncome += transaction.amount;
-                } else if (transaction.transactionType === 'payment') {
-                    totalExpenses += transaction.amount;
-                }
-            });
-            
-            // محاسبه از اسناد ذخیره شده
-            savedDocuments.forEach(document => {
-                totalTransactionsCount += document.transactions.length;
-                
-                document.transactions.forEach(transaction => {
-                    if (transaction.transactionType === 'receipt') {
-                        totalIncome += transaction.amount;
-                    } else if (transaction.transactionType === 'payment') {
-                        totalExpenses += transaction.amount;
-                    }
-                });
-            });
-            
-            // به‌روزرسانی آمار
-            totalTransactionsEl.textContent = toPersianNumbers(totalTransactionsCount);
-            totalIncomeEl.textContent = formatCurrency(totalIncome) + ' ریال';
-            totalExpensesEl.textContent = formatCurrency(totalExpenses) + ' ریال';
             totalDocumentsEl.textContent = toPersianNumbers(savedDocuments.length);
+            totalAccountsEl.textContent = toPersianNumbers(accounts.length);
+            totalPartiesEl.textContent = toPersianNumbers(parties.length);
         }
         
         // تابع حذف حساب
@@ -2114,6 +2005,27 @@
         // تابع تولید سند حسابداری با منطق جدید
         function generateAccountingDocument() {
             let documentDate = new Date().toLocaleDateString('fa-IR');
+            
+            // محاسبه جمع مبالغ برای شرح
+            let totalAmount = 0;
+            let descriptionText = '';
+            
+            transactions.forEach(transaction => {
+                totalAmount += transaction.amount;
+                
+                // اضافه کردن طرف حساب به شرح
+                let partyInfo = '';
+                if (transaction.partyName) {
+                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
+                }
+                
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
+            });
+            
+            // حذف آخرین خط تیره از شرح
+            if (descriptionText.endsWith(' - ')) {
+                descriptionText = descriptionText.slice(0, -3);
+            }
             
             let html = `
                 <div class="accounting-document">
@@ -2199,6 +2111,10 @@
             html += `
                         </tbody>
                     </table>
+                    <div class="document-description">
+                        <div class="description-title">شرح سند:</div>
+                        <div class="description-content">${descriptionText}</div>
+                    </div>
                 </div>
             `;
             
@@ -2209,11 +2125,18 @@
         function saveAccountingDocument() {
             const documentDate = new Date().toLocaleDateString('fa-IR');
             
+            // محاسبه جمع مبلغ کل
+            let totalAmount = 0;
+            transactions.forEach(transaction => {
+                totalAmount += transaction.amount;
+            });
+            
             // ایجاد سند جدید
             const newDocument = {
                 id: Date.now(),
                 number: documentCounter++,
                 date: documentDate,
+                totalAmount: totalAmount,
                 transactions: [...transactions] // کپی از معاملات فعلی
             };
             
@@ -2249,6 +2172,23 @@
             if (!document) {
                 showNotification('سند مورد نظر یافت نشد!', 'error');
                 return;
+            }
+            
+            // ایجاد شرح از معاملات
+            let descriptionText = '';
+            document.transactions.forEach(transaction => {
+                // اضافه کردن طرف حساب به شرح
+                let partyInfo = '';
+                if (transaction.partyName) {
+                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
+                }
+                
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
+            });
+            
+            // حذف آخرین خط تیره از شرح
+            if (descriptionText.endsWith(' - ')) {
+                descriptionText = descriptionText.slice(0, -3);
             }
             
             // نمایش سند در پیش‌نمایش
@@ -2336,6 +2276,10 @@
             html += `
                         </tbody>
                     </table>
+                    <div class="document-description">
+                        <div class="description-title">شرح سند:</div>
+                        <div class="description-content">${descriptionText}</div>
+                    </div>
                 </div>
             `;
             
