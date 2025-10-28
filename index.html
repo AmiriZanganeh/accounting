@@ -1500,14 +1500,18 @@
         const VALID_USERNAME = "Amiri";
         const VALID_PASSWORD = "1360";
         
-        // کلیدهای localStorage
-        const STORAGE_KEYS = {
-            ACCOUNTS: 'aura_accounting_system_accounts',
-            TRANSACTIONS: 'aura_accounting_system_transactions',
-            DOCUMENTS: 'aura_accounting_system_documents',
-            DOCUMENT_COUNTER: 'aura_accounting_system_document_counter',
-            PARTIES: 'aura_accounting_system_parties',
-            CURRENT_DOCUMENT: 'aura_accounting_system_current_document'
+        // نام و نسخه پایگاه داده
+        const DB_NAME = 'AuraAccountingDB';
+        const DB_VERSION = 1;
+        
+        // نام جداول
+        const STORE_NAMES = {
+            ACCOUNTS: 'accounts',
+            PARTIES: 'parties',
+            TRANSACTIONS: 'transactions',
+            DOCUMENTS: 'documents',
+            CURRENT_DOCUMENT: 'current_document',
+            DOCUMENT_COUNTER: 'document_counter'
         };
         
         // آرایه برای ذخیره معاملات سند جاری
@@ -1522,6 +1526,9 @@
         // آرایه برای ذخیره اسناد
         let savedDocuments = [];
         let documentCounter = 1;
+        
+        // متغیر پایگاه داده
+        let db;
         
         // عناصر DOM
         const loginPage = document.getElementById('login-page');
@@ -1558,53 +1565,6 @@
         const payableDocsTotalEl = document.getElementById('payable-docs-total');
         const amountInput = document.getElementById('amount');
         
-        // توابع localStorage
-        function saveToLocalStorage(key, data) {
-            try {
-                localStorage.setItem(key, JSON.stringify(data));
-                return true;
-            } catch (error) {
-                console.error('خطا در ذخیره‌سازی داده‌ها:', error);
-                return false;
-            }
-        }
-        
-        function loadFromLocalStorage(key, defaultValue = null) {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : defaultValue;
-            } catch (error) {
-                console.error('خطا در بازیابی داده‌ها:', error);
-                return defaultValue;
-            }
-        }
-        
-        // بارگذاری داده‌ها از localStorage
-        function loadAllData() {
-            accounts = loadFromLocalStorage(STORAGE_KEYS.ACCOUNTS, [
-                { id: 1, name: 'موجودی نقد' },
-                { id: 2, name: 'حساب دریافتنی' },
-                { id: 3, name: 'اسناد دریافتنی' },
-                { id: 4, name: 'حساب پرداختنی' },
-                { id: 5, name: 'اسناد پرداختنی' },
-                { id: 6, name: 'فروش' },
-                { id: 7, name: 'هزینه اجاره' },
-                { id: 8, name: 'هزینه حقوق' }
-            ]);
-            
-            parties = loadFromLocalStorage(STORAGE_KEYS.PARTIES, [
-                { id: 1, name: 'شرکت البرز', type: 'خریدار' },
-                { id: 2, name: 'شرکت پارس', type: 'فروشنده' },
-                { id: 3, name: 'فروشگاه مرکزی', type: 'خریدار' }
-            ]);
-            
-            savedDocuments = loadFromLocalStorage(STORAGE_KEYS.DOCUMENTS, []);
-            documentCounter = loadFromLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, 1);
-            
-            // بارگذاری معاملات سند جاری
-            currentDocumentTransactions = loadFromLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, []);
-        }
-        
         // مدیریت ورود به سیستم
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1635,226 +1595,486 @@
         
         // مقداردهی اولیه برنامه پس از ورود
         function initializeApp() {
-            // بارگذاری داده‌ها از localStorage
-            loadAllData();
-            
-            // تنظیم تاریخ امروز
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('transaction-date').value = today;
-            
-            // بارگذاری حساب‌ها در dropdown
-            updateAccountSelect();
-            
-            // بارگذاری طرف‌های حساب در dropdown
-            updatePartySelect();
-            
-            // بارگذاری لیست حساب‌ها
-            updateAccountsList();
-            
-            // بارگذاری لیست طرف‌های حساب
-            updatePartiesList();
-            
-            // بارگذاری اسناد ذخیره شده
-            updateDocumentsList();
-            
-            // نمایش سند جاری اگر معامله‌ای وجود دارد
-            if (currentDocumentTransactions.length > 0) {
-                generateAccountingDocument();
-            }
-            
-            // رویداد ثبت فرم معامله
-            transactionForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // دریافت مقادیر از فرم
-                const date = document.getElementById('transaction-date').value;
-                const transactionType = document.getElementById('transaction-type').value;
-                const paymentType = document.getElementById('payment-type').value;
-                const accountId = document.getElementById('account').value;
-                const partyId = document.getElementById('party').value;
-                const amountText = document.getElementById('amount').value;
-                const description = document.getElementById('description').value;
-                
-                // اعتبارسنجی
-                if (!date || !transactionType || !paymentType || !accountId || !amountText || !description) {
-                    alert('لطفاً تمام فیلدهای ضروری را پر کنید!');
-                    return;
-                }
-                
-                // تبدیل مبلغ به عدد
-                const amount = parseAmount(amountText);
-                
-                if (isNaN(amount) || amount <= 0) {
-                    alert('لطفاً یک مبلغ معتبر وارد کنید!');
-                    return;
-                }
-                
-                // پیدا کردن نام حساب
-                const account = accounts.find(acc => acc.id == accountId);
-                if (!account) {
-                    alert('حساب انتخاب شده معتبر نیست!');
-                    return;
-                }
-                
-                // پیدا کردن نام طرف حساب
-                let partyName = '';
-                if (partyId) {
-                    const party = parties.find(p => p.id == partyId);
-                    partyName = party ? party.name : '';
-                }
-                
-                // ایجاد شیء معامله
-                const transaction = {
-                    id: Date.now(),
-                    date: formatDate(date),
-                    transactionType,
-                    paymentType,
-                    accountId,
-                    accountName: account.name,
-                    partyId: partyId || null,
-                    partyName: partyName,
-                    amount: amount,
-                    description
-                };
-                
-                // افزودن به آرایه معاملات سند جاری
-                currentDocumentTransactions.push(transaction);
-                
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
-                
-                // پاک کردن فرم
-                transactionForm.reset();
-                
-                // تنظیم مجدد تاریخ به امروز
+            // باز کردن پایگاه داده
+            openDatabase().then(() => {
+                // بارگذاری داده‌ها از IndexedDB
+                return Promise.all([
+                    loadAccounts(),
+                    loadParties(),
+                    loadDocuments(),
+                    loadDocumentCounter(),
+                    loadCurrentDocument()
+                ]);
+            }).then(() => {
+                // تنظیم تاریخ امروز
+                const today = new Date().toISOString().split('T')[0];
                 document.getElementById('transaction-date').value = today;
                 
-                // نمایش پیام موفقیت
-                showNotification('معامله با موفقیت ثبت شد!', 'success');
-                
-                // تولید خودکار سند حسابداری
-                generateAccountingDocument();
-            });
-            
-            // رویداد افزودن حساب جدید
-            addAccountBtn.addEventListener('click', function() {
-                const accountName = newAccountNameInput.value.trim();
-                
-                if (!accountName) {
-                    showNotification('لطفاً نام حساب را وارد کنید!', 'error');
-                    return;
-                }
-                
-                // ایجاد حساب جدید
-                const newAccount = {
-                    id: Date.now(),
-                    name: accountName
-                };
-                
-                // افزودن به آرایه حساب‌ها
-                accounts.push(newAccount);
-                
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
-                
-                // به‌روزرسالی dropdown و لیست حساب‌ها
+                // بارگذاری حساب‌ها در dropdown
                 updateAccountSelect();
+                
+                // بارگذاری طرف‌های حساب در dropdown
+                updatePartySelect();
+                
+                // بارگذاری لیست حساب‌ها
                 updateAccountsList();
                 
-                // پاک کردن فیلد ورودی
-                newAccountNameInput.value = '';
-                
-                // نمایش پیام موفقیت
-                showNotification('حساب جدید با موفقیت افزوده شد!', 'success');
-            });
-            
-            // رویداد افزودن طرف حساب جدید
-            addPartyBtn.addEventListener('click', function() {
-                const partyName = newPartyNameInput.value.trim();
-                const partyType = newPartyTypeInput.value.trim();
-                
-                if (!partyName) {
-                    showNotification('لطفاً نام طرف حساب را وارد کنید!', 'error');
-                    return;
-                }
-                
-                if (!partyType) {
-                    showNotification('لطفاً نوع طرف حساب را وارد کنید!', 'error');
-                    return;
-                }
-                
-                // ایجاد طرف حساب جدید
-                const newParty = {
-                    id: Date.now(),
-                    name: partyName,
-                    type: partyType
-                };
-                
-                // افزودن به آرایه طرف‌های حساب
-                parties.push(newParty);
-                
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
-                
-                // به‌روزرسانی dropdown و لیست طرف‌های حساب
-                updatePartySelect();
+                // بارگذاری لیست طرف‌های حساب
                 updatePartiesList();
                 
-                // پاک کردن فیلد ورودی
-                newPartyNameInput.value = '';
-                newPartyTypeInput.value = '';
+                // بارگذاری اسناد ذخیره شده
+                updateDocumentsList();
                 
-                // نمایش پیام موفقیت
-                showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
-            });
-            
-            // رویداد ذخیره سند
-            saveDocumentBtn.addEventListener('click', function() {
-                if (currentDocumentTransactions.length === 0) {
-                    showNotification('هیچ معامله‌ای برای ذخیره سند وجود ندارد!', 'error');
-                    return;
+                // نمایش سند جاری اگر معامله‌ای وجود دارد
+                if (currentDocumentTransactions.length > 0) {
+                    generateAccountingDocument();
                 }
                 
-                saveAccountingDocument();
-            });
-            
-            // رویداد پاک کردن سند جاری
-            clearDocumentBtn.addEventListener('click', function() {
-                if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
-                    currentDocumentTransactions = [];
-                    saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
-                    documentPreview.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                        </div>
-                    `;
-                    showNotification('سند جاری با موفقیت پاک شد!', 'success');
-                }
-            });
-            
-            // مدیریت ناوبری
-            navItems.forEach(navItem => {
-                navItem.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
+                // رویداد ثبت فرم معامله
+                transactionForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
                     
-                    // غیرفعال کردن همه آیتم‌های ناوبری
-                    navItems.forEach(item => item.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.add('hidden'));
+                    // دریافت مقادیر از فرم
+                    const date = document.getElementById('transaction-date').value;
+                    const transactionType = document.getElementById('transaction-type').value;
+                    const paymentType = document.getElementById('payment-type').value;
+                    const accountId = document.getElementById('account').value;
+                    const partyId = document.getElementById('party').value;
+                    const amountText = document.getElementById('amount').value;
+                    const description = document.getElementById('description').value;
                     
-                    // فعال کردن آیتم انتخاب شده
-                    this.classList.add('active');
-                    document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+                    // اعتبارسنجی
+                    if (!date || !transactionType || !paymentType || !accountId || !amountText || !description) {
+                        alert('لطفاً تمام فیلدهای ضروری را پر کنید!');
+                        return;
+                    }
                     
-                    // به‌روزرسانی عنوان صفحه
-                    updatePageTitle(tabId);
+                    // تبدیل مبلغ به عدد
+                    const amount = parseAmount(amountText);
                     
-                    // اگر تب آمار انتخاب شده، آمار را به‌روزرسانی کن
-                    if (tabId === 'statistics') {
-                        updateStatistics();
+                    if (isNaN(amount) || amount <= 0) {
+                        alert('لطفاً یک مبلغ معتبر وارد کنید!');
+                        return;
+                    }
+                    
+                    // پیدا کردن نام حساب
+                    const account = accounts.find(acc => acc.id == accountId);
+                    if (!account) {
+                        alert('حساب انتخاب شده معتبر نیست!');
+                        return;
+                    }
+                    
+                    // پیدا کردن نام طرف حساب
+                    let partyName = '';
+                    if (partyId) {
+                        const party = parties.find(p => p.id == partyId);
+                        partyName = party ? party.name : '';
+                    }
+                    
+                    // ایجاد شیء معامله
+                    const transaction = {
+                        id: Date.now(),
+                        date: formatDate(date),
+                        transactionType,
+                        paymentType,
+                        accountId,
+                        accountName: account.name,
+                        partyId: partyId || null,
+                        partyName: partyName,
+                        amount: amount,
+                        description
+                    };
+                    
+                    // افزودن به آرایه معاملات سند جاری
+                    currentDocumentTransactions.push(transaction);
+                    
+                    // ذخیره در IndexedDB
+                    saveCurrentDocument();
+                    
+                    // پاک کردن فرم
+                    transactionForm.reset();
+                    
+                    // تنظیم مجدد تاریخ به امروز
+                    document.getElementById('transaction-date').value = today;
+                    
+                    // نمایش پیام موفقیت
+                    showNotification('معامله با موفقیت ثبت شد!', 'success');
+                    
+                    // تولید خودکار سند حسابداری
+                    generateAccountingDocument();
+                });
+                
+                // رویداد افزودن حساب جدید
+                addAccountBtn.addEventListener('click', function() {
+                    const accountName = newAccountNameInput.value.trim();
+                    
+                    if (!accountName) {
+                        showNotification('لطفاً نام حساب را وارد کنید!', 'error');
+                        return;
+                    }
+                    
+                    // ایجاد حساب جدید
+                    const newAccount = {
+                        id: Date.now(),
+                        name: accountName
+                    };
+                    
+                    // افزودن به آرایه حساب‌ها
+                    accounts.push(newAccount);
+                    
+                    // ذخیره در IndexedDB
+                    saveAccount(newAccount);
+                    
+                    // به‌روزرسالی dropdown و لیست حساب‌ها
+                    updateAccountSelect();
+                    updateAccountsList();
+                    
+                    // پاک کردن فیلد ورودی
+                    newAccountNameInput.value = '';
+                    
+                    // نمایش پیام موفقیت
+                    showNotification('حساب جدید با موفقیت افزوده شد!', 'success');
+                });
+                
+                // رویداد افزودن طرف حساب جدید
+                addPartyBtn.addEventListener('click', function() {
+                    const partyName = newPartyNameInput.value.trim();
+                    const partyType = newPartyTypeInput.value.trim();
+                    
+                    if (!partyName) {
+                        showNotification('لطفاً نام طرف حساب را وارد کنید!', 'error');
+                        return;
+                    }
+                    
+                    if (!partyType) {
+                        showNotification('لطفاً نوع طرف حساب را وارد کنید!', 'error');
+                        return;
+                    }
+                    
+                    // ایجاد طرف حساب جدید
+                    const newParty = {
+                        id: Date.now(),
+                        name: partyName,
+                        type: partyType
+                    };
+                    
+                    // افزودن به آرایه طرف‌های حساب
+                    parties.push(newParty);
+                    
+                    // ذخیره در IndexedDB
+                    saveParty(newParty);
+                    
+                    // به‌روزرسانی dropdown و لیست طرف‌های حساب
+                    updatePartySelect();
+                    updatePartiesList();
+                    
+                    // پاک کردن فیلد ورودی
+                    newPartyNameInput.value = '';
+                    newPartyTypeInput.value = '';
+                    
+                    // نمایش پیام موفقیت
+                    showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
+                });
+                
+                // رویداد ذخیره سند
+                saveDocumentBtn.addEventListener('click', function() {
+                    if (currentDocumentTransactions.length === 0) {
+                        showNotification('هیچ معامله‌ای برای ذخیره سند وجود ندارد!', 'error');
+                        return;
+                    }
+                    
+                    saveAccountingDocument();
+                });
+                
+                // رویداد پاک کردن سند جاری
+                clearDocumentBtn.addEventListener('click', function() {
+                    if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
+                        currentDocumentTransactions = [];
+                        saveCurrentDocument();
+                        documentPreview.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                            </div>
+                        `;
+                        showNotification('سند جاری با موفقیت پاک شد!', 'success');
                     }
                 });
+                
+                // مدیریت ناوبری
+                navItems.forEach(navItem => {
+                    navItem.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-tab');
+                        
+                        // غیرفعال کردن همه آیتم‌های ناوبری
+                        navItems.forEach(item => item.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.add('hidden'));
+                        
+                        // فعال کردن آیتم انتخاب شده
+                        this.classList.add('active');
+                        document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+                        
+                        // به‌روزرسانی عنوان صفحه
+                        updatePageTitle(tabId);
+                        
+                        // اگر تب آمار انتخاب شده، آمار را به‌روزرسانی کن
+                        if (tabId === 'statistics') {
+                            updateStatistics();
+                        }
+                    });
+                });
+            }).catch(error => {
+                console.error('خطا در مقداردهی اولیه برنامه:', error);
+                showNotification('خطا در بارگذاری داده‌ها!', 'error');
             });
+        }
+        
+        // توابع IndexedDB
+        function openDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در باز کردن پایگاه داده'));
+                };
+                
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    resolve();
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    
+                    // ایجاد جداول در صورت عدم وجود
+                    if (!db.objectStoreNames.contains(STORE_NAMES.ACCOUNTS)) {
+                        const accountsStore = db.createObjectStore(STORE_NAMES.ACCOUNTS, { keyPath: 'id' });
+                        accountsStore.createIndex('name', 'name', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.PARTIES)) {
+                        const partiesStore = db.createObjectStore(STORE_NAMES.PARTIES, { keyPath: 'id' });
+                        partiesStore.createIndex('name', 'name', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.TRANSACTIONS)) {
+                        const transactionsStore = db.createObjectStore(STORE_NAMES.TRANSACTIONS, { keyPath: 'id' });
+                        transactionsStore.createIndex('date', 'date', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.DOCUMENTS)) {
+                        const documentsStore = db.createObjectStore(STORE_NAMES.DOCUMENTS, { keyPath: 'id' });
+                        documentsStore.createIndex('number', 'number', { unique: true });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.CURRENT_DOCUMENT)) {
+                        db.createObjectStore(STORE_NAMES.CURRENT_DOCUMENT, { keyPath: 'id' });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.DOCUMENT_COUNTER)) {
+                        db.createObjectStore(STORE_NAMES.DOCUMENT_COUNTER, { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+        
+        // بارگذاری حساب‌ها از IndexedDB
+        function loadAccounts() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.ACCOUNTS);
+                const request = store.getAll();
+                
+                request.onsuccess = () => {
+                    accounts = request.result;
+                    
+                    // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
+                    if (accounts.length === 0) {
+                        const defaultAccounts = [
+                            { id: 1, name: 'موجودی نقد' },
+                            { id: 2, name: 'حساب دریافتنی' },
+                            { id: 3, name: 'اسناد دریافتنی' },
+                            { id: 4, name: 'حساب پرداختنی' },
+                            { id: 5, name: 'اسناد پرداختنی' },
+                            { id: 6, name: 'فروش' },
+                            { id: 7, name: 'هزینه اجاره' },
+                            { id: 8, name: 'هزینه حقوق' }
+                        ];
+                        
+                        const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
+                        const store = transaction.objectStore(STORE_NAMES.ACCOUNTS);
+                        
+                        defaultAccounts.forEach(account => {
+                            store.add(account);
+                        });
+                        
+                        accounts = defaultAccounts;
+                    }
+                    
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری حساب‌ها'));
+                };
+            });
+        }
+        
+        // بارگذاری طرف‌های حساب از IndexedDB
+        function loadParties() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.PARTIES], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.PARTIES);
+                const request = store.getAll();
+                
+                request.onsuccess = () => {
+                    parties = request.result;
+                    
+                    // اگر طرف‌های حساب خالی هستند، طرف‌های حساب پیش‌فرض را اضافه کن
+                    if (parties.length === 0) {
+                        const defaultParties = [
+                            { id: 1, name: 'شرکت البرز', type: 'خریدار' },
+                            { id: 2, name: 'شرکت پارس', type: 'فروشنده' },
+                            { id: 3, name: 'فروشگاه مرکزی', type: 'خریدار' }
+                        ];
+                        
+                        const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
+                        const store = transaction.objectStore(STORE_NAMES.PARTIES);
+                        
+                        defaultParties.forEach(party => {
+                            store.add(party);
+                        });
+                        
+                        parties = defaultParties;
+                    }
+                    
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری طرف‌های حساب'));
+                };
+            });
+        }
+        
+        // بارگذاری اسناد از IndexedDB
+        function loadDocuments() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.DOCUMENTS], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.DOCUMENTS);
+                const request = store.getAll();
+                
+                request.onsuccess = () => {
+                    savedDocuments = request.result;
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری اسناد'));
+                };
+            });
+        }
+        
+        // بارگذاری شمارنده اسناد از IndexedDB
+        function loadDocumentCounter() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.DOCUMENT_COUNTER], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.DOCUMENT_COUNTER);
+                const request = store.get(1);
+                
+                request.onsuccess = () => {
+                    if (request.result) {
+                        documentCounter = request.result.value;
+                    } else {
+                        // اگر شمارنده وجود ندارد، مقدار پیش‌فرض را تنظیم کن
+                        documentCounter = 1;
+                        saveDocumentCounter();
+                    }
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری شمارنده اسناد'));
+                };
+            });
+        }
+        
+        // بارگذاری سند جاری از IndexedDB
+        function loadCurrentDocument() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.CURRENT_DOCUMENT], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.CURRENT_DOCUMENT);
+                const request = store.get(1);
+                
+                request.onsuccess = () => {
+                    if (request.result) {
+                        currentDocumentTransactions = request.result.transactions || [];
+                    } else {
+                        currentDocumentTransactions = [];
+                    }
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری سند جاری'));
+                };
+            });
+        }
+        
+        // ذخیره حساب در IndexedDB
+        function saveAccount(account) {
+            const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.ACCOUNTS);
+            store.put(account);
+        }
+        
+        // ذخیره طرف حساب در IndexedDB
+        function saveParty(party) {
+            const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.PARTIES);
+            store.put(party);
+        }
+        
+        // ذخیره سند در IndexedDB
+        function saveDocument(document) {
+            const transaction = db.transaction([STORE_NAMES.DOCUMENTS], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.DOCUMENTS);
+            store.put(document);
+        }
+        
+        // ذخیره شمارنده اسناد در IndexedDB
+        function saveDocumentCounter() {
+            const transaction = db.transaction([STORE_NAMES.DOCUMENT_COUNTER], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.DOCUMENT_COUNTER);
+            store.put({ id: 1, value: documentCounter });
+        }
+        
+        // ذخیره سند جاری در IndexedDB
+        function saveCurrentDocument() {
+            const transaction = db.transaction([STORE_NAMES.CURRENT_DOCUMENT], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.CURRENT_DOCUMENT);
+            store.put({ id: 1, transactions: currentDocumentTransactions });
+        }
+        
+        // حذف حساب از IndexedDB
+        function deleteAccountFromDB(accountId) {
+            const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.ACCOUNTS);
+            store.delete(accountId);
+        }
+        
+        // حذف طرف حساب از IndexedDB
+        function deletePartyFromDB(partyId) {
+            const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.PARTIES);
+            store.delete(partyId);
+        }
+        
+        // حذف سند از IndexedDB
+        function deleteDocumentFromDB(documentId) {
+            const transaction = db.transaction([STORE_NAMES.DOCUMENTS], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.DOCUMENTS);
+            store.delete(documentId);
         }
         
         // تابع تبدیل مبلغ به عدد
@@ -2277,8 +2497,8 @@
                 // حذف حساب از آرایه
                 accounts = accounts.filter(account => account.id !== accountId);
                 
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.ACCOUNTS, accounts);
+                // حذف از IndexedDB
+                deleteAccountFromDB(accountId);
                 
                 // به‌روزرسانی dropdown و لیست حساب‌ها
                 updateAccountSelect();
@@ -2294,8 +2514,8 @@
                 // حذف طرف حساب از آرایه
                 parties = parties.filter(party => party.id !== partyId);
                 
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
+                // حذف از IndexedDB
+                deletePartyFromDB(partyId);
                 
                 // به‌روزرسانی dropdown و لیست طرف‌های حساب
                 updatePartySelect();
@@ -2446,13 +2666,13 @@
             // افزودن به آرایه اسناد
             savedDocuments.push(newDocument);
             
-            // ذخیره در localStorage
-            saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
-            saveToLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, documentCounter);
+            // ذخیره در IndexedDB
+            saveDocument(newDocument);
+            saveDocumentCounter();
             
             // پاک کردن سند جاری
             currentDocumentTransactions = [];
-            saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
+            saveCurrentDocument();
             
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
@@ -2596,8 +2816,8 @@
                 // حذف سند از آرایه
                 savedDocuments = savedDocuments.filter(doc => doc.id !== documentId);
                 
-                // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
+                // حذف از IndexedDB
+                deleteDocumentFromDB(documentId);
                 
                 // به‌روزرسانی لیست اسناد
                 updateDocumentsList();
