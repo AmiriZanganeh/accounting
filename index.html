@@ -1119,7 +1119,6 @@
             box-shadow: 0 8px 20px rgba(17, 138, 178, 0.3);
             position: relative;
             overflow: hidden;
-            margin-bottom: 20px;
         }
 
         .back-btn:hover {
@@ -1404,6 +1403,13 @@
                                 </div>
                                 
                                 <div class="form-group">
+                                    <label for="party" class="form-label">طرف حساب (اختیاری)</label>
+                                    <select id="party" class="form-control">
+                                        <option value="">انتخاب کنید</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
@@ -1527,13 +1533,9 @@
                                 <i class="fas fa-save"></i>
                                 ذخیره سند
                             </button>
-                            <button id="clear-all" class="btn btn-danger">
+                            <button id="clear-document" class="btn btn-danger">
                                 <i class="fas fa-trash-alt"></i>
-                                پاک کردن همه
-                            </button>
-                            <button id="back-btn" class="back-btn hidden">
-                                <i class="fas fa-arrow-right"></i>
-                                بازگشت
+                                پاک کردن سند
                             </button>
                         </div>
                     </div>
@@ -1583,9 +1585,9 @@
         const transactionForm = document.getElementById('transaction-form');
         const documentPreview = document.getElementById('document-preview');
         const saveDocumentBtn = document.getElementById('save-document');
-        const clearAllBtn = document.getElementById('clear-all');
-        const backBtn = document.getElementById('back-btn');
+        const clearDocumentBtn = document.getElementById('clear-document');
         const accountSelect = document.getElementById('account');
+        const partySelect = document.getElementById('party');
         const navItems = document.querySelectorAll('.nav-item');
         const tabContents = document.querySelectorAll('.tab-content');
         const addAccountBtn = document.getElementById('add-account');
@@ -1692,6 +1694,9 @@
             // بارگذاری حساب‌ها در dropdown
             updateAccountSelect();
             
+            // بارگذاری طرف‌های حساب در dropdown
+            updatePartySelect();
+            
             // بارگذاری لیست حساب‌ها
             updateAccountsList();
             
@@ -1715,6 +1720,7 @@
                 const transactionType = document.getElementById('transaction-type').value;
                 const paymentType = document.getElementById('payment-type').value;
                 const accountId = document.getElementById('account').value;
+                const partyId = document.getElementById('party').value;
                 const amountText = document.getElementById('amount').value;
                 const description = document.getElementById('description').value;
                 
@@ -1739,6 +1745,13 @@
                     return;
                 }
                 
+                // پیدا کردن نام طرف حساب
+                let partyName = '';
+                if (partyId) {
+                    const party = parties.find(p => p.id == partyId);
+                    partyName = party ? party.name : '';
+                }
+                
                 // ایجاد شیء معامله
                 const transaction = {
                     id: Date.now(),
@@ -1747,6 +1760,8 @@
                     paymentType,
                     accountId,
                     accountName: account.name,
+                    partyId: partyId || null,
+                    partyName: partyName,
                     amount: amount,
                     description
                 };
@@ -1825,7 +1840,8 @@
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
                 
-                // به‌روزرسانی لیست طرف‌های حساب
+                // به‌روزرسانی dropdown و لیست طرف‌های حساب
+                updatePartySelect();
                 updatePartiesList();
                 
                 // پاک کردن فیلد ورودی
@@ -1845,9 +1861,9 @@
                 saveAccountingDocument();
             });
             
-            // رویداد پاک کردن همه معاملات
-            clearAllBtn.addEventListener('click', function() {
-                if (confirm('آیا از پاک کردن همه معاملات اطمینان دارید؟')) {
+            // رویداد پاک کردن سند جاری
+            clearDocumentBtn.addEventListener('click', function() {
+                if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
                     currentDocumentTransactions = [];
                     saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
                     documentPreview.innerHTML = `
@@ -1856,29 +1872,7 @@
                             <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
                         </div>
                     `;
-                    showNotification('همه معاملات با موفقیت پاک شدند!', 'success');
-                }
-            });
-            
-            // رویداد بازگشت از حالت مشاهده سند
-            backBtn.addEventListener('click', function() {
-                // مخفی کردن دکمه بازگشت
-                backBtn.classList.add('hidden');
-                
-                // نمایش دکمه‌های اصلی
-                saveDocumentBtn.classList.remove('hidden');
-                clearAllBtn.classList.remove('hidden');
-                
-                // بازگشت به حالت عادی
-                if (currentDocumentTransactions.length > 0) {
-                    generateAccountingDocument();
-                } else {
-                    documentPreview.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                        </div>
-                    `;
+                    showNotification('سند جاری با موفقیت پاک شد!', 'success');
                 }
             });
             
@@ -1996,6 +1990,17 @@
             });
             
             accountSelect.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی dropdown طرف‌های حساب
+        function updatePartySelect() {
+            let html = '<option value="">انتخاب کنید</option>';
+            parties.forEach(party => {
+                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
+                html += `<option value="${party.id}">${party.name} (${typeText})</option>`;
+            });
+            
+            partySelect.innerHTML = html;
         }
         
         // تابع به‌روزرسانی لیست حساب‌ها
@@ -2339,7 +2344,8 @@
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
                 
-                // به‌روزرسانی لیست طرف‌های حساب
+                // به‌روزرسانی dropdown و لیست طرف‌های حساب
+                updatePartySelect();
                 updatePartiesList();
                 
                 showNotification('طرف حساب با موفقیت حذف شد!', 'success');
@@ -2356,7 +2362,14 @@
             
             currentDocumentTransactions.forEach(transaction => {
                 totalAmount += transaction.amount;
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
+                
+                // اضافه کردن طرف حساب به شرح
+                let partyInfo = '';
+                if (transaction.partyName) {
+                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
+                }
+                
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
             });
             
             // حذف آخرین خط تیره از شرح
@@ -2515,7 +2528,13 @@
             // ایجاد شرح از معاملات
             let descriptionText = '';
             document.transactions.forEach(transaction => {
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
+                // اضافه کردن طرف حساب به شرح
+                let partyInfo = '';
+                if (transaction.partyName) {
+                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
+                }
+                
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
             });
             
             // حذف آخرین خط تیره از شرح
@@ -2612,15 +2631,38 @@
                         <div class="description-title">شرح سند:</div>
                         <div class="description-content">${descriptionText}</div>
                     </div>
+                    <div class="actions">
+                        <button id="back-btn" class="btn back-btn">
+                            <i class="fas fa-arrow-right"></i>
+                            بازگشت
+                        </button>
+                    </div>
                 </div>
             `;
             
             documentPreview.innerHTML = html;
             
-            // نمایش دکمه بازگشت و مخفی کردن دکمه‌های اصلی
-            backBtn.classList.remove('hidden');
+            // اضافه کردن رویداد برای دکمه بازگشت
+            document.getElementById('back-btn').addEventListener('click', function() {
+                // به‌روزرسانی لیست اسناد
+                updateDocumentsList();
+                
+                // پاک کردن پیش‌نمایش
+                documentPreview.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                    </div>
+                `;
+                
+                // نمایش دکمه‌های اصلی
+                saveDocumentBtn.classList.remove('hidden');
+                clearDocumentBtn.classList.remove('hidden');
+            });
+            
+            // مخفی کردن دکمه‌های اصلی
             saveDocumentBtn.classList.add('hidden');
-            clearAllBtn.classList.add('hidden');
+            clearDocumentBtn.classList.add('hidden');
         }
         
         // تابع حذف سند
