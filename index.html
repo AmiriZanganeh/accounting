@@ -1005,13 +1005,8 @@
             text-align: right;
         }
 
-        .debit {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .credit {
-            color: var(--danger);
+        /* حذف رنگ‌های بدهکار و بستانکار */
+        .debit, .credit {
             font-weight: 600;
         }
 
@@ -1062,14 +1057,7 @@
             font-weight: 800;
         }
 
-        .positive-balance {
-            color: var(--success);
-        }
-
-        .negative-balance {
-            color: var(--danger);
-        }
-
+        /* حذف رنگ‌های مثبت و منفی */
         .balance-chart {
             height: 8px;
             background: var(--light);
@@ -1082,6 +1070,35 @@
             height: 100%;
             background: var(--bg-gradient);
             border-radius: 4px;
+        }
+
+        .payment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-stat {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary);
+        }
+
+        .payment-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 8px 0;
+            color: var(--dark);
+        }
+
+        .payment-stat-label {
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -1143,7 +1160,7 @@
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-tab="transaction">
                         <i class="fas fa-plus-circle"></i>
-                        ثبت معامله
+                        معامله
                     </div>
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
@@ -1310,6 +1327,21 @@
                         </div>
                         
                         <div id="statistics-tab" class="tab-content hidden">
+                            <div class="payment-stats" id="payment-stats">
+                                <div class="payment-stat">
+                                    <div class="payment-stat-value" id="cash-total">0</div>
+                                    <div class="payment-stat-label">نقدی</div>
+                                </div>
+                                <div class="payment-stat">
+                                    <div class="payment-stat-value" id="credit-total">0</div>
+                                    <div class="payment-stat-label">نسیه</div>
+                                </div>
+                                <div class="payment-stat">
+                                    <div class="payment-stat-value" id="check-total">0</div>
+                                    <div class="payment-stat-label">چک</div>
+                                </div>
+                            </div>
+                            
                             <div class="account-balances" id="account-balances">
                                 <div class="empty-state">
                                     <i class="fas fa-chart-bar"></i>
@@ -1361,11 +1393,12 @@
             TRANSACTIONS: 'aura_accounting_system_transactions',
             DOCUMENTS: 'aura_accounting_system_documents',
             DOCUMENT_COUNTER: 'aura_accounting_system_document_counter',
-            PARTIES: 'aura_accounting_system_parties'
+            PARTIES: 'aura_accounting_system_parties',
+            CURRENT_DOCUMENT: 'aura_accounting_system_current_document'
         };
         
-        // آرایه برای ذخیره معاملات
-        let transactions = [];
+        // آرایه برای ذخیره معاملات سند جاری
+        let currentDocumentTransactions = [];
         
         // آرایه برای ذخیره حساب‌ها
         let accounts = [];
@@ -1404,6 +1437,10 @@
         const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
         const accountBalances = document.getElementById('account-balances');
+        const paymentStats = document.getElementById('payment-stats');
+        const cashTotalEl = document.getElementById('cash-total');
+        const creditTotalEl = document.getElementById('credit-total');
+        const checkTotalEl = document.getElementById('check-total');
         const amountInput = document.getElementById('amount');
         
         // توابع localStorage
@@ -1446,9 +1483,11 @@
                 { id: 3, name: 'فروشگاه مرکزی', type: 'buyer' }
             ]);
             
-            transactions = loadFromLocalStorage(STORAGE_KEYS.TRANSACTIONS, []);
             savedDocuments = loadFromLocalStorage(STORAGE_KEYS.DOCUMENTS, []);
             documentCounter = loadFromLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, 1);
+            
+            // بارگذاری معاملات سند جاری
+            currentDocumentTransactions = loadFromLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, []);
         }
         
         // مدیریت ورود به سیستم
@@ -1502,6 +1541,11 @@
             
             // بارگذاری اسناد ذخیره شده
             updateDocumentsList();
+            
+            // نمایش سند جاری اگر معامله‌ای وجود دارد
+            if (currentDocumentTransactions.length > 0) {
+                generateAccountingDocument();
+            }
             
             // رویداد ثبت فرم معامله
             transactionForm.addEventListener('submit', function(e) {
@@ -1558,11 +1602,11 @@
                     description
                 };
                 
-                // افزودن به آرایه معاملات
-                transactions.push(transaction);
+                // افزودن به آرایه معاملات سند جاری
+                currentDocumentTransactions.push(transaction);
                 
                 // ذخیره در localStorage
-                saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
+                saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
                 
                 // پاک کردن فرم
                 transactionForm.reset();
@@ -1645,7 +1689,7 @@
             
             // رویداد ذخیره سند
             saveDocumentBtn.addEventListener('click', function() {
-                if (transactions.length === 0) {
+                if (currentDocumentTransactions.length === 0) {
                     showNotification('هیچ معامله‌ای برای ذخیره سند وجود ندارد!', 'error');
                     return;
                 }
@@ -1656,8 +1700,8 @@
             // رویداد پاک کردن همه معاملات
             clearAllBtn.addEventListener('click', function() {
                 if (confirm('آیا از پاک کردن همه معاملات اطمینان دارید؟')) {
-                    transactions = [];
-                    saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactions);
+                    currentDocumentTransactions = [];
+                    saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
                     documentPreview.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-file-alt"></i>
@@ -1686,7 +1730,7 @@
                     
                     // اگر تب آمار انتخاب شده، آمار را به‌روزرسانی کن
                     if (tabId === 'statistics') {
-                        updateAccountBalances();
+                        updateStatistics();
                     }
                 });
             });
@@ -1909,9 +1953,49 @@
             documentsList.innerHTML = html;
         }
         
+        // تابع به‌روزرسانی آمار
+        function updateStatistics() {
+            // محاسبه آمار نوع پرداخت از تمام اسناد
+            let cashTotal = 0;
+            let creditTotal = 0;
+            let checkTotal = 0;
+            
+            // محاسبه از اسناد ذخیره شده
+            savedDocuments.forEach(document => {
+                document.transactions.forEach(transaction => {
+                    if (transaction.paymentType === 'cash') {
+                        cashTotal += transaction.amount;
+                    } else if (transaction.paymentType === 'credit') {
+                        creditTotal += transaction.amount;
+                    } else if (transaction.paymentType === 'check') {
+                        checkTotal += transaction.amount;
+                    }
+                });
+            });
+            
+            // محاسبه از سند جاری
+            currentDocumentTransactions.forEach(transaction => {
+                if (transaction.paymentType === 'cash') {
+                    cashTotal += transaction.amount;
+                } else if (transaction.paymentType === 'credit') {
+                    creditTotal += transaction.amount;
+                } else if (transaction.paymentType === 'check') {
+                    checkTotal += transaction.amount;
+                }
+            });
+            
+            // به‌روزرسانی آمار نوع پرداخت
+            cashTotalEl.textContent = formatCurrency(cashTotal);
+            creditTotalEl.textContent = formatCurrency(creditTotal);
+            checkTotalEl.textContent = formatCurrency(checkTotal);
+            
+            // محاسبه موجودی هر حساب
+            updateAccountBalances();
+        }
+        
         // تابع به‌روزرسانی موجودی حساب‌ها
         function updateAccountBalances() {
-            if (transactions.length === 0) {
+            if (savedDocuments.length === 0 && currentDocumentTransactions.length === 0) {
                 accountBalances.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-chart-bar"></i>
@@ -1931,7 +2015,19 @@
                 };
             });
             
-            transactions.forEach(transaction => {
+            // محاسبه از اسناد ذخیره شده
+            savedDocuments.forEach(document => {
+                document.transactions.forEach(transaction => {
+                    if (transaction.transactionType === 'receipt') {
+                        accountBalancesMap[transaction.accountId].balance += transaction.amount;
+                    } else {
+                        accountBalancesMap[transaction.accountId].balance -= transaction.amount;
+                    }
+                });
+            });
+            
+            // محاسبه از سند جاری
+            currentDocumentTransactions.forEach(transaction => {
                 if (transaction.transactionType === 'receipt') {
                     accountBalancesMap[transaction.accountId].balance += transaction.amount;
                 } else {
@@ -1958,7 +2054,7 @@
                     <div class="account-balance">
                         <div class="account-balance-header">
                             <div class="account-name">${account.name}</div>
-                            <div class="account-balance-value ${balance >= 0 ? 'positive-balance' : 'negative-balance'}">
+                            <div class="account-balance-value">
                                 ${formatCurrency(balance)}
                             </div>
                         </div>
@@ -1976,7 +2072,19 @@
         function deleteAccount(accountId) {
             if (confirm('آیا از حذف این حساب اطمینان دارید؟')) {
                 // بررسی استفاده از حساب در معاملات
-                const accountInUse = transactions.some(transaction => transaction.accountId == accountId);
+                let accountInUse = false;
+                
+                // بررسی در اسناد ذخیره شده
+                savedDocuments.forEach(document => {
+                    if (document.transactions.some(transaction => transaction.accountId == accountId)) {
+                        accountInUse = true;
+                    }
+                });
+                
+                // بررسی در سند جاری
+                if (currentDocumentTransactions.some(transaction => transaction.accountId == accountId)) {
+                    accountInUse = true;
+                }
                 
                 if (accountInUse) {
                     showNotification('این حساب در معاملات استفاده شده و قابل حذف نیست!', 'error');
@@ -2001,7 +2109,19 @@
         function deleteParty(partyId) {
             if (confirm('آیا از حذف این طرف حساب اطمینان دارید؟')) {
                 // بررسی استفاده از طرف حساب در معاملات
-                const partyInUse = transactions.some(transaction => transaction.partyId == partyId);
+                let partyInUse = false;
+                
+                // بررسی در اسناد ذخیره شده
+                savedDocuments.forEach(document => {
+                    if (document.transactions.some(transaction => transaction.partyId == partyId)) {
+                        partyInUse = true;
+                    }
+                });
+                
+                // بررسی در سند جاری
+                if (currentDocumentTransactions.some(transaction => transaction.partyId == partyId)) {
+                    partyInUse = true;
+                }
                 
                 if (partyInUse) {
                     showNotification('این طرف حساب در معاملات استفاده شده و قابل حذف نیست!', 'error');
@@ -2030,7 +2150,7 @@
             let totalAmount = 0;
             let descriptionText = '';
             
-            transactions.forEach(transaction => {
+            currentDocumentTransactions.forEach(transaction => {
                 totalAmount += transaction.amount;
                 
                 // اضافه کردن طرف حساب به شرح
@@ -2064,7 +2184,7 @@
                         <tbody>
             `;
             
-            transactions.forEach(transaction => {
+            currentDocumentTransactions.forEach(transaction => {
                 // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                 
                 if (transaction.transactionType === 'receipt') {
@@ -2147,7 +2267,7 @@
             
             // محاسبه جمع مبلغ کل
             let totalAmount = 0;
-            transactions.forEach(transaction => {
+            currentDocumentTransactions.forEach(transaction => {
                 totalAmount += transaction.amount;
             });
             
@@ -2157,7 +2277,7 @@
                 number: documentCounter++,
                 date: documentDate,
                 totalAmount: totalAmount,
-                transactions: [...transactions] // کپی از معاملات فعلی
+                transactions: [...currentDocumentTransactions] // کپی از معاملات سند جاری
             };
             
             // افزودن به آرایه اسناد
@@ -2166,6 +2286,10 @@
             // ذخیره در localStorage
             saveToLocalStorage(STORAGE_KEYS.DOCUMENTS, savedDocuments);
             saveToLocalStorage(STORAGE_KEYS.DOCUMENT_COUNTER, documentCounter);
+            
+            // پاک کردن سند جاری
+            currentDocumentTransactions = [];
+            saveToLocalStorage(STORAGE_KEYS.CURRENT_DOCUMENT, currentDocumentTransactions);
             
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
