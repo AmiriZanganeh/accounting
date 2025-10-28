@@ -611,19 +611,19 @@
             flex-wrap: wrap;
         }
 
-        .account-management, .party-management {
+        .account-management {
             margin-top: 20px;
             padding-top: 20px;
             border-top: 2px solid var(--border);
         }
 
-        .account-form, .party-form {
+        .account-form {
             display: flex;
             gap: 12px;
             margin-top: 15px;
         }
 
-        .account-form input, .party-form input {
+        .account-form input {
             flex: 1;
         }
 
@@ -778,7 +778,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .account-form, .party-form {
+            .account-form {
                 flex-direction: column;
             }
 
@@ -1086,6 +1086,70 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+
+        /* استایل‌های جدید برای دکمه بازگشت */
+        .back-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px rgba(17, 138, 178, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(17, 138, 178, 0.4);
+        }
+
+        /* استایل‌های جدید برای لیست طرف‌های حساب در بخش حساب‌ها */
+        .parties-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .party-form {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .party-form input, .party-form select {
+            flex: 1;
+        }
+
+        .parties-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            background: var(--light);
+            margin-top: 15px;
+        }
+
+        /* استایل‌های جدید برای شرح سند در لیست اسناد */
+        .document-description-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -1151,10 +1215,6 @@
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
                         حساب‌ها
-                    </div>
-                    <div class="nav-item" data-tab="parties">
-                        <i class="fas fa-users"></i>
-                        طرف حساب
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
@@ -1233,13 +1293,6 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="party" class="form-label">طرف حساب</label>
-                                    <select id="party" class="form-control">
-                                        <option value="">انتخاب کنید (اختیاری)</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
@@ -1277,10 +1330,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div id="parties-tab" class="tab-content hidden">
-                            <div class="party-management">
+                            
+                            <div class="parties-section">
                                 <h3>افزودن طرف حساب جدید</h3>
                                 <div class="party-form">
                                     <input type="text" id="new-party-name" class="form-control" placeholder="نام طرف حساب">
@@ -1369,6 +1420,10 @@
                                 <i class="fas fa-trash-alt"></i>
                                 پاک کردن همه
                             </button>
+                            <button id="back-btn" class="back-btn hidden">
+                                <i class="fas fa-arrow-right"></i>
+                                بازگشت
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1379,7 +1434,7 @@
     <script>
         // اطلاعات ورود
         const VALID_USERNAME = "Amiri";
-        const VALID_PASSWORD = "3647";
+        const VALID_PASSWORD = "1360";
         
         // کلیدهای localStorage
         const STORAGE_KEYS = {
@@ -1418,8 +1473,8 @@
         const documentPreview = document.getElementById('document-preview');
         const saveDocumentBtn = document.getElementById('save-document');
         const clearAllBtn = document.getElementById('clear-all');
+        const backBtn = document.getElementById('back-btn');
         const accountSelect = document.getElementById('account');
-        const partySelect = document.getElementById('party');
         const navItems = document.querySelectorAll('.nav-item');
         const tabContents = document.querySelectorAll('.tab-content');
         const addAccountBtn = document.getElementById('add-account');
@@ -1526,9 +1581,6 @@
             // بارگذاری حساب‌ها در dropdown
             updateAccountSelect();
             
-            // بارگذاری طرف‌های حساب در dropdown
-            updatePartySelect();
-            
             // بارگذاری لیست حساب‌ها
             updateAccountsList();
             
@@ -1552,7 +1604,6 @@
                 const transactionType = document.getElementById('transaction-type').value;
                 const paymentType = document.getElementById('payment-type').value;
                 const accountId = document.getElementById('account').value;
-                const partyId = document.getElementById('party').value;
                 const amountText = document.getElementById('amount').value;
                 const description = document.getElementById('description').value;
                 
@@ -1577,13 +1628,6 @@
                     return;
                 }
                 
-                // پیدا کردن نام طرف حساب
-                let partyName = '';
-                if (partyId) {
-                    const party = parties.find(p => p.id == partyId);
-                    partyName = party ? party.name : '';
-                }
-                
                 // ایجاد شیء معامله
                 const transaction = {
                     id: Date.now(),
@@ -1592,8 +1636,6 @@
                     paymentType,
                     accountId,
                     accountName: account.name,
-                    partyId: partyId || null,
-                    partyName: partyName,
                     amount: amount,
                     description
                 };
@@ -1672,8 +1714,7 @@
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
                 
-                // به‌روزرسانی dropdown و لیست طرف‌های حساب
-                updatePartySelect();
+                // به‌روزرسانی لیست طرف‌های حساب
                 updatePartiesList();
                 
                 // پاک کردن فیلد ورودی
@@ -1705,6 +1746,28 @@
                         </div>
                     `;
                     showNotification('همه معاملات با موفقیت پاک شدند!', 'success');
+                }
+            });
+            
+            // رویداد بازگشت از حالت مشاهده سند
+            backBtn.addEventListener('click', function() {
+                // مخفی کردن دکمه بازگشت
+                backBtn.classList.add('hidden');
+                
+                // نمایش دکمه‌های اصلی
+                saveDocumentBtn.classList.remove('hidden');
+                clearAllBtn.classList.remove('hidden');
+                
+                // بازگشت به حالت عادی
+                if (currentDocumentTransactions.length > 0) {
+                    generateAccountingDocument();
+                } else {
+                    documentPreview.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                        </div>
+                    `;
                 }
             });
             
@@ -1775,11 +1838,6 @@
                     description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
                     formTitle: 'لیست حساب‌ها'
                 },
-                'parties': {
-                    title: 'مدیریت طرف‌های حساب',
-                    description: 'در این بخش می‌توانید خریداران و فروشندگان را مدیریت کنید',
-                    formTitle: 'لیست طرف‌های حساب'
-                },
                 'documents': {
                     title: 'اسناد ذخیره شده',
                     description: 'در این بخش می‌توانید اسناد حسابداری ذخیره شده را مشاهده کنید',
@@ -1803,7 +1861,6 @@
             const icons = {
                 'transaction': 'edit',
                 'accounts': 'wallet',
-                'parties': 'users',
                 'documents': 'file-invoice',
                 'statistics': 'chart-bar'
             };
@@ -1828,17 +1885,6 @@
             });
             
             accountSelect.innerHTML = html;
-        }
-        
-        // تابع به‌روزرسانی dropdown طرف‌های حساب
-        function updatePartySelect() {
-            let html = '<option value="">انتخاب کنید (اختیاری)</option>';
-            parties.forEach(party => {
-                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
-                html += `<option value="${party.id}">${party.name} (${typeText})</option>`;
-            });
-            
-            partySelect.innerHTML = html;
         }
         
         // تابع به‌روزرسانی لیست حساب‌ها
@@ -1917,6 +1963,17 @@
             
             let html = '';
             savedDocuments.forEach(document => {
+                // ایجاد شرح از معاملات
+                let descriptionText = '';
+                document.transactions.forEach(transaction => {
+                    descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
+                });
+                
+                // حذف آخرین خط تیره از شرح
+                if (descriptionText.endsWith(' - ')) {
+                    descriptionText = descriptionText.slice(0, -3);
+                }
+                
                 html += `
                     <div class="document-item">
                         <div class="document-info">
@@ -1930,6 +1987,9 @@
                                     <i class="fas fa-money-bill-wave"></i>
                                     <span>${formatCurrency(document.totalAmount)}</span>
                                 </div>
+                            </div>
+                            <div class="document-description-preview">
+                                ${descriptionText}
                             </div>
                         </div>
                         <div class="document-actions">
@@ -2162,34 +2222,13 @@
         // تابع حذف طرف حساب
         function deleteParty(partyId) {
             if (confirm('آیا از حذف این طرف حساب اطمینان دارید؟')) {
-                // بررسی استفاده از طرف حساب در معاملات
-                let partyInUse = false;
-                
-                // بررسی در اسناد ذخیره شده
-                savedDocuments.forEach(document => {
-                    if (document.transactions.some(transaction => transaction.partyId == partyId)) {
-                        partyInUse = true;
-                    }
-                });
-                
-                // بررسی در سند جاری
-                if (currentDocumentTransactions.some(transaction => transaction.partyId == partyId)) {
-                    partyInUse = true;
-                }
-                
-                if (partyInUse) {
-                    showNotification('این طرف حساب در معاملات استفاده شده و قابل حذف نیست!', 'error');
-                    return;
-                }
-                
                 // حذف طرف حساب از آرایه
                 parties = parties.filter(party => party.id !== partyId);
                 
                 // ذخیره در localStorage
                 saveToLocalStorage(STORAGE_KEYS.PARTIES, parties);
                 
-                // به‌روزرسانی dropdown و لیست طرف‌های حساب
-                updatePartySelect();
+                // به‌روزرسانی لیست طرف‌های حساب
                 updatePartiesList();
                 
                 showNotification('طرف حساب با موفقیت حذف شد!', 'success');
@@ -2206,14 +2245,7 @@
             
             currentDocumentTransactions.forEach(transaction => {
                 totalAmount += transaction.amount;
-                
-                // اضافه کردن طرف حساب به شرح
-                let partyInfo = '';
-                if (transaction.partyName) {
-                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
-                }
-                
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
             });
             
             // حذف آخرین خط تیره از شرح
@@ -2372,13 +2404,7 @@
             // ایجاد شرح از معاملات
             let descriptionText = '';
             document.transactions.forEach(transaction => {
-                // اضافه کردن طرف حساب به شرح
-                let partyInfo = '';
-                if (transaction.partyName) {
-                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
-                }
-                
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
+                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
             });
             
             // حذف آخرین خط تیره از شرح
@@ -2480,13 +2506,10 @@
             
             documentPreview.innerHTML = html;
             
-            // تغییر به تب پیش‌نمایش
-            navItems.forEach(item => item.classList.remove('active'));
-            tabContents.forEach(content => content.classList.add('hidden'));
-            
-            document.getElementById('transaction-tab').classList.remove('hidden');
-            document.querySelector('[data-tab="transaction"]').classList.add('active');
-            updatePageTitle('transaction');
+            // نمایش دکمه بازگشت و مخفی کردن دکمه‌های اصلی
+            backBtn.classList.remove('hidden');
+            saveDocumentBtn.classList.add('hidden');
+            clearAllBtn.classList.add('hidden');
         }
         
         // تابع حذف سند
