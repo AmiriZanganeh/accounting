@@ -602,6 +602,7 @@
             padding: 20px;
             border-radius: var(--border-radius);
             min-height: 250px;
+            position: relative;
         }
 
         .actions {
@@ -840,26 +841,6 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
-        }
-
-        /* انیمیشن‌ها */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-100px); opacity: 0; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
         }
 
         /* استایل‌های جدید برای طراحی خلاق */
@@ -1101,31 +1082,6 @@
             margin-bottom: 20px;
         }
 
-        /* استایل‌های جدید برای دکمه بازگشت */
-        .back-btn {
-            background: var(--info);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 8px 20px rgba(17, 138, 178, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(17, 138, 178, 0.4);
-        }
-
         /* استایل‌های جدید برای لیست طرف‌های حساب در بخش حساب‌ها */
         .parties-section {
             margin-top: 30px;
@@ -1265,7 +1221,7 @@
 <body>
     <!-- صفحه ورود -->
     <div class="auth-container" id="login-page">
-        <div class="login-card creative-card fade-in">
+        <div class="login-card creative-card">
             <div class="brand">
                 <div class="brand-icon">
                     <i class="fas fa-calculator"></i>
@@ -1413,7 +1369,7 @@
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
-                                        <input type="text" id="amount" class="form-control amount-input" placeholder="0" required>
+                                        <input type="number" id="amount" class="form-control amount-input" placeholder="0" required inputmode="numeric" pattern="[0-9]*">
                                     </div>
                                 </div>
                                 
@@ -1452,10 +1408,7 @@
                                 <h3>افزودن طرف حساب جدید</h3>
                                 <div class="party-form">
                                     <input type="text" id="new-party-name" class="form-control" placeholder="نام طرف حساب">
-                                    <select id="new-party-type" class="form-control">
-                                        <option value="buyer">خریدار</option>
-                                        <option value="seller">فروشنده</option>
-                                    </select>
+                                    <input type="text" id="new-party-type" class="form-control" placeholder="نوع طرف حساب (خریدار/فروشنده)">
                                     <button type="button" id="add-party" class="btn btn-success">
                                         <i class="fas fa-plus"></i>
                                         افزودن
@@ -1595,7 +1548,7 @@
         const accountsList = document.getElementById('accounts-list');
         const addPartyBtn = document.getElementById('add-party');
         const newPartyNameInput = document.getElementById('new-party-name');
-        const newPartyTypeSelect = document.getElementById('new-party-type');
+        const newPartyTypeInput = document.getElementById('new-party-type');
         const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
         const accountBalances = document.getElementById('account-balances');
@@ -1642,9 +1595,9 @@
             ]);
             
             parties = loadFromLocalStorage(STORAGE_KEYS.PARTIES, [
-                { id: 1, name: 'شرکت البرز', type: 'buyer' },
-                { id: 2, name: 'شرکت پارس', type: 'seller' },
-                { id: 3, name: 'فروشگاه مرکزی', type: 'buyer' }
+                { id: 1, name: 'شرکت البرز', type: 'خریدار' },
+                { id: 2, name: 'شرکت پارس', type: 'فروشنده' },
+                { id: 3, name: 'فروشگاه مرکزی', type: 'خریدار' }
             ]);
             
             savedDocuments = loadFromLocalStorage(STORAGE_KEYS.DOCUMENTS, []);
@@ -1820,10 +1773,15 @@
             // رویداد افزودن طرف حساب جدید
             addPartyBtn.addEventListener('click', function() {
                 const partyName = newPartyNameInput.value.trim();
-                const partyType = newPartyTypeSelect.value;
+                const partyType = newPartyTypeInput.value.trim();
                 
                 if (!partyName) {
                     showNotification('لطفاً نام طرف حساب را وارد کنید!', 'error');
+                    return;
+                }
+                
+                if (!partyType) {
+                    showNotification('لطفاً نوع طرف حساب را وارد کنید!', 'error');
                     return;
                 }
                 
@@ -1846,6 +1804,7 @@
                 
                 // پاک کردن فیلد ورودی
                 newPartyNameInput.value = '';
+                newPartyTypeInput.value = '';
                 
                 // نمایش پیام موفقیت
                 showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
@@ -1996,8 +1955,7 @@
         function updatePartySelect() {
             let html = '<option value="">انتخاب کنید</option>';
             parties.forEach(party => {
-                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
-                html += `<option value="${party.id}">${party.name} (${typeText})</option>`;
+                html += `<option value="${party.id}">${party.name} (${party.type})</option>`;
             });
             
             partySelect.innerHTML = html;
@@ -2045,14 +2003,11 @@
             
             let html = '';
             parties.forEach(party => {
-                const typeText = party.type === 'buyer' ? 'خریدار' : 'فروشنده';
-                const typeClass = party.type === 'buyer' ? 'success' : 'warning';
-                
                 html += `
                     <div class="party-item">
                         <div>
                             <span>${party.name}</span>
-                            <small style="color: var(--${typeClass});">(${typeText})</small>
+                            <small style="color: var(--success);">(${party.type})</small>
                         </div>
                         <button class="btn btn-danger btn-sm" onclick="deleteParty(${party.id})">
                             <i class="fas fa-trash"></i>
@@ -2631,38 +2586,10 @@
                         <div class="description-title">شرح سند:</div>
                         <div class="description-content">${descriptionText}</div>
                     </div>
-                    <div class="actions">
-                        <button id="back-btn" class="btn back-btn">
-                            <i class="fas fa-arrow-right"></i>
-                            بازگشت
-                        </button>
-                    </div>
                 </div>
             `;
             
             documentPreview.innerHTML = html;
-            
-            // اضافه کردن رویداد برای دکمه بازگشت
-            document.getElementById('back-btn').addEventListener('click', function() {
-                // به‌روزرسانی لیست اسناد
-                updateDocumentsList();
-                
-                // پاک کردن پیش‌نمایش
-                documentPreview.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-file-alt"></i>
-                        <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                    </div>
-                `;
-                
-                // نمایش دکمه‌های اصلی
-                saveDocumentBtn.classList.remove('hidden');
-                clearDocumentBtn.classList.remove('hidden');
-            });
-            
-            // مخفی کردن دکمه‌های اصلی
-            saveDocumentBtn.classList.add('hidden');
-            clearDocumentBtn.classList.add('hidden');
         }
         
         // تابع حذف سند
@@ -2707,7 +2634,6 @@
                 gap: 10px;
                 font-weight: 600;
                 font-size: 1rem;
-                animation: slideIn 0.3s ease;
             `;
             
             notification.innerHTML = `
@@ -2719,10 +2645,7 @@
             
             // حذف نوتیفیکیشن بعد از 3 ثانیه
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
+                document.body.removeChild(notification);
             }, 3000);
         }
     </script>
