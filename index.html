@@ -1057,29 +1057,8 @@
             font-weight: 800;
         }
 
-        /* حذف رنگ‌های مثبت و منفی */
-        .balance-chart {
-            height: 8px;
-            background: var(--light);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .balance-fill {
-            height: 100%;
-            background: var(--bg-gradient);
-            border-radius: 4px;
-        }
-
-        .payment-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .payment-stat {
+        /* استایل‌های جدید برای بخش آمار به‌روزرسانی شده */
+        .account-stat {
             background: white;
             border-radius: var(--border-radius);
             padding: 15px;
@@ -1088,17 +1067,24 @@
             border-top: 4px solid var(--primary);
         }
 
-        .payment-stat-value {
+        .account-stat-value {
             font-size: 1.5rem;
             font-weight: 800;
             margin: 8px 0;
             color: var(--dark);
         }
 
-        .payment-stat-label {
+        .account-stat-label {
             color: var(--gray);
             font-weight: 600;
             font-size: 0.9rem;
+        }
+        
+        .account-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -1327,18 +1313,26 @@
                         </div>
                         
                         <div id="statistics-tab" class="tab-content hidden">
-                            <div class="payment-stats" id="payment-stats">
-                                <div class="payment-stat">
-                                    <div class="payment-stat-value" id="cash-total">0</div>
-                                    <div class="payment-stat-label">نقدی</div>
+                            <div class="account-stats" id="payment-stats">
+                                <div class="account-stat">
+                                    <div class="account-stat-value" id="cash-total">0</div>
+                                    <div class="account-stat-label">موجودی نقد</div>
                                 </div>
-                                <div class="payment-stat">
-                                    <div class="payment-stat-value" id="credit-total">0</div>
-                                    <div class="payment-stat-label">نسیه</div>
+                                <div class="account-stat">
+                                    <div class="account-stat-value" id="receivable-total">0</div>
+                                    <div class="account-stat-label">حساب دریافتنی</div>
                                 </div>
-                                <div class="payment-stat">
-                                    <div class="payment-stat-value" id="check-total">0</div>
-                                    <div class="payment-stat-label">چک</div>
+                                <div class="account-stat">
+                                    <div class="account-stat-value" id="receivable-docs-total">0</div>
+                                    <div class="account-stat-label">اسناد دریافتنی</div>
+                                </div>
+                                <div class="account-stat">
+                                    <div class="account-stat-value" id="payable-total">0</div>
+                                    <div class="account-stat-label">حساب پرداختنی</div>
+                                </div>
+                                <div class="account-stat">
+                                    <div class="account-stat-value" id="payable-docs-total">0</div>
+                                    <div class="account-stat-label">اسناد پرداختنی</div>
                                 </div>
                             </div>
                             
@@ -1439,8 +1433,10 @@
         const accountBalances = document.getElementById('account-balances');
         const paymentStats = document.getElementById('payment-stats');
         const cashTotalEl = document.getElementById('cash-total');
-        const creditTotalEl = document.getElementById('credit-total');
-        const checkTotalEl = document.getElementById('check-total');
+        const receivableTotalEl = document.getElementById('receivable-total');
+        const receivableDocsTotalEl = document.getElementById('receivable-docs-total');
+        const payableTotalEl = document.getElementById('payable-total');
+        const payableDocsTotalEl = document.getElementById('payable-docs-total');
         const amountInput = document.getElementById('amount');
         
         // توابع localStorage
@@ -1955,42 +1951,111 @@
         
         // تابع به‌روزرسانی آمار
         function updateStatistics() {
-            // محاسبه آمار نوع پرداخت از تمام اسناد
-            let cashTotal = 0;
-            let creditTotal = 0;
-            let checkTotal = 0;
+            // محاسبه موجودی هر حساب
+            const accountBalancesMap = {};
+            
+            // حساب‌های اصلی برای نمایش در آمار
+            const mainAccounts = [
+                { id: 1, name: 'موجودی نقد' },
+                { id: 2, name: 'حساب دریافتنی' },
+                { id: 3, name: 'اسناد دریافتنی' },
+                { id: 4, name: 'حساب پرداختنی' },
+                { id: 5, name: 'اسناد پرداختنی' }
+            ];
+            
+            // مقداردهی اولیه موجودی‌ها
+            mainAccounts.forEach(account => {
+                accountBalancesMap[account.id] = {
+                    name: account.name,
+                    balance: 0
+                };
+            });
             
             // محاسبه از اسناد ذخیره شده
             savedDocuments.forEach(document => {
                 document.transactions.forEach(transaction => {
-                    if (transaction.paymentType === 'cash') {
-                        cashTotal += transaction.amount;
-                    } else if (transaction.paymentType === 'credit') {
-                        creditTotal += transaction.amount;
-                    } else if (transaction.paymentType === 'check') {
-                        checkTotal += transaction.amount;
+                    if (transaction.transactionType === 'receipt') {
+                        // دریافت: افزایش موجودی نقد، حساب دریافتنی یا اسناد دریافتنی
+                        if (transaction.paymentType === 'cash') {
+                            accountBalancesMap[1].balance += transaction.amount; // موجودی نقد
+                        } else if (transaction.paymentType === 'credit') {
+                            accountBalancesMap[2].balance += transaction.amount; // حساب دریافتنی
+                        } else if (transaction.paymentType === 'check') {
+                            accountBalancesMap[3].balance += transaction.amount; // اسناد دریافتنی
+                        }
+                    } else if (transaction.transactionType === 'payment') {
+                        // پرداخت: افزایش حساب پرداختنی یا اسناد پرداختنی
+                        if (transaction.paymentType === 'credit') {
+                            accountBalancesMap[4].balance += transaction.amount; // حساب پرداختنی
+                        } else if (transaction.paymentType === 'check') {
+                            accountBalancesMap[5].balance += transaction.amount; // اسناد پرداختنی
+                        } else if (transaction.paymentType === 'cash') {
+                            // برای پرداخت نقدی، موجودی نقد کاهش می‌یابد
+                            accountBalancesMap[1].balance -= transaction.amount; // موجودی نقد
+                        }
                     }
                 });
             });
             
             // محاسبه از سند جاری
             currentDocumentTransactions.forEach(transaction => {
-                if (transaction.paymentType === 'cash') {
-                    cashTotal += transaction.amount;
-                } else if (transaction.paymentType === 'credit') {
-                    creditTotal += transaction.amount;
-                } else if (transaction.paymentType === 'check') {
-                    checkTotal += transaction.amount;
+                if (transaction.transactionType === 'receipt') {
+                    // دریافت: افزایش موجودی نقد، حساب دریافتنی یا اسناد دریافتنی
+                    if (transaction.paymentType === 'cash') {
+                        accountBalancesMap[1].balance += transaction.amount; // موجودی نقد
+                    } else if (transaction.paymentType === 'credit') {
+                        accountBalancesMap[2].balance += transaction.amount; // حساب دریافتنی
+                    } else if (transaction.paymentType === 'check') {
+                        accountBalancesMap[3].balance += transaction.amount; // اسناد دریافتنی
+                    }
+                } else if (transaction.transactionType === 'payment') {
+                    // پرداخت: افزایش حساب پرداختنی یا اسناد پرداختنی
+                    if (transaction.paymentType === 'credit') {
+                        accountBalancesMap[4].balance += transaction.amount; // حساب پرداختنی
+                    } else if (transaction.paymentType === 'check') {
+                        accountBalancesMap[5].balance += transaction.amount; // اسناد پرداختنی
+                    } else if (transaction.paymentType === 'cash') {
+                        // برای پرداخت نقدی، موجودی نقد کاهش می‌یابد
+                        accountBalancesMap[1].balance -= transaction.amount; // موجودی نقد
+                    }
                 }
             });
             
-            // به‌روزرسانی آمار نوع پرداخت
-            cashTotalEl.textContent = formatCurrency(cashTotal);
-            creditTotalEl.textContent = formatCurrency(creditTotal);
-            checkTotalEl.textContent = formatCurrency(checkTotal);
+            // به‌روزرسانی آمار حساب‌ها
+            updateAccountStats(accountBalancesMap);
             
-            // محاسبه موجودی هر حساب
+            // به‌روزرسانی موجودی همه حساب‌ها
             updateAccountBalances();
+        }
+        
+        // تابع به‌روزرسانی آمار حساب‌ها
+        function updateAccountStats(accountBalancesMap) {
+            if (Object.keys(accountBalancesMap).length === 0) {
+                paymentStats.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            // نمایش آمار برای حساب‌های اصلی
+            Object.values(accountBalancesMap).forEach(account => {
+                // نمایش اعداد بدون علامت منفی
+                const absoluteBalance = Math.abs(account.balance);
+                
+                html += `
+                    <div class="account-stat">
+                        <div class="account-stat-value">${formatCurrency(absoluteBalance)}</div>
+                        <div class="account-stat-label">${account.name}</div>
+                    </div>
+                `;
+            });
+            
+            paymentStats.innerHTML = html;
         }
         
         // تابع به‌روزرسانی موجودی حساب‌ها
@@ -2037,29 +2102,18 @@
             
             let html = '';
             
-            // محاسبه حداکثر موجودی برای نمودار
-            let maxBalance = 0;
-            Object.values(accountBalancesMap).forEach(account => {
-                if (Math.abs(account.balance) > maxBalance) {
-                    maxBalance = Math.abs(account.balance);
-                }
-            });
-            
             // نمایش موجودی هر حساب
             Object.values(accountBalancesMap).forEach(account => {
-                const balance = account.balance;
-                const percentage = maxBalance > 0 ? Math.abs(balance) / maxBalance * 100 : 0;
+                // نمایش اعداد بدون علامت منفی
+                const absoluteBalance = Math.abs(account.balance);
                 
                 html += `
                     <div class="account-balance">
                         <div class="account-balance-header">
                             <div class="account-name">${account.name}</div>
                             <div class="account-balance-value">
-                                ${formatCurrency(balance)}
+                                ${formatCurrency(absoluteBalance)}
                             </div>
-                        </div>
-                        <div class="balance-chart">
-                            <div class="balance-fill" style="width: ${percentage}%;"></div>
                         </div>
                     </div>
                 `;
