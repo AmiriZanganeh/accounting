@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مهراز سیستم </title>
+    <title>Aura | سیستم حسابداری خلاق</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -525,6 +525,14 @@
             box-shadow: 0 12px 25px rgba(255, 209, 102, 0.4);
         }
 
+        .btn-info {
+            background: linear-gradient(135deg, var(--info), #0F7CA3);
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 12px 25px rgba(17, 138, 178, 0.4);
+        }
+
         .btn-sm {
             padding: 8px 16px;
             font-size: 0.9rem;
@@ -703,7 +711,7 @@
         }
 
         .document-action-btn.delete {
-            background: linear-gradient(135deg, var(--danger), #E83E6D);
+            background: linear-gradient(135deg, var(--info), #0F7CA3);
             color: white;
         }
 
@@ -1209,6 +1217,103 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* استایل‌های جدید برای تراز آزمایشی دوستون */
+        .trial-balance {
+            margin-top: 20px;
+        }
+
+        .trial-balance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .trial-balance-table th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .trial-balance-table td {
+            padding: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .trial-balance-table .account-name {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .trial-balance-table .debit {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .trial-balance-table .credit {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* استایل‌های جدید برای دفترکل */
+        .ledger-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .ledger-controls select {
+            flex: 1;
+        }
+
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .ledger-table th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .ledger-table td {
+            padding: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .ledger-table .account-name {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .ledger-table .debit {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .ledger-table .credit {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .ledger-table .balance {
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -1219,8 +1324,8 @@
                 <div class="brand-icon">
                     <i class="fas fa-calculator"></i>
                 </div>
-                <h1 class="brand-name">مهراز سیستم </h1>
-                <p class="brand-tagline">این سیستم نسخه آزمایشی است </p>
+                <h1 class="brand-name">Aura</h1>
+                <p class="brand-tagline">سیستم حسابداری خلاق و مدرن</p>
             </div>
             <form class="login-form" id="login-form">
                 <div class="input-group">
@@ -1262,18 +1367,14 @@
                         <div class="app-logo-icon">
                             <i class="fas fa-calculator"></i>
                         </div>
-                        <div class="app-logo-text">مهراز سیستم </div>
+                        <div class="app-logo-text">Aura</div>
                     </div>
                 </div>
                 
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-tab="transaction">
                         <i class="fas fa-plus-circle"></i>
-                        معامله
-                    </div>
-                    <div class="nav-item" data-tab="accounts">
-                        <i class="fas fa-wallet"></i>
-                        حساب‌ها
+                        ثبت
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
@@ -1282,6 +1383,10 @@
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
                         آمار
+                    </div>
+                    <div class="nav-item" data-tab="accounts">
+                        <i class="fas fa-wallet"></i>
+                        حساب
                     </div>
                 </div>
                 
@@ -1340,12 +1445,12 @@
                                         <option value="">انتخاب کنید</option>
                                         <option value="cash">نقد</option>
                                         <option value="credit">نسیه</option>
-                                        <option value="check">چک</option>
+                                        <option value="check">چک-سفته</option>
                                     </select>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="account" class="form-label">حساب</label>
+                                    <label for="account" class="form-label">بابت</label>
                                     <select id="account" class="form-control" required>
                                         <option value="">انتخاب کنید</option>
                                     </select>
@@ -1427,34 +1532,53 @@
                         </div>
                         
                         <div id="statistics-tab" class="tab-content hidden">
-                            <div class="account-stats" id="payment-stats">
-                                <div class="account-stat">
-                                    <div class="account-stat-value" id="cash-total">0</div>
-                                    <div class="account-stat-label">موجودی نقد</div>
-                                </div>
-                                <div class="account-stat">
-                                    <div class="account-stat-value" id="receivable-total">0</div>
-                                    <div class="account-stat-label">حساب دریافتنی</div>
-                                </div>
-                                <div class="account-stat">
-                                    <div class="account-stat-value" id="receivable-docs-total">0</div>
-                                    <div class="account-stat-label">اسناد دریافتنی</div>
-                                </div>
-                                <div class="account-stat">
-                                    <div class="account-stat-value" id="payable-total">0</div>
-                                    <div class="account-stat-label">حساب پرداختنی</div>
-                                </div>
-                                <div class="account-stat">
-                                    <div class="account-stat-value" id="payable-docs-total">0</div>
-                                    <div class="account-stat-label">اسناد پرداختنی</div>
-                                </div>
+                            <div class="trial-balance">
+                                <h3>تراز آزمایشی دوستون</h3>
+                                <table class="trial-balance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>نام حساب</th>
+                                            <th>بدهکار</th>
+                                            <th>بستانکار</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trial-balance-body">
+                                        <tr>
+                                            <td colspan="3" class="empty-state">
+                                                <i class="fas fa-chart-bar"></i>
+                                                <p>هیچ معامله‌ای برای محاسبه تراز آزمایشی وجود ندارد</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             
-                            <div class="account-balances" id="account-balances">
-                                <div class="empty-state">
-                                    <i class="fas fa-chart-bar"></i>
-                                    <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
+                            <div class="ledger-section" style="margin-top: 30px;">
+                                <h3>دفترکل</h3>
+                                <div class="ledger-controls">
+                                    <select id="ledger-account-select" class="form-control">
+                                        <option value="">انتخاب حساب برای مشاهده دفترکل</option>
+                                    </select>
                                 </div>
+                                <table class="ledger-table">
+                                    <thead>
+                                        <tr>
+                                            <th>تاریخ</th>
+                                            <th>شرح</th>
+                                            <th>بدهکار</th>
+                                            <th>بستانکار</th>
+                                            <th>مانده</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ledger-body">
+                                        <tr>
+                                            <td colspan="5" class="empty-state">
+                                                <i class="fas fa-book"></i>
+                                                <p>لطفاً یک حساب را برای مشاهده دفترکل انتخاب کنید</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1479,9 +1603,9 @@
                                 <i class="fas fa-save"></i>
                                 ذخیره سند
                             </button>
-                            <button id="clear-document" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                                پاک کردن سند
+                            <button id="clear-document" class="btn btn-info">
+                                <i class="fas fa-undo"></i>
+                                بازگشت
                             </button>
                         </div>
                     </div>
@@ -1556,13 +1680,9 @@
         const newPartyTypeInput = document.getElementById('new-party-type');
         const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
-        const accountBalances = document.getElementById('account-balances');
-        const paymentStats = document.getElementById('payment-stats');
-        const cashTotalEl = document.getElementById('cash-total');
-        const receivableTotalEl = document.getElementById('receivable-total');
-        const receivableDocsTotalEl = document.getElementById('receivable-docs-total');
-        const payableTotalEl = document.getElementById('payable-total');
-        const payableDocsTotalEl = document.getElementById('payable-docs-total');
+        const trialBalanceBody = document.getElementById('trial-balance-body');
+        const ledgerAccountSelect = document.getElementById('ledger-account-select');
+        const ledgerBody = document.getElementById('ledger-body');
         const amountInput = document.getElementById('amount');
         
         // مدیریت ورود به سیستم
@@ -1823,6 +1943,12 @@
                         }
                     });
                 });
+                
+                // رویداد تغییر حساب در دفترکل
+                ledgerAccountSelect.addEventListener('change', function() {
+                    updateLedger(this.value);
+                });
+                
             }).catch(error => {
                 console.error('خطا در مقداردهی اولیه برنامه:', error);
                 showNotification('خطا در بارگذاری داده‌ها!', 'error');
@@ -2126,9 +2252,9 @@
                     formTitle: 'لیست اسناد'
                 },
                 'statistics': {
-                    title: 'آمار و موجودی‌ها',
-                    description: 'در این بخش می‌توانید آمار و موجودی حساب‌های خود را مشاهده کنید',
-                    formTitle: 'آمار حساب‌ها'
+                    title: 'آمار و گزارشات',
+                    description: 'در این بخش می‌توانید تراز آزمایشی و دفترکل حساب‌ها را مشاهده کنید',
+                    formTitle: 'گزارشات مالی'
                 }
             };
             
@@ -2154,7 +2280,7 @@
             const types = {
                 'cash': 'نقد',
                 'credit': 'نسیه',
-                'check': 'چک'
+                'check': 'چک-سفته'
             };
             return types[paymentType] || paymentType;
         }
@@ -2167,6 +2293,14 @@
             });
             
             accountSelect.innerHTML = html;
+            
+            // به‌روزرسانی dropdown حساب‌ها در دفترکل
+            let ledgerHtml = '<option value="">انتخاب حساب برای مشاهده دفترکل</option>';
+            accounts.forEach(account => {
+                ledgerHtml += `<option value="${account.id}">${account.name}</option>`;
+            });
+            
+            ledgerAccountSelect.innerHTML = ledgerHtml;
         }
         
         // تابع به‌روزرسانی dropdown طرف‌های حساب
@@ -2300,175 +2434,426 @@
         
         // تابع به‌روزرسانی آمار
         function updateStatistics() {
-            // محاسبه موجودی هر حساب
-            const accountBalancesMap = {};
+            updateTrialBalance();
+            updateLedger(ledgerAccountSelect.value);
+        }
+        
+        // تابع به‌روزرسانی تراز آزمایشی
+        function updateTrialBalance() {
+            if (savedDocuments.length === 0 && currentDocumentTransactions.length === 0) {
+                trialBalanceBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="empty-state">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>هیچ معامله‌ای برای محاسبه تراز آزمایشی وجود ندارد</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
             
-            // حساب‌های اصلی برای نمایش در آمار
-            const mainAccounts = [
-                { id: 1, name: 'موجودی نقد' },
-                { id: 2, name: 'حساب دریافتنی' },
-                { id: 3, name: 'اسناد دریافتنی' },
-                { id: 4, name: 'حساب پرداختنی' },
-                { id: 5, name: 'اسناد پرداختنی' }
-            ];
+            // محاسبه مانده هر حساب
+            const accountBalances = {};
             
-            // مقداردهی اولیه موجودی‌ها
-            mainAccounts.forEach(account => {
-                accountBalancesMap[account.id] = {
+            // مقداردهی اولیه
+            accounts.forEach(account => {
+                accountBalances[account.id] = {
                     name: account.name,
-                    balance: 0
+                    debit: 0,
+                    credit: 0
                 };
             });
             
             // محاسبه از اسناد ذخیره شده
             savedDocuments.forEach(document => {
                 document.transactions.forEach(transaction => {
+                    // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                    
                     if (transaction.transactionType === 'receipt') {
-                        // دریافت: افزایش موجودی نقد، حساب دریافتنی یا اسناد دریافتنی
-                        if (transaction.paymentType === 'cash') {
-                            accountBalancesMap[1].balance += transaction.amount; // موجودی نقد
-                        } else if (transaction.paymentType === 'credit') {
-                            accountBalancesMap[2].balance += transaction.amount; // حساب دریافتنی
-                        } else if (transaction.paymentType === 'check') {
-                            accountBalancesMap[3].balance += transaction.amount; // اسناد دریافتنی
+                        // دریافت: حساب انتخاب شده بستانکار می‌شود
+                        let debitAccount = '';
+                        
+                        // تعیین حساب بدهکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                debitAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                debitAccount = 'حساب دریافتنی';
+                                break;
+                            case 'check':
+                                debitAccount = 'اسناد دریافتنی';
+                                break;
+                        }
+                        
+                        // پیدا کردن حساب بدهکار
+                        const debitAcc = accounts.find(acc => acc.name === debitAccount);
+                        if (debitAcc) {
+                            accountBalances[debitAcc.id].debit += transaction.amount;
+                        }
+                        
+                        // حساب انتخاب شده بستانکار می‌شود
+                        accountBalances[transaction.accountId].credit += transaction.amount;
+                    } else if (transaction.transactionType === 'payment') {
+                        // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                        let creditAccount = '';
+                        
+                        // تعیین حساب بستانکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                creditAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                creditAccount = 'حساب پرداختنی';
+                                break;
+                            case 'check':
+                                creditAccount = 'اسناد پرداختنی';
+                                break;
+                        }
+                        
+                        // حساب انتخاب شده بدهکار می‌شود
+                        accountBalances[transaction.accountId].debit += transaction.amount;
+                        
+                        // پیدا کردن حساب بستانکار
+                        const creditAcc = accounts.find(acc => acc.name === creditAccount);
+                        if (creditAcc) {
+                            accountBalances[creditAcc.id].credit += transaction.amount;
+                        }
+                    }
+                });
+            });
+            
+            // محاسبه از سند جاری
+            currentDocumentTransactions.forEach(transaction => {
+                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                
+                if (transaction.transactionType === 'receipt') {
+                    // دریافت: حساب انتخاب شده بستانکار می‌شود
+                    let debitAccount = '';
+                    
+                    // تعیین حساب بدهکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            debitAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            debitAccount = 'حساب دریافتنی';
+                            break;
+                        case 'check':
+                            debitAccount = 'اسناد دریافتنی';
+                            break;
+                    }
+                    
+                    // پیدا کردن حساب بدهکار
+                    const debitAcc = accounts.find(acc => acc.name === debitAccount);
+                    if (debitAcc) {
+                        accountBalances[debitAcc.id].debit += transaction.amount;
+                    }
+                    
+                    // حساب انتخاب شده بستانکار می‌شود
+                    accountBalances[transaction.accountId].credit += transaction.amount;
+                } else if (transaction.transactionType === 'payment') {
+                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                    let creditAccount = '';
+                    
+                    // تعیین حساب بستانکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            creditAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            creditAccount = 'حساب پرداختنی';
+                            break;
+                        case 'check':
+                            creditAccount = 'اسناد پرداختنی';
+                            break;
+                    }
+                    
+                    // حساب انتخاب شده بدهکار می‌شود
+                    accountBalances[transaction.accountId].debit += transaction.amount;
+                    
+                    // پیدا کردن حساب بستانکار
+                    const creditAcc = accounts.find(acc => acc.name === creditAccount);
+                    if (creditAcc) {
+                        accountBalances[creditAcc.id].credit += transaction.amount;
+                    }
+                }
+            });
+            
+            let html = '';
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            // نمایش حساب‌هایی که مانده دارند
+            Object.values(accountBalances).forEach(account => {
+                if (account.debit > 0 || account.credit > 0) {
+                    totalDebit += account.debit;
+                    totalCredit += account.credit;
+                    
+                    html += `
+                        <tr>
+                            <td class="account-name">${account.name}</td>
+                            <td class="debit">${account.debit > 0 ? formatCurrency(account.debit) : '-'}</td>
+                            <td class="credit">${account.credit > 0 ? formatCurrency(account.credit) : '-'}</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            // اضافه کردن ردیف جمع کل
+            html += `
+                <tr style="background-color: rgba(255, 107, 107, 0.1); font-weight: bold;">
+                    <td class="account-name">جمع کل</td>
+                    <td class="debit">${formatCurrency(totalDebit)}</td>
+                    <td class="credit">${formatCurrency(totalCredit)}</td>
+                </tr>
+            `;
+            
+            trialBalanceBody.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی دفترکل
+        function updateLedger(accountId) {
+            if (!accountId) {
+                ledgerBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-book"></i>
+                            <p>لطفاً یک حساب را برای مشاهده دفترکل انتخاب کنید</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const account = accounts.find(acc => acc.id == accountId);
+            if (!account) {
+                ledgerBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>حساب انتخاب شده معتبر نیست</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // جمع‌آوری تمام معاملات مربوط به این حساب
+            const ledgerEntries = [];
+            let balance = 0;
+            
+            // بررسی اسناد ذخیره شده
+            savedDocuments.forEach(document => {
+                document.transactions.forEach(transaction => {
+                    // بررسی معاملات مربوط به حساب انتخاب شده
+                    if (transaction.accountId == accountId) {
+                        let debit = 0;
+                        let credit = 0;
+                        
+                        if (transaction.transactionType === 'receipt') {
+                            credit = transaction.amount;
+                            balance -= transaction.amount;
+                        } else if (transaction.transactionType === 'payment') {
+                            debit = transaction.amount;
+                            balance += transaction.amount;
+                        }
+                        
+                        ledgerEntries.push({
+                            date: document.date,
+                            description: transaction.description,
+                            debit: debit,
+                            credit: credit,
+                            balance: balance
+                        });
+                    }
+                    
+                    // بررسی معاملات مربوط به حساب‌های مرتبط
+                    let relatedAccount = '';
+                    if (transaction.transactionType === 'receipt') {
+                        // دریافت: حساب انتخاب شده بستانکار می‌شود
+                        let debitAccount = '';
+                        
+                        // تعیین حساب بدهکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                debitAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                debitAccount = 'حساب دریافتنی';
+                                break;
+                            case 'check':
+                                debitAccount = 'اسناد دریافتنی';
+                                break;
+                        }
+                        
+                        if (debitAccount === account.name) {
+                            debit = transaction.amount;
+                            credit = 0;
+                            balance += transaction.amount;
+                            
+                            ledgerEntries.push({
+                                date: document.date,
+                                description: transaction.description,
+                                debit: debit,
+                                credit: credit,
+                                balance: balance
+                            });
                         }
                     } else if (transaction.transactionType === 'payment') {
-                        // پرداخت: افزایش حساب پرداختنی یا اسناد پرداختنی
-                        if (transaction.paymentType === 'credit') {
-                            accountBalancesMap[4].balance += transaction.amount; // حساب پرداختنی
-                        } else if (transaction.paymentType === 'check') {
-                            accountBalancesMap[5].balance += transaction.amount; // اسناد پرداختنی
-                        } else if (transaction.paymentType === 'cash') {
-                            // برای پرداخت نقدی، موجودی نقد کاهش می‌یابد
-                            accountBalancesMap[1].balance -= transaction.amount; // موجودی نقد
+                        // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                        let creditAccount = '';
+                        
+                        // تعیین حساب بستانکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                creditAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                creditAccount = 'حساب پرداختنی';
+                                break;
+                            case 'check':
+                                creditAccount = 'اسناد پرداختنی';
+                                break;
+                        }
+                        
+                        if (creditAccount === account.name) {
+                            debit = 0;
+                            credit = transaction.amount;
+                            balance -= transaction.amount;
+                            
+                            ledgerEntries.push({
+                                date: document.date,
+                                description: transaction.description,
+                                debit: debit,
+                                credit: credit,
+                                balance: balance
+                            });
                         }
                     }
                 });
             });
             
-            // محاسبه از سند جاری
+            // بررسی سند جاری
             currentDocumentTransactions.forEach(transaction => {
+                // بررسی معاملات مربوط به حساب انتخاب شده
+                if (transaction.accountId == accountId) {
+                    let debit = 0;
+                    let credit = 0;
+                    
+                    if (transaction.transactionType === 'receipt') {
+                        credit = transaction.amount;
+                        balance -= transaction.amount;
+                    } else if (transaction.transactionType === 'payment') {
+                        debit = transaction.amount;
+                        balance += transaction.amount;
+                    }
+                    
+                    ledgerEntries.push({
+                        date: transaction.date,
+                        description: transaction.description,
+                        debit: debit,
+                        credit: credit,
+                        balance: balance
+                    });
+                }
+                
+                // بررسی معاملات مربوط به حساب‌های مرتبط
+                let relatedAccount = '';
                 if (transaction.transactionType === 'receipt') {
-                    // دریافت: افزایش موجودی نقد، حساب دریافتنی یا اسناد دریافتنی
-                    if (transaction.paymentType === 'cash') {
-                        accountBalancesMap[1].balance += transaction.amount; // موجودی نقد
-                    } else if (transaction.paymentType === 'credit') {
-                        accountBalancesMap[2].balance += transaction.amount; // حساب دریافتنی
-                    } else if (transaction.paymentType === 'check') {
-                        accountBalancesMap[3].balance += transaction.amount; // اسناد دریافتنی
+                    // دریافت: حساب انتخاب شده بستانکار می‌شود
+                    let debitAccount = '';
+                    
+                    // تعیین حساب بدهکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            debitAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            debitAccount = 'حساب دریافتنی';
+                            break;
+                        case 'check':
+                            debitAccount = 'اسناد دریافتنی';
+                            break;
+                    }
+                    
+                    if (debitAccount === account.name) {
+                        debit = transaction.amount;
+                        credit = 0;
+                        balance += transaction.amount;
+                        
+                        ledgerEntries.push({
+                            date: transaction.date,
+                            description: transaction.description,
+                            debit: debit,
+                            credit: credit,
+                            balance: balance
+                        });
                     }
                 } else if (transaction.transactionType === 'payment') {
-                    // پرداخت: افزایش حساب پرداختنی یا اسناد پرداختنی
-                    if (transaction.paymentType === 'credit') {
-                        accountBalancesMap[4].balance += transaction.amount; // حساب پرداختنی
-                    } else if (transaction.paymentType === 'check') {
-                        accountBalancesMap[5].balance += transaction.amount; // اسناد پرداختنی
-                    } else if (transaction.paymentType === 'cash') {
-                        // برای پرداخت نقدی، موجودی نقد کاهش می‌یابد
-                        accountBalancesMap[1].balance -= transaction.amount; // موجودی نقد
+                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                    let creditAccount = '';
+                    
+                    // تعیین حساب بستانکار بر اساس نوع پرداخت
+                    switch(transaction.paymentType) {
+                        case 'cash':
+                            creditAccount = 'موجودی نقد';
+                            break;
+                        case 'credit':
+                            creditAccount = 'حساب پرداختنی';
+                            break;
+                        case 'check':
+                            creditAccount = 'اسناد پرداختنی';
+                            break;
+                    }
+                    
+                    if (creditAccount === account.name) {
+                        debit = 0;
+                        credit = transaction.amount;
+                        balance -= transaction.amount;
+                        
+                        ledgerEntries.push({
+                            date: transaction.date,
+                            description: transaction.description,
+                            debit: debit,
+                            credit: credit,
+                            balance: balance
+                        });
                     }
                 }
             });
             
-            // به‌روزرسانی آمار حساب‌ها
-            updateAccountStats(accountBalancesMap);
+            // مرتب‌سازی بر اساس تاریخ
+            ledgerEntries.sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
             
-            // به‌روزرسانی موجودی همه حساب‌ها
-            updateAccountBalances();
-        }
-        
-        // تابع به‌روزرسانی آمار حساب‌ها
-        function updateAccountStats(accountBalancesMap) {
-            if (Object.keys(accountBalancesMap).length === 0) {
-                paymentStats.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
-                    </div>
+            if (ledgerEntries.length === 0) {
+                ledgerBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-book"></i>
+                            <p>هیچ معامله‌ای برای حساب "${account.name}" ثبت نشده است</p>
+                        </td>
+                    </tr>
                 `;
                 return;
             }
             
             let html = '';
-            
-            // نمایش آمار برای حساب‌های اصلی
-            Object.values(accountBalancesMap).forEach(account => {
-                // نمایش اعداد بدون علامت منفی
-                const absoluteBalance = Math.abs(account.balance);
-                
+            ledgerEntries.forEach(entry => {
                 html += `
-                    <div class="account-stat">
-                        <div class="account-stat-value">${formatCurrency(absoluteBalance)}</div>
-                        <div class="account-stat-label">${account.name}</div>
-                    </div>
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td class="account-name">${entry.description}</td>
+                        <td class="debit">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
+                        <td class="credit">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
+                        <td class="balance">${formatCurrency(Math.abs(entry.balance))} ${entry.balance >= 0 ? 'بدهکار' : 'بستانکار'}</td>
+                    </tr>
                 `;
             });
             
-            paymentStats.innerHTML = html;
-        }
-        
-        // تابع به‌روزرسانی موجودی حساب‌ها
-        function updateAccountBalances() {
-            if (savedDocuments.length === 0 && currentDocumentTransactions.length === 0) {
-                accountBalances.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>هیچ معامله‌ای برای محاسبه آمار وجود ندارد</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // محاسبه موجودی هر حساب
-            const accountBalancesMap = {};
-            
-            accounts.forEach(account => {
-                accountBalancesMap[account.id] = {
-                    name: account.name,
-                    balance: 0
-                };
-            });
-            
-            // محاسبه از اسناد ذخیره شده
-            savedDocuments.forEach(document => {
-                document.transactions.forEach(transaction => {
-                    if (transaction.transactionType === 'receipt') {
-                        accountBalancesMap[transaction.accountId].balance += transaction.amount;
-                    } else {
-                        accountBalancesMap[transaction.accountId].balance -= transaction.amount;
-                    }
-                });
-            });
-            
-            // محاسبه از سند جاری
-            currentDocumentTransactions.forEach(transaction => {
-                if (transaction.transactionType === 'receipt') {
-                    accountBalancesMap[transaction.accountId].balance += transaction.amount;
-                } else {
-                    accountBalancesMap[transaction.accountId].balance -= transaction.amount;
-                }
-            });
-            
-            let html = '';
-            
-            // نمایش موجودی هر حساب
-            Object.values(accountBalancesMap).forEach(account => {
-                // نمایش اعداد بدون علامت منفی
-                const absoluteBalance = Math.abs(account.balance);
-                
-                html += `
-                    <div class="account-balance">
-                        <div class="account-balance-header">
-                            <div class="account-name">${account.name}</div>
-                            <div class="account-balance-value">
-                                ${formatCurrency(absoluteBalance)}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            accountBalances.innerHTML = html;
+            ledgerBody.innerHTML = html;
         }
         
         // تابع حذف حساب
@@ -2869,4 +3254,3 @@
     </script>
 </body>
 </html>
-
