@@ -305,10 +305,6 @@
             font-size: 1.3rem;
         }
 
-        .nav-item-text {
-            display: block;
-        }
-
         .user-section {
             padding: 20px 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -738,19 +734,11 @@
                 height: auto;
             }
 
-            .sidebar-header {
-                padding: 15px;
-            }
-
-            .app-logo-text {
-                font-size: 1.2rem;
-            }
-
             .sidebar-nav {
                 display: flex;
                 overflow-x: auto;
-                padding: 10px;
-                justify-content: space-around;
+                padding: 15px;
+                justify-content: space-between;
             }
 
             .nav-item {
@@ -758,34 +746,18 @@
                 border-bottom: 3px solid transparent;
                 padding: 10px 15px;
                 flex-direction: column;
+                align-items: center;
                 gap: 5px;
-                margin: 0 5px;
                 min-width: 70px;
-                text-align: center;
+                margin: 0 5px;
+            }
+
+            .nav-item span {
+                display: none;
             }
 
             .nav-item.active {
                 border-bottom: 3px solid var(--primary);
-                background: rgba(255, 255, 255, 0.1);
-            }
-
-            .nav-item-text {
-                font-size: 0.75rem;
-                display: none; /* مخفی کردن متن در موبایل */
-            }
-
-            .nav-item i {
-                font-size: 1.5rem;
-                margin-bottom: 5px;
-            }
-
-            .user-section {
-                padding: 15px;
-                justify-content: center;
-            }
-
-            .user-info {
-                display: none; /* مخفی کردن اطلاعات کاربر در موبایل */
             }
 
             .main-content {
@@ -844,22 +816,22 @@
             .document-description {
                 font-size: 0.9rem;
             }
-
+            
             /* بهبود نمایش دفترکل در موبایل */
-            .ledger-container {
+            .ledger-table-container {
                 overflow-x: auto;
                 width: 100%;
             }
-
+            
             .ledger-table {
                 min-width: 600px;
             }
-
-            .trial-balance-container {
+            
+            .trial-balance-table-container {
                 overflow-x: auto;
                 width: 100%;
             }
-
+            
             .trial-balance-table {
                 min-width: 500px;
             }
@@ -1223,14 +1195,19 @@
                 width: 100%;
                 justify-content: space-between;
             }
-
+            
+            /* نمایش فقط آیکون‌ها در ناوبری موبایل */
+            .nav-item span {
+                display: none;
+            }
+            
             .nav-item {
-                padding: 8px 12px;
+                padding: 10px;
                 min-width: 60px;
             }
-
+            
             .nav-item i {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
             }
         }
         
@@ -1289,8 +1266,9 @@
             margin-top: 20px;
         }
 
-        .trial-balance-container {
+        .trial-balance-table-container {
             overflow-x: auto;
+            width: 100%;
         }
 
         .trial-balance-table {
@@ -1300,6 +1278,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
+            min-width: 500px;
         }
 
         .trial-balance-table th {
@@ -1339,8 +1318,9 @@
             flex: 1;
         }
 
-        .ledger-container {
+        .ledger-table-container {
             overflow-x: auto;
+            width: 100%;
         }
 
         .ledger-table {
@@ -1350,6 +1330,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
+            min-width: 600px;
         }
 
         .ledger-table th {
@@ -1440,19 +1421,19 @@
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-tab="transaction">
                         <i class="fas fa-plus-circle"></i>
-                        <span class="nav-item-text">ثبت</span>
+                        <span>ثبت</span>
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
-                        <span class="nav-item-text">اسناد</span>
+                        <span>اسناد</span>
                     </div>
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
-                        <span class="nav-item-text">آمار</span>
+                        <span>آمار</span>
                     </div>
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
-                        <span class="nav-item-text">حساب</span>
+                        <span>حساب</span>
                     </div>
                 </div>
                 
@@ -1600,7 +1581,7 @@
                         <div id="statistics-tab" class="tab-content hidden">
                             <div class="trial-balance">
                                 <h3>تراز آزمایشی دوستون</h3>
-                                <div class="trial-balance-container">
+                                <div class="trial-balance-table-container">
                                     <table class="trial-balance-table">
                                         <thead>
                                             <tr>
@@ -1628,7 +1609,7 @@
                                         <option value="">انتخاب حساب برای مشاهده دفترکل</option>
                                     </select>
                                 </div>
-                                <div class="ledger-container">
+                                <div class="ledger-table-container">
                                     <table class="ledger-table">
                                         <thead>
                                             <tr>
