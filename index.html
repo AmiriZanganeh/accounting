@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura | سیستم حسابداری خلاق</title>
+    <title>مهراز سیستم</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -711,7 +711,7 @@
         }
 
         .document-action-btn.delete {
-            background: linear-gradient(135deg, var(--info), #0F7CA3);
+            background: linear-gradient(135deg, var(--danger), #E83E6D);
             color: white;
         }
 
@@ -1251,14 +1251,10 @@
             font-weight: 600;
         }
 
-        .trial-balance-table .debit {
-            color: var(--danger);
-            font-weight: 600;
-        }
-
+        /* حذف رنگ‌های قرمز و سبز برای مبالغ */
+        .trial-balance-table .debit,
         .trial-balance-table .credit {
-            color: var(--success);
-            font-weight: 600;
+            color: var(--dark);
         }
 
         /* استایل‌های جدید برای دفترکل */
@@ -1301,14 +1297,10 @@
             font-weight: 600;
         }
 
-        .ledger-table .debit {
-            color: var(--danger);
-            font-weight: 600;
-        }
-
+        /* حذف رنگ‌های قرمز و سبز برای مبالغ */
+        .ledger-table .debit,
         .ledger-table .credit {
-            color: var(--success);
-            font-weight: 600;
+            color: var(--dark);
         }
 
         .ledger-table .balance {
@@ -1324,8 +1316,8 @@
                 <div class="brand-icon">
                     <i class="fas fa-calculator"></i>
                 </div>
-                <h1 class="brand-name">Aura</h1>
-                <p class="brand-tagline">سیستم حسابداری خلاق و مدرن</p>
+                <h1 class="brand-name">مهراز سیستم</h1>
+                <p class="brand-tagline">این سیستم نسخه آزمایشی است</p>
             </div>
             <form class="login-form" id="login-form">
                 <div class="input-group">
@@ -1367,7 +1359,7 @@
                         <div class="app-logo-icon">
                             <i class="fas fa-calculator"></i>
                         </div>
-                        <div class="app-logo-text">Aura</div>
+                        <div class="app-logo-text">مهراز سیستم</div>
                     </div>
                 </div>
                 
@@ -1506,7 +1498,7 @@
                                 <h3>افزودن طرف حساب جدید</h3>
                                 <div class="party-form">
                                     <input type="text" id="new-party-name" class="form-control" placeholder="نام طرف حساب">
-                                    <input type="text" id="new-party-type" class="form-control" placeholder="نوع طرف حساب (خریدار/فروشنده)">
+                                    <input type="text" id="new-party-type" class="form-control" placeholder="نوع طرف حساب (مشتری/فروشنده)">
                                     <button type="button" id="add-party" class="btn btn-success">
                                         <i class="fas fa-plus"></i>
                                         افزودن
@@ -2017,14 +2009,14 @@
                     // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
                     if (accounts.length === 0) {
                         const defaultAccounts = [
-                            { id: 1, name: 'موجودی نقد' },
-                            { id: 2, name: 'حساب دریافتنی' },
-                            { id: 3, name: 'اسناد دریافتنی' },
-                            { id: 4, name: 'حساب پرداختنی' },
-                            { id: 5, name: 'اسناد پرداختنی' },
-                            { id: 6, name: 'فروش' },
-                            { id: 7, name: 'هزینه اجاره' },
-                            { id: 8, name: 'هزینه حقوق' }
+                            { id: 1, name: 'موجودی نقد', isSystem: true },
+                            { id: 2, name: 'حساب های دریافتنی', isSystem: true },
+                            { id: 3, name: 'اسناد دریافتنی', isSystem: true },
+                            { id: 4, name: 'حساب های پرداختنی', isSystem: true },
+                            { id: 5, name: 'اسناد پرداختنی', isSystem: true },
+                            { id: 6, name: 'فروش', isSystem: false },
+                            { id: 7, name: 'هزینه اجاره', isSystem: false },
+                            { id: 8, name: 'هزینه حقوق', isSystem: false }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -2059,9 +2051,9 @@
                     // اگر طرف‌های حساب خالی هستند، طرف‌های حساب پیش‌فرض را اضافه کن
                     if (parties.length === 0) {
                         const defaultParties = [
-                            { id: 1, name: 'شرکت البرز', type: 'خریدار' },
+                            { id: 1, name: 'شرکت البرز', type: 'مشتری' },
                             { id: 2, name: 'شرکت پارس', type: 'فروشنده' },
-                            { id: 3, name: 'فروشگاه مرکزی', type: 'خریدار' }
+                            { id: 3, name: 'فروشگاه مرکزی', type: 'مشتری' }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
@@ -2289,7 +2281,10 @@
         function updateAccountSelect() {
             let html = '<option value="">انتخاب کنید</option>';
             accounts.forEach(account => {
-                html += `<option value="${account.id}">${account.name}</option>`;
+                // فقط حساب‌های غیرسیستمی را نمایش بده
+                if (!account.isSystem) {
+                    html += `<option value="${account.id}">${account.name}</option>`;
+                }
             });
             
             accountSelect.innerHTML = html;
@@ -2315,7 +2310,10 @@
         
         // تابع به‌روزرسانی لیست حساب‌ها
         function updateAccountsList() {
-            if (accounts.length === 0) {
+            // فقط حساب‌های غیرسیستمی را نمایش بده
+            const userAccounts = accounts.filter(account => !account.isSystem);
+            
+            if (userAccounts.length === 0) {
                 accountsList.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-wallet"></i>
@@ -2326,7 +2324,7 @@
             }
             
             let html = '';
-            accounts.forEach(account => {
+            userAccounts.forEach(account => {
                 html += `
                     <div class="account-item">
                         <span>${account.name}</span>
@@ -2479,7 +2477,7 @@
                                 debitAccount = 'موجودی نقد';
                                 break;
                             case 'credit':
-                                debitAccount = 'حساب دریافتنی';
+                                debitAccount = 'حساب های دریافتنی';
                                 break;
                             case 'check':
                                 debitAccount = 'اسناد دریافتنی';
@@ -2504,7 +2502,7 @@
                                 creditAccount = 'موجودی نقد';
                                 break;
                             case 'credit':
-                                creditAccount = 'حساب پرداختنی';
+                                creditAccount = 'حساب های پرداختنی';
                                 break;
                             case 'check':
                                 creditAccount = 'اسناد پرداختنی';
@@ -2537,7 +2535,7 @@
                             debitAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            debitAccount = 'حساب دریافتنی';
+                            debitAccount = 'حساب های دریافتنی';
                             break;
                         case 'check':
                             debitAccount = 'اسناد دریافتنی';
@@ -2562,7 +2560,7 @@
                             creditAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            creditAccount = 'حساب پرداختنی';
+                            creditAccount = 'حساب های پرداختنی';
                             break;
                         case 'check':
                             creditAccount = 'اسناد پرداختنی';
@@ -2680,7 +2678,7 @@
                                 debitAccount = 'موجودی نقد';
                                 break;
                             case 'credit':
-                                debitAccount = 'حساب دریافتنی';
+                                debitAccount = 'حساب های دریافتنی';
                                 break;
                             case 'check':
                                 debitAccount = 'اسناد دریافتنی';
@@ -2710,7 +2708,7 @@
                                 creditAccount = 'موجودی نقد';
                                 break;
                             case 'credit':
-                                creditAccount = 'حساب پرداختنی';
+                                creditAccount = 'حساب های پرداختنی';
                                 break;
                             case 'check':
                                 creditAccount = 'اسناد پرداختنی';
@@ -2770,7 +2768,7 @@
                             debitAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            debitAccount = 'حساب دریافتنی';
+                            debitAccount = 'حساب های دریافتنی';
                             break;
                         case 'check':
                             debitAccount = 'اسناد دریافتنی';
@@ -2800,7 +2798,7 @@
                             creditAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            creditAccount = 'حساب پرداختنی';
+                            creditAccount = 'حساب های پرداختنی';
                             break;
                         case 'check':
                             creditAccount = 'اسناد پرداختنی';
@@ -2965,7 +2963,7 @@
                             debitAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            debitAccount = 'حساب دریافتنی';
+                            debitAccount = 'حساب های دریافتنی';
                             break;
                         case 'check':
                             debitAccount = 'اسناد دریافتنی';
@@ -2994,7 +2992,7 @@
                             creditAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            creditAccount = 'حساب پرداختنی';
+                            creditAccount = 'حساب های پرداختنی';
                             break;
                         case 'check':
                             creditAccount = 'اسناد پرداختنی';
@@ -3131,7 +3129,7 @@
                             debitAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            debitAccount = 'حساب دریافتنی';
+                            debitAccount = 'حساب های دریافتنی';
                             break;
                         case 'check':
                             debitAccount = 'اسناد دریافتنی';
@@ -3160,7 +3158,7 @@
                             creditAccount = 'موجودی نقد';
                             break;
                         case 'credit':
-                            creditAccount = 'حساب پرداختنی';
+                            creditAccount = 'حساب های پرداختنی';
                             break;
                         case 'check':
                             creditAccount = 'اسناد پرداختنی';
