@@ -315,6 +315,7 @@
 
         .nav-item-text {
             transition: opacity 0.3s ease;
+            font-size: 0.95rem;
         }
 
         /* محتوای اصلی */
@@ -333,7 +334,7 @@
         }
 
         .page-title {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -346,7 +347,7 @@
         }
 
         .page-description {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--gray);
             white-space: nowrap;
             overflow: hidden;
@@ -390,7 +391,7 @@
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--dark);
             display: flex;
             align-items: center;
@@ -403,7 +404,7 @@
 
         .card-title i {
             color: var(--primary);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         select, textarea {
@@ -705,7 +706,7 @@
 
         .document-title {
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--dark);
             margin-bottom: 5px;
         }
@@ -713,7 +714,7 @@
         .document-meta {
             display: flex;
             gap: 12px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--gray);
         }
 
@@ -724,7 +725,7 @@
         }
 
         .document-meta-item i {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         /* استایل‌های جدید برای فرم‌ها */
@@ -737,7 +738,7 @@
             margin-bottom: 6px;
             font-weight: 600;
             color: var(--dark);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .form-control {
@@ -774,14 +775,14 @@
         }
 
         .document-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--primary);
             margin-bottom: 5px;
         }
 
         .document-date {
             color: var(--gray);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         /* استایل‌های جدید برای جداول با فونت کوچک‌تر */
@@ -824,13 +825,13 @@
             font-weight: 700;
             margin-bottom: 10px;
             color: var(--dark);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .description-content {
             color: var(--gray);
             line-height: 1.6;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         /* استایل‌های جدید برای بخش آمار */
@@ -852,7 +853,7 @@
 
         .account-name {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--dark);
         }
 
@@ -881,7 +882,7 @@
         .account-stat-label {
             color: var(--gray);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         
         .account-stats {
@@ -924,7 +925,7 @@
             padding: 10px;
             background: rgba(0, 0, 0, 0.03);
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--gray);
             line-height: 1.5;
         }
@@ -1074,33 +1075,25 @@
             font-size: 0.7rem;
             font-weight: 600;
             white-space: nowrap;
+            color: var(--dark);
         }
         
-        .balance-status.debit {
-            background-color: rgba(255, 107, 107, 0.1);
-            color: var(--primary);
-        }
-        
-        .balance-status.credit {
-            background-color: rgba(78, 205, 196, 0.1);
-            color: var(--secondary);
+        .balance-type {
+            font-size: 0.65rem;
+            color: var(--gray);
+            margin-top: 2px;
         }
 
-        /* استایل جدید برای نمایش بد و بس در دفترکل */
-        .amount-with-type {
+        /* استایل جدید برای نمایش بد و بس در مانده دفترکل */
+        .balance-with-type {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 2px;
         }
         
-        .amount-value {
+        .balance-value {
             font-weight: 600;
-        }
-        
-        .amount-type {
-            font-size: 0.65rem;
-            color: var(--gray);
         }
         
         /* ریسپانسیو */
@@ -1202,7 +1195,7 @@
             }
             
             .document-description {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             
             /* بهبود نمایش دفترکل در موبایل */
@@ -1350,7 +1343,7 @@
             }
             
             .document-description {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 padding: 10px;
             }
             
@@ -2972,32 +2965,19 @@
             
             let html = '';
             ledgerEntries.forEach(entry => {
-                const balanceStatus = entry.balance >= 0 ? 'debit' : 'credit';
-                const balanceText = entry.balance >= 0 ? 'بدهکار' : 'بستانکار';
-                
-                // نمایش مبالغ با نوع (بد و بس)
-                const debitDisplay = entry.debit > 0 ? 
-                    `<div class="amount-with-type">
-                        <div class="amount-value">${formatCurrency(entry.debit)}</div>
-                        <div class="amount-type">بد</div>
-                    </div>` : '-';
-                
-                const creditDisplay = entry.credit > 0 ? 
-                    `<div class="amount-with-type">
-                        <div class="amount-value">${formatCurrency(entry.credit)}</div>
-                        <div class="amount-type">بس</div>
-                    </div>` : '-';
+                const balanceType = entry.balance >= 0 ? 'بد' : 'بس';
                 
                 html += `
                     <tr>
                         <td class="date-cell">${entry.date}</td>
                         <td class="description-cell">${entry.description}</td>
-                        <td class="amount-cell">${debitDisplay}</td>
-                        <td class="amount-cell">${creditDisplay}</td>
+                        <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
+                        <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
                         <td class="balance-cell">
-                            <span class="balance-status ${balanceStatus}">
-                                ${formatCurrency(Math.abs(entry.balance))} ${balanceText}
-                            </span>
+                            <div class="balance-with-type">
+                                <div class="balance-value">${formatCurrency(Math.abs(entry.balance))}</div>
+                                <div class="balance-type">${balanceType}</div>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -3254,7 +3234,7 @@
             let html = `
                 <div class="accounting-document">
                     <div class="document-header">
-                        <div class="document-title">سند حسابداری شماره ${toPersianNumbers(document.number)}</div>
+                        <div class="document-title" style="font-size: 1.1rem;">سند حسابداری شماره ${toPersianNumbers(document.number)}</div>
                         <div class="document-date">تاریخ: ${document.date}</div>
                     </div>
                     <table class="accounting-table">
