@@ -738,22 +738,12 @@
                 display: flex;
                 overflow-x: auto;
                 padding: 15px;
-                justify-content: space-between;
             }
 
             .nav-item {
                 white-space: nowrap;
                 border-bottom: 3px solid transparent;
-                padding: 10px 15px;
-                flex-direction: column;
-                align-items: center;
-                gap: 5px;
-                min-width: 70px;
-                margin: 0 5px;
-            }
-
-            .nav-item span {
-                display: none;
+                padding: 10px 18px;
             }
 
             .nav-item.active {
@@ -819,21 +809,39 @@
             
             /* بهبود نمایش دفترکل در موبایل */
             .ledger-table-container {
-                overflow-x: auto;
                 width: 100%;
+                overflow-x: auto;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border);
             }
             
             .ledger-table {
-                min-width: 600px;
+                min-width: 100%;
+                table-layout: fixed;
             }
             
-            .trial-balance-table-container {
-                overflow-x: auto;
-                width: 100%;
+            .ledger-table th, 
+            .ledger-table td {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+                word-break: break-word;
+                white-space: normal;
             }
             
-            .trial-balance-table {
-                min-width: 500px;
+            .ledger-table .account-name {
+                min-width: 120px;
+            }
+            
+            .ledger-table .date-cell {
+                min-width: 90px;
+            }
+            
+            .ledger-table .amount-cell {
+                min-width: 80px;
+            }
+            
+            .ledger-table .balance-cell {
+                min-width: 100px;
             }
         }
 
@@ -1196,18 +1204,41 @@
                 justify-content: space-between;
             }
             
-            /* نمایش فقط آیکون‌ها در ناوبری موبایل */
-            .nav-item span {
-                display: none;
+            /* بهبود نمایش دفترکل در موبایل */
+            .ledger-table-container {
+                width: 100%;
+                overflow-x: auto;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border);
             }
             
-            .nav-item {
-                padding: 10px;
-                min-width: 60px;
+            .ledger-table {
+                min-width: 100%;
+                table-layout: fixed;
             }
             
-            .nav-item i {
-                font-size: 1.5rem;
+            .ledger-table th, 
+            .ledger-table td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+                word-break: break-word;
+                white-space: normal;
+            }
+            
+            .ledger-table .account-name {
+                min-width: 100px;
+            }
+            
+            .ledger-table .date-cell {
+                min-width: 80px;
+            }
+            
+            .ledger-table .amount-cell {
+                min-width: 70px;
+            }
+            
+            .ledger-table .balance-cell {
+                min-width: 90px;
             }
         }
         
@@ -1266,11 +1297,6 @@
             margin-top: 20px;
         }
 
-        .trial-balance-table-container {
-            overflow-x: auto;
-            width: 100%;
-        }
-
         .trial-balance-table {
             width: 100%;
             border-collapse: collapse;
@@ -1278,7 +1304,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
-            min-width: 500px;
         }
 
         .trial-balance-table th {
@@ -1319,18 +1344,18 @@
         }
 
         .ledger-table-container {
-            overflow-x: auto;
             width: 100%;
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .ledger-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            min-width: 600px;
+            margin-top: 0;
+            table-layout: fixed;
         }
 
         .ledger-table th {
@@ -1345,6 +1370,8 @@
             padding: 10px;
             border: 1px solid var(--border);
             text-align: center;
+            word-break: break-word;
+            white-space: normal;
         }
 
         .ledger-table .account-name {
@@ -1360,6 +1387,23 @@
 
         .ledger-table .balance {
             font-weight: 700;
+        }
+        
+        /* کلاس‌های جدید برای تنظیم عرض ستون‌ها */
+        .ledger-table .date-cell {
+            min-width: 100px;
+        }
+        
+        .ledger-table .description-cell {
+            min-width: 150px;
+        }
+        
+        .ledger-table .amount-cell {
+            min-width: 90px;
+        }
+        
+        .ledger-table .balance-cell {
+            min-width: 110px;
         }
     </style>
 </head>
@@ -1421,19 +1465,19 @@
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-tab="transaction">
                         <i class="fas fa-plus-circle"></i>
-                        <span>ثبت</span>
+                        ثبت
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
-                        <span>اسناد</span>
+                        اسناد
                     </div>
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
-                        <span>آمار</span>
+                        آمار
                     </div>
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
-                        <span>حساب</span>
+                        حساب
                     </div>
                 </div>
                 
@@ -1581,25 +1625,23 @@
                         <div id="statistics-tab" class="tab-content hidden">
                             <div class="trial-balance">
                                 <h3>تراز آزمایشی دوستون</h3>
-                                <div class="trial-balance-table-container">
-                                    <table class="trial-balance-table">
-                                        <thead>
-                                            <tr>
-                                                <th>نام حساب</th>
-                                                <th>بدهکار</th>
-                                                <th>بستانکار</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="trial-balance-body">
-                                            <tr>
-                                                <td colspan="3" class="empty-state">
-                                                    <i class="fas fa-chart-bar"></i>
-                                                    <p>هیچ معامله‌ای برای محاسبه تراز آزمایشی وجود ندارد</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="trial-balance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>نام حساب</th>
+                                            <th>بدهکار</th>
+                                            <th>بستانکار</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trial-balance-body">
+                                        <tr>
+                                            <td colspan="3" class="empty-state">
+                                                <i class="fas fa-chart-bar"></i>
+                                                <p>هیچ معامله‌ای برای محاسبه تراز آزمایشی وجود ندارد</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             
                             <div class="ledger-section" style="margin-top: 30px;">
@@ -1613,11 +1655,11 @@
                                     <table class="ledger-table">
                                         <thead>
                                             <tr>
-                                                <th>تاریخ</th>
-                                                <th>شرح</th>
-                                                <th>بدهکار</th>
-                                                <th>بستانکار</th>
-                                                <th>مانده</th>
+                                                <th class="date-cell">تاریخ</th>
+                                                <th class="description-cell">شرح</th>
+                                                <th class="amount-cell">بدهکار</th>
+                                                <th class="amount-cell">بستانکار</th>
+                                                <th class="balance-cell">مانده</th>
                                             </tr>
                                         </thead>
                                         <tbody id="ledger-body">
@@ -2899,11 +2941,11 @@
             ledgerEntries.forEach(entry => {
                 html += `
                     <tr>
-                        <td>${entry.date}</td>
-                        <td class="account-name">${entry.description}</td>
-                        <td class="debit">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
-                        <td class="credit">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
-                        <td class="balance">${formatCurrency(Math.abs(entry.balance))} ${entry.balance >= 0 ? 'بدهکار' : 'بستانکار'}</td>
+                        <td class="date-cell">${entry.date}</td>
+                        <td class="description-cell">${entry.description}</td>
+                        <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
+                        <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
+                        <td class="balance-cell">${formatCurrency(Math.abs(entry.balance))} ${entry.balance >= 0 ? 'بدهکار' : 'بستانکار'}</td>
                     </tr>
                 `;
             });
