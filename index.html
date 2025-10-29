@@ -1281,6 +1281,7 @@
         .trial-balance-table .account-name {
             text-align: right;
             font-weight: 600;
+            font-size: 0.8rem; /* کاهش سایز فونت برای نام حساب‌ها */
         }
 
         /* حذف رنگ‌های قرمز و سبز برای مبالغ */
@@ -1314,7 +1315,7 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.85rem; /* کاهش سایز فونت */
+            font-size: 0.8rem; /* کاهش سایز فونت دفترکل */
         }
 
         .ledger-table th {
@@ -1347,6 +1348,7 @@
 
         .ledger-table .balance {
             font-weight: 700;
+            color: var(--dark); /* حذف رنگ از مبالغ مانده */
         }
         
         /* کلاس‌های جدید برای تنظیم عرض ستون‌ها */
@@ -1374,16 +1376,20 @@
             font-size: 0.75rem;
             font-weight: 600;
             white-space: nowrap;
+            color: var(--dark); /* حذف رنگ از وضعیت مانده */
         }
         
         .balance-status.debit {
             background-color: rgba(255, 107, 107, 0.1);
-            color: var(--primary);
         }
         
         .balance-status.credit {
             background-color: rgba(78, 205, 196, 0.1);
-            color: var(--secondary);
+        }
+        
+        /* حذف باکس سند حسابداری خالی */
+        .document-preview-empty {
+            display: none;
         }
     </style>
 </head>
@@ -1657,10 +1663,7 @@
                         </div>
                         
                         <div class="document-preview" id="document-preview">
-                            <div class="empty-state">
-                                <i class="fas fa-file-alt"></i>
-                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                            </div>
+                            <!-- محتوای سند حسابداری در اینجا نمایش داده می‌شود -->
                         </div>
                         
                         <div class="actions">
@@ -1976,12 +1979,7 @@
                     if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
                         currentDocumentTransactions = [];
                         saveCurrentDocument();
-                        documentPreview.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-file-alt"></i>
-                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                            </div>
-                        `;
+                        documentPreview.innerHTML = '';
                         showNotification('سند جاری با موفقیت پاک شد!', 'success');
                     }
                 });
@@ -2672,7 +2670,7 @@
             // اضافه کردن ردیف جمع کل
             html += `
                 <tr style="background-color: rgba(255, 107, 107, 0.1); font-weight: bold;">
-                    <td class="account-name">جمع کل</td>
+                    <td class="account-name" style="font-size: 0.8rem;">جمع کل</td>
                     <td class="debit">${formatCurrency(totalDebit)}</td>
                     <td class="credit">${formatCurrency(totalCredit)}</td>
                 </tr>
@@ -2911,8 +2909,7 @@
             
             let html = '';
             ledgerEntries.forEach(entry => {
-                const balanceStatus = entry.balance >= 0 ? 'debit' : 'credit';
-                const balanceText = entry.balance >= 0 ? 'بدهکار' : 'بستانکار';
+                const balanceStatus = entry.balance >= 0 ? 'بس' : 'بد';
                 
                 html += `
                     <tr>
@@ -2921,8 +2918,8 @@
                         <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
                         <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
                         <td class="balance-cell">
-                            <span class="balance-status ${balanceStatus}">
-                                ${formatCurrency(Math.abs(entry.balance))} ${balanceText}
+                            <span class="balance-status">
+                                ${formatCurrency(Math.abs(entry.balance))} ${balanceStatus}
                             </span>
                         </td>
                     </tr>
@@ -3139,12 +3136,7 @@
             updateDocumentsList();
             
             // پاک کردن پیش‌نمایش
-            documentPreview.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-file-alt"></i>
-                    <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                </div>
-            `;
+            documentPreview.innerHTML = '';
             
             // نمایش پیام موفقیت
             showNotification(`سند شماره ${toPersianNumbers(newDocument.number)} با موفقیت ذخیره شد!`, 'success');
