@@ -333,7 +333,7 @@
         }
 
         .page-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -346,7 +346,7 @@
         }
 
         .page-description {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--gray);
             white-space: nowrap;
             overflow: hidden;
@@ -390,7 +390,7 @@
         }
 
         .card-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--dark);
             display: flex;
             align-items: center;
@@ -403,7 +403,7 @@
 
         .card-title i {
             color: var(--primary);
-            font-size: 1.4rem;
+            font-size: 1.3rem;
         }
 
         select, textarea {
@@ -609,7 +609,7 @@
         }
 
         .empty-state p {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .hidden {
@@ -705,7 +705,7 @@
 
         .document-title {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--dark);
             margin-bottom: 5px;
         }
@@ -713,7 +713,7 @@
         .document-meta {
             display: flex;
             gap: 12px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--gray);
         }
 
@@ -737,7 +737,7 @@
             margin-bottom: 6px;
             font-weight: 600;
             color: var(--dark);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .form-control {
@@ -774,14 +774,14 @@
         }
 
         .document-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--primary);
             margin-bottom: 5px;
         }
 
         .document-date {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* استایل‌های جدید برای جداول با فونت کوچک‌تر */
@@ -789,7 +789,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .accounting-table th {
@@ -809,6 +809,7 @@
         /* حذف رنگ‌های بدهکار و بستانکار */
         .debit, .credit {
             font-weight: 600;
+            color: var(--dark);
         }
 
         .document-description {
@@ -823,11 +824,13 @@
             font-weight: 700;
             margin-bottom: 10px;
             color: var(--dark);
+            font-size: 0.9rem;
         }
 
         .description-content {
             color: var(--gray);
             line-height: 1.6;
+            font-size: 0.85rem;
         }
 
         /* استایل‌های جدید برای بخش آمار */
@@ -849,12 +852,12 @@
 
         .account-name {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--dark);
         }
 
         .account-balance-value {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
         }
 
@@ -869,7 +872,7 @@
         }
 
         .account-stat-value {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             margin: 8px 0;
             color: var(--dark);
@@ -878,7 +881,7 @@
         .account-stat-label {
             color: var(--gray);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .account-stats {
@@ -921,7 +924,7 @@
             padding: 10px;
             background: rgba(0, 0, 0, 0.03);
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--gray);
             line-height: 1.5;
         }
@@ -933,7 +936,7 @@
             background: var(--sidebar-bg);
             color: white;
             margin-top: 30px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .footer a {
@@ -958,7 +961,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .trial-balance-table th {
@@ -978,6 +981,7 @@
         .trial-balance-table .account-name {
             text-align: right;
             font-weight: 600;
+            font-size: 0.7rem;
         }
 
         /* حذف رنگ‌های قرمز و سبز برای مبالغ */
@@ -1011,7 +1015,7 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .ledger-table th {
@@ -1067,7 +1071,7 @@
             display: inline-block;
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             white-space: nowrap;
         }
@@ -1080,6 +1084,23 @@
         .balance-status.credit {
             background-color: rgba(78, 205, 196, 0.1);
             color: var(--secondary);
+        }
+
+        /* استایل جدید برای نمایش بد و بس در دفترکل */
+        .amount-with-type {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+        
+        .amount-value {
+            font-weight: 600;
+        }
+        
+        .amount-type {
+            font-size: 0.65rem;
+            color: var(--gray);
         }
         
         /* ریسپانسیو */
@@ -1172,7 +1193,7 @@
             
             /* بهبود نمایش سند حسابداری در موبایل */
             .accounting-table {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
             
             .accounting-table th, 
@@ -1181,7 +1202,7 @@
             }
             
             .document-description {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
             
             /* بهبود نمایش دفترکل در موبایل */
@@ -1195,7 +1216,7 @@
             .ledger-table {
                 min-width: 100%;
                 table-layout: fixed;
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
             
             .ledger-table th, 
@@ -1223,12 +1244,16 @@
             
             /* بهبود نمایش تراز آزمایشی در موبایل */
             .trial-balance-table {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
             
             .trial-balance-table th, 
             .trial-balance-table td {
                 padding: 6px 4px;
+            }
+            
+            .trial-balance-table .account-name {
+                font-size: 0.65rem;
             }
         }
 
@@ -1277,7 +1302,7 @@
             .accounting-table,
             .trial-balance-table,
             .ledger-table {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             
             .accounting-table th, 
@@ -1316,7 +1341,7 @@
             }
             
             .accounting-table {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
             
             .accounting-table th, 
@@ -1325,7 +1350,7 @@
             }
             
             .document-description {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 padding: 10px;
             }
             
@@ -1351,7 +1376,7 @@
             .ledger-table {
                 min-width: 100%;
                 table-layout: fixed;
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
             
             .ledger-table th, 
@@ -1379,12 +1404,16 @@
             
             /* بهبود نمایش تراز آزمایشی در موبایل */
             .trial-balance-table {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
             
             .trial-balance-table th, 
             .trial-balance-table td {
                 padding: 5px 3px;
+            }
+            
+            .trial-balance-table .account-name {
+                font-size: 0.6rem;
             }
         }
         
@@ -2946,12 +2975,25 @@
                 const balanceStatus = entry.balance >= 0 ? 'debit' : 'credit';
                 const balanceText = entry.balance >= 0 ? 'بدهکار' : 'بستانکار';
                 
+                // نمایش مبالغ با نوع (بد و بس)
+                const debitDisplay = entry.debit > 0 ? 
+                    `<div class="amount-with-type">
+                        <div class="amount-value">${formatCurrency(entry.debit)}</div>
+                        <div class="amount-type">بد</div>
+                    </div>` : '-';
+                
+                const creditDisplay = entry.credit > 0 ? 
+                    `<div class="amount-with-type">
+                        <div class="amount-value">${formatCurrency(entry.credit)}</div>
+                        <div class="amount-type">بس</div>
+                    </div>` : '-';
+                
                 html += `
                     <tr>
                         <td class="date-cell">${entry.date}</td>
                         <td class="description-cell">${entry.description}</td>
-                        <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
-                        <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
+                        <td class="amount-cell">${debitDisplay}</td>
+                        <td class="amount-cell">${creditDisplay}</td>
                         <td class="balance-cell">
                             <span class="balance-status ${balanceStatus}">
                                 ${formatCurrency(Math.abs(entry.balance))} ${balanceText}
