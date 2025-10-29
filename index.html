@@ -930,7 +930,6 @@
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
-            margin-bottom: 15px;
         }
 
         .document-header {
@@ -955,22 +954,20 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
-            font-size: 0.85rem; /* کاهش سایز فونت */
         }
 
         .accounting-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 10px; /* کاهش padding */
-            text-align: center;
+            padding: 12px;
+            text-align: right;
             border: 1px solid var(--border);
-            font-weight: 600;
         }
 
         .accounting-table td {
-            padding: 8px; /* کاهش padding */
+            padding: 10px;
             border: 1px solid var(--border);
-            text-align: center;
+            text-align: right;
         }
 
         /* حذف رنگ‌های بدهکار و بستانکار */
@@ -984,8 +981,6 @@
             background: rgba(255, 107, 107, 0.05);
             border-radius: var(--border-radius);
             border: 1px solid var(--border);
-            text-align: center; /* وسط‌چین کردن متن */
-            font-size: 0.9rem; /* کاهش سایز فونت */
         }
 
         .description-title {
@@ -1261,20 +1256,18 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
-            font-size: 0.85rem; /* کاهش سایز فونت */
         }
 
         .trial-balance-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 10px; /* کاهش padding */
+            padding: 12px;
             text-align: center;
             border: 1px solid var(--border);
-            font-weight: 600;
         }
 
         .trial-balance-table td {
-            padding: 8px; /* کاهش padding */
+            padding: 10px;
             border: 1px solid var(--border);
             text-align: center;
         }
@@ -1282,7 +1275,6 @@
         .trial-balance-table .account-name {
             text-align: right;
             font-weight: 600;
-            font-size: 0.8rem; /* کاهش سایز فونت برای نام حساب‌ها */
         }
 
         /* حذف رنگ‌های قرمز و سبز برای مبالغ */
@@ -1316,20 +1308,18 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.75rem; /* کاهش بیشتر سایز فونت دفترکل */
         }
 
         .ledger-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 10px; /* کاهش padding */
+            padding: 12px;
             text-align: center;
             border: 1px solid var(--border);
-            font-weight: 600;
         }
 
         .ledger-table td {
-            padding: 8px; /* کاهش padding */
+            padding: 10px;
             border: 1px solid var(--border);
             text-align: center;
             word-break: break-word;
@@ -1349,7 +1339,6 @@
 
         .ledger-table .balance {
             font-weight: 700;
-            color: var(--dark); /* حذف رنگ از مبالغ مانده */
         }
         
         /* کلاس‌های جدید برای تنظیم عرض ستون‌ها */
@@ -1377,51 +1366,16 @@
             font-size: 0.75rem;
             font-weight: 600;
             white-space: nowrap;
-            color: var(--dark); /* حذف رنگ از وضعیت مانده */
         }
         
         .balance-status.debit {
             background-color: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
         }
         
         .balance-status.credit {
             background-color: rgba(78, 205, 196, 0.1);
-        }
-        
-        /* حذف باکس سند حسابداری خالی */
-        .document-preview-empty {
-            display: none;
-        }
-        
-        /* استایل جدید برای سند حسابداری ساده */
-        .simple-accounting-document {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            font-size: 0.85rem;
-        }
-        
-        .simple-accounting-document th {
-            background: var(--bg-gradient);
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid var(--border);
-            font-weight: 600;
-        }
-        
-        .simple-accounting-document td {
-            padding: 8px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        
-        .simple-accounting-document .account-name {
-            text-align: right;
-            font-weight: 600;
+            color: var(--secondary);
         }
     </style>
 </head>
@@ -1695,7 +1649,10 @@
                         </div>
                         
                         <div class="document-preview" id="document-preview">
-                            <!-- محتوای سند حسابداری در اینجا نمایش داده می‌شود -->
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                            </div>
                         </div>
                         
                         <div class="actions">
@@ -2011,7 +1968,12 @@
                     if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
                         currentDocumentTransactions = [];
                         saveCurrentDocument();
-                        documentPreview.innerHTML = '';
+                        documentPreview.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                            </div>
+                        `;
                         showNotification('سند جاری با موفقیت پاک شد!', 'success');
                     }
                 });
@@ -2702,7 +2664,7 @@
             // اضافه کردن ردیف جمع کل
             html += `
                 <tr style="background-color: rgba(255, 107, 107, 0.1); font-weight: bold;">
-                    <td class="account-name" style="font-size: 0.8rem;">جمع کل</td>
+                    <td class="account-name">جمع کل</td>
                     <td class="debit">${formatCurrency(totalDebit)}</td>
                     <td class="credit">${formatCurrency(totalCredit)}</td>
                 </tr>
@@ -2941,7 +2903,8 @@
             
             let html = '';
             ledgerEntries.forEach(entry => {
-                const balanceStatus = entry.balance >= 0 ? 'بس' : 'بد';
+                const balanceStatus = entry.balance >= 0 ? 'debit' : 'credit';
+                const balanceText = entry.balance >= 0 ? 'بدهکار' : 'بستانکار';
                 
                 html += `
                     <tr>
@@ -2950,8 +2913,8 @@
                         <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
                         <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
                         <td class="balance-cell">
-                            <span class="balance-status">
-                                ${formatCurrency(Math.abs(entry.balance))} ${balanceStatus}
+                            <span class="balance-status ${balanceStatus}">
+                                ${formatCurrency(Math.abs(entry.balance))} ${balanceText}
                             </span>
                         </td>
                     </tr>
@@ -3041,19 +3004,20 @@
             }
             
             let html = `
-                <div style="margin-bottom: 15px;">
-                    <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">سند حسابداری</h3>
-                    <p style="text-align: center; color: var(--gray); margin-bottom: 15px;">تاریخ: ${documentDate}</p>
-                </div>
-                <table class="simple-accounting-document">
-                    <thead>
-                        <tr>
-                            <th>شرح حساب</th>
-                            <th>بدهکار (ریال)</th>
-                            <th>بستانکار (ریال)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="accounting-document">
+                    <div class="document-header">
+                        <div class="document-title">سند حسابداری</div>
+                        <div class="document-date">تاریخ: ${documentDate}</div>
+                    </div>
+                    <table class="accounting-table">
+                        <thead>
+                            <tr>
+                                <th>شرح حساب</th>
+                                <th>بدهکار (ریال)</th>
+                                <th>بستانکار (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
             
             currentDocumentTransactions.forEach(transaction => {
@@ -3078,12 +3042,12 @@
                     
                     html += `
                         <tr>
-                            <td class="account-name">${debitAccount}</td>
+                            <td>${debitAccount}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td class="account-name">${transaction.accountName}</td>
+                            <td>${transaction.accountName}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3107,12 +3071,12 @@
                     
                     html += `
                         <tr>
-                            <td class="account-name">${transaction.accountName}</td>
+                            <td>${transaction.accountName}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td class="account-name">${creditAccount}</td>
+                            <td>${creditAccount}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3121,11 +3085,12 @@
             });
             
             html += `
-                    </tbody>
-                </table>
-                <div class="document-description">
-                    <div class="description-title">شرح سند:</div>
-                    <div class="description-content">${descriptionText}</div>
+                        </tbody>
+                    </table>
+                    <div class="document-description">
+                        <div class="description-title">شرح سند:</div>
+                        <div class="description-content">${descriptionText}</div>
+                    </div>
                 </div>
             `;
             
@@ -3166,7 +3131,12 @@
             updateDocumentsList();
             
             // پاک کردن پیش‌نمایش
-            documentPreview.innerHTML = '';
+            documentPreview.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                </div>
+            `;
             
             // نمایش پیام موفقیت
             showNotification(`سند شماره ${toPersianNumbers(newDocument.number)} با موفقیت ذخیره شد!`, 'success');
@@ -3200,19 +3170,20 @@
             
             // نمایش سند در پیش‌نمایش
             let html = `
-                <div style="margin-bottom: 15px;">
-                    <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">سند حسابداری شماره ${toPersianNumbers(document.number)}</h3>
-                    <p style="text-align: center; color: var(--gray); margin-bottom: 15px;">تاریخ: ${document.date}</p>
-                </div>
-                <table class="simple-accounting-document">
-                    <thead>
-                        <tr>
-                            <th>شرح حساب</th>
-                            <th>بدهکار (ریال)</th>
-                            <th>بستانکار (ریال)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="accounting-document">
+                    <div class="document-header">
+                        <div class="document-title">سند حسابداری شماره ${toPersianNumbers(document.number)}</div>
+                        <div class="document-date">تاریخ: ${document.date}</div>
+                    </div>
+                    <table class="accounting-table">
+                        <thead>
+                            <tr>
+                                <th>شرح حساب</th>
+                                <th>بدهکار (ریال)</th>
+                                <th>بستانکار (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
             
             document.transactions.forEach(transaction => {
@@ -3237,12 +3208,12 @@
                     
                     html += `
                         <tr>
-                            <td class="account-name">${debitAccount}</td>
+                            <td>${debitAccount}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td class="account-name">${transaction.accountName}</td>
+                            <td>${transaction.accountName}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3266,12 +3237,12 @@
                     
                     html += `
                         <tr>
-                            <td class="account-name">${transaction.accountName}</td>
+                            <td>${transaction.accountName}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td class="account-name">${creditAccount}</td>
+                            <td>${creditAccount}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3280,11 +3251,12 @@
             });
             
             html += `
-                    </tbody>
-                </table>
-                <div class="document-description">
-                    <div class="description-title">شرح سند:</div>
-                    <div class="description-content">${descriptionText}</div>
+                        </tbody>
+                    </table>
+                    <div class="document-description">
+                        <div class="description-title">شرح سند:</div>
+                        <div class="description-content">${descriptionText}</div>
+                    </div>
                 </div>
             `;
             
