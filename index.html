@@ -930,6 +930,7 @@
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
+            margin-bottom: 15px;
         }
 
         .document-header {
@@ -961,7 +962,7 @@
             background: var(--bg-gradient);
             color: white;
             padding: 10px; /* کاهش padding */
-            text-align: center; /* وسط‌چین کردن متن */
+            text-align: center;
             border: 1px solid var(--border);
             font-weight: 600;
         }
@@ -969,7 +970,7 @@
         .accounting-table td {
             padding: 8px; /* کاهش padding */
             border: 1px solid var(--border);
-            text-align: center; /* وسط‌چین کردن متن */
+            text-align: center;
         }
 
         /* حذف رنگ‌های بدهکار و بستانکار */
@@ -1315,7 +1316,7 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.8rem; /* کاهش سایز فونت دفترکل */
+            font-size: 0.75rem; /* کاهش بیشتر سایز فونت دفترکل */
         }
 
         .ledger-table th {
@@ -1390,6 +1391,37 @@
         /* حذف باکس سند حسابداری خالی */
         .document-preview-empty {
             display: none;
+        }
+        
+        /* استایل جدید برای سند حسابداری ساده */
+        .simple-accounting-document {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            font-size: 0.85rem;
+        }
+        
+        .simple-accounting-document th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+            font-weight: 600;
+        }
+        
+        .simple-accounting-document td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .simple-accounting-document .account-name {
+            text-align: right;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -3009,20 +3041,19 @@
             }
             
             let html = `
-                <div class="accounting-document">
-                    <div class="document-header">
-                        <div class="document-title">سند حسابداری</div>
-                        <div class="document-date">تاریخ: ${documentDate}</div>
-                    </div>
-                    <table class="accounting-table">
-                        <thead>
-                            <tr>
-                                <th>شرح حساب</th>
-                                <th>بدهکار (ریال)</th>
-                                <th>بستانکار (ریال)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div style="margin-bottom: 15px;">
+                    <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">سند حسابداری</h3>
+                    <p style="text-align: center; color: var(--gray); margin-bottom: 15px;">تاریخ: ${documentDate}</p>
+                </div>
+                <table class="simple-accounting-document">
+                    <thead>
+                        <tr>
+                            <th>شرح حساب</th>
+                            <th>بدهکار (ریال)</th>
+                            <th>بستانکار (ریال)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             `;
             
             currentDocumentTransactions.forEach(transaction => {
@@ -3047,12 +3078,12 @@
                     
                     html += `
                         <tr>
-                            <td>${debitAccount}</td>
+                            <td class="account-name">${debitAccount}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td>${transaction.accountName}</td>
+                            <td class="account-name">${transaction.accountName}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3076,12 +3107,12 @@
                     
                     html += `
                         <tr>
-                            <td>${transaction.accountName}</td>
+                            <td class="account-name">${transaction.accountName}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td>${creditAccount}</td>
+                            <td class="account-name">${creditAccount}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3090,12 +3121,11 @@
             });
             
             html += `
-                        </tbody>
-                    </table>
-                    <div class="document-description">
-                        <div class="description-title">شرح سند:</div>
-                        <div class="description-content">${descriptionText}</div>
-                    </div>
+                    </tbody>
+                </table>
+                <div class="document-description">
+                    <div class="description-title">شرح سند:</div>
+                    <div class="description-content">${descriptionText}</div>
                 </div>
             `;
             
@@ -3170,20 +3200,19 @@
             
             // نمایش سند در پیش‌نمایش
             let html = `
-                <div class="accounting-document">
-                    <div class="document-header">
-                        <div class="document-title">سند حسابداری شماره ${toPersianNumbers(document.number)}</div>
-                        <div class="document-date">تاریخ: ${document.date}</div>
-                    </div>
-                    <table class="accounting-table">
-                        <thead>
-                            <tr>
-                                <th>شرح حساب</th>
-                                <th>بدهکار (ریال)</th>
-                                <th>بستانکار (ریال)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div style="margin-bottom: 15px;">
+                    <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">سند حسابداری شماره ${toPersianNumbers(document.number)}</h3>
+                    <p style="text-align: center; color: var(--gray); margin-bottom: 15px;">تاریخ: ${document.date}</p>
+                </div>
+                <table class="simple-accounting-document">
+                    <thead>
+                        <tr>
+                            <th>شرح حساب</th>
+                            <th>بدهکار (ریال)</th>
+                            <th>بستانکار (ریال)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             `;
             
             document.transactions.forEach(transaction => {
@@ -3208,12 +3237,12 @@
                     
                     html += `
                         <tr>
-                            <td>${debitAccount}</td>
+                            <td class="account-name">${debitAccount}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td>${transaction.accountName}</td>
+                            <td class="account-name">${transaction.accountName}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3237,12 +3266,12 @@
                     
                     html += `
                         <tr>
-                            <td>${transaction.accountName}</td>
+                            <td class="account-name">${transaction.accountName}</td>
                             <td class="debit">${formatCurrency(transaction.amount)}</td>
                             <td>-</td>
                         </tr>
                         <tr>
-                            <td>${creditAccount}</td>
+                            <td class="account-name">${creditAccount}</td>
                             <td>-</td>
                             <td class="credit">${formatCurrency(transaction.amount)}</td>
                         </tr>
@@ -3251,12 +3280,11 @@
             });
             
             html += `
-                        </tbody>
-                    </table>
-                    <div class="document-description">
-                        <div class="description-title">شرح سند:</div>
-                        <div class="description-content">${descriptionText}</div>
-                    </div>
+                    </tbody>
+                </table>
+                <div class="document-description">
+                    <div class="description-title">شرح سند:</div>
+                    <div class="description-content">${descriptionText}</div>
                 </div>
             `;
             
