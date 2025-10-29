@@ -84,16 +84,6 @@
             border: 1px solid rgba(255, 107, 107, 0.1);
         }
 
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--bg-gradient);
-        }
-
         .brand {
             text-align: center;
             margin-bottom: 40px;
@@ -224,7 +214,10 @@
         }
 
         .sidebar-header {
-            padding: 30px 25px;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05);
         }
@@ -251,6 +244,21 @@
         .app-logo-text {
             font-size: 1.4rem;
             font-weight: 800;
+            color: white;
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
 
@@ -307,59 +315,6 @@
 
         .nav-item-text {
             transition: opacity 0.3s ease;
-        }
-
-        .user-section {
-            padding: 20px 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--bg-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .user-role {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .logout-btn {
-            background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: none;
-            cursor: pointer;
-            font-size: 1.3rem;
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
         }
 
         /* محتوای اصلی */
@@ -419,16 +374,6 @@
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--bg-gradient);
         }
 
         .card:hover {
@@ -772,15 +717,6 @@
                 margin-bottom: 0;
             }
 
-            .user-section {
-                padding: 15px 20px;
-                justify-content: space-between;
-            }
-
-            .user-info {
-                display: none;
-            }
-
             .main-content {
                 padding: 0;
             }
@@ -911,28 +847,6 @@
             border: 1px solid rgba(255, 107, 107, 0.2);
             position: relative;
             overflow: hidden;
-        }
-
-        .creative-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--bg-gradient);
-        }
-
-        .creative-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
         }
 
         .document-item {
@@ -1518,6 +1432,9 @@
                         </div>
                         <div class="app-logo-text">مهراز سیستم</div>
                     </div>
+                    <button class="logout-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
                 
                 <div class="sidebar-nav">
@@ -1537,17 +1454,6 @@
                         <i class="fas fa-wallet"></i>
                         <span class="nav-item-text">حساب</span>
                     </div>
-                </div>
-                
-                <div class="user-section">
-                    <div class="user-avatar">A</div>
-                    <div class="user-info">
-                        <div class="user-name">Amiri</div>
-                        <div class="user-role">مدیر سیستم</div>
-                    </div>
-                    <button class="logout-btn" id="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
                 </div>
             </div>
             
