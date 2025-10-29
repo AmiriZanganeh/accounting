@@ -305,6 +305,10 @@
             font-size: 1.3rem;
         }
 
+        .nav-item-text {
+            transition: opacity 0.3s ease;
+        }
+
         .user-section {
             padding: 20px 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -734,20 +738,47 @@
                 height: auto;
             }
 
+            .sidebar-header {
+                padding: 15px 20px;
+            }
+
+            .app-logo-text {
+                font-size: 1.2rem;
+            }
+
             .sidebar-nav {
                 display: flex;
+                justify-content: space-around;
+                padding: 10px 0;
                 overflow-x: auto;
-                padding: 15px;
             }
 
             .nav-item {
-                white-space: nowrap;
-                border-bottom: 3px solid transparent;
-                padding: 10px 18px;
+                flex-direction: column;
+                padding: 10px 15px;
+                margin: 0 5px;
+                text-align: center;
+                min-width: 70px;
+                gap: 8px;
             }
 
-            .nav-item.active {
-                border-bottom: 3px solid var(--primary);
+            .nav-item-text {
+                font-size: 0.75rem;
+                opacity: 1;
+            }
+
+            .nav-item i {
+                font-size: 1.4rem;
+                margin-bottom: 0;
+            }
+
+            .user-section {
+                padding: 15px 20px;
+                justify-content: space-between;
+            }
+
+            .user-info {
+                display: none;
             }
 
             .main-content {
@@ -842,6 +873,13 @@
             
             .ledger-table .balance-cell {
                 min-width: 100px;
+            }
+        }
+
+        /* نمایش متن در حالت بزرگتر */
+        @media (min-width: 769px) {
+            .nav-item-text {
+                opacity: 1;
             }
         }
 
@@ -1405,6 +1443,26 @@
         .ledger-table .balance-cell {
             min-width: 110px;
         }
+        
+        /* بهبود نمایش وضعیت مانده در موبایل */
+        .balance-status {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .balance-status.debit {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
+        }
+        
+        .balance-status.credit {
+            background-color: rgba(78, 205, 196, 0.1);
+            color: var(--secondary);
+        }
     </style>
 </head>
 <body>
@@ -1465,19 +1523,19 @@
                 <div class="sidebar-nav">
                     <div class="nav-item active" data-tab="transaction">
                         <i class="fas fa-plus-circle"></i>
-                        ثبت
+                        <span class="nav-item-text">ثبت</span>
                     </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
-                        اسناد
+                        <span class="nav-item-text">اسناد</span>
                     </div>
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
-                        آمار
+                        <span class="nav-item-text">آمار</span>
                     </div>
                     <div class="nav-item" data-tab="accounts">
                         <i class="fas fa-wallet"></i>
-                        حساب
+                        <span class="nav-item-text">حساب</span>
                     </div>
                 </div>
                 
@@ -2939,13 +2997,20 @@
             
             let html = '';
             ledgerEntries.forEach(entry => {
+                const balanceStatus = entry.balance >= 0 ? 'debit' : 'credit';
+                const balanceText = entry.balance >= 0 ? 'بدهکار' : 'بستانکار';
+                
                 html += `
                     <tr>
                         <td class="date-cell">${entry.date}</td>
                         <td class="description-cell">${entry.description}</td>
                         <td class="amount-cell">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
                         <td class="amount-cell">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
-                        <td class="balance-cell">${formatCurrency(Math.abs(entry.balance))} ${entry.balance >= 0 ? 'بدهکار' : 'بستانکار'}</td>
+                        <td class="balance-cell">
+                            <span class="balance-status ${balanceStatus}">
+                                ${formatCurrency(Math.abs(entry.balance))} ${balanceText}
+                            </span>
+                        </td>
                     </tr>
                 `;
             });
