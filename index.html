@@ -672,172 +672,6 @@
             font-size: 0.85rem;
         }
 
-        /* ریسپانسیو */
-        @media (max-width: 768px) {
-            .app-layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-            }
-
-            .sidebar-header {
-                padding: 15px 20px;
-            }
-
-            .app-logo-text {
-                font-size: 1.2rem;
-            }
-
-            .sidebar-nav {
-                display: flex;
-                justify-content: space-around;
-                padding: 10px 0;
-                overflow-x: auto;
-            }
-
-            .nav-item {
-                flex-direction: column;
-                padding: 10px 15px;
-                margin: 0 5px;
-                text-align: center;
-                min-width: 70px;
-                gap: 8px;
-            }
-
-            .nav-item-text {
-                font-size: 0.75rem;
-                opacity: 1;
-            }
-
-            .nav-item i {
-                font-size: 1.4rem;
-                margin-bottom: 0;
-            }
-
-            .main-content {
-                padding: 0;
-            }
-
-            .content-header {
-                padding: 15px;
-            }
-
-            .content-body {
-                padding: 15px;
-                grid-template-columns: 1fr;
-            }
-
-            .account-form {
-                flex-direction: column;
-            }
-
-            .document-summary {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .summary-item {
-                min-width: 100%;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            .actions .btn {
-                width: 100%;
-            }
-
-            .document-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .document-actions .document-action-btn {
-                width: 100%;
-            }
-            
-            /* بهبود نمایش سند حسابداری در موبایل */
-            .accounting-table {
-                font-size: 0.8rem;
-            }
-            
-            .accounting-table th, 
-            .accounting-table td {
-                padding: 8px 4px;
-            }
-            
-            .document-description {
-                font-size: 0.9rem;
-            }
-            
-            /* بهبود نمایش دفترکل در موبایل */
-            .ledger-table-container {
-                width: 100%;
-                overflow-x: auto;
-                border-radius: var(--border-radius);
-                border: 1px solid var(--border);
-            }
-            
-            .ledger-table {
-                min-width: 100%;
-                table-layout: fixed;
-            }
-            
-            .ledger-table th, 
-            .ledger-table td {
-                padding: 10px 8px;
-                font-size: 0.85rem;
-                word-break: break-word;
-                white-space: normal;
-            }
-            
-            .ledger-table .account-name {
-                min-width: 120px;
-            }
-            
-            .ledger-table .date-cell {
-                min-width: 90px;
-            }
-            
-            .ledger-table .amount-cell {
-                min-width: 80px;
-            }
-            
-            .ledger-table .balance-cell {
-                min-width: 100px;
-            }
-        }
-
-        /* نمایش متن در حالت بزرگتر */
-        @media (min-width: 769px) {
-            .nav-item-text {
-                opacity: 1;
-            }
-        }
-
-        /* اسکرول بار سفارشی */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #F1F1F1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
         /* استایل‌های جدید برای طراحی خلاق */
         .creative-card {
             background: white;
@@ -950,22 +784,24 @@
             font-size: 0.9rem;
         }
 
+        /* استایل‌های جدید برای جداول با فونت کوچک‌تر */
         .accounting-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
+            font-size: 0.8rem;
         }
 
         .accounting-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 12px;
+            padding: 10px;
             text-align: right;
             border: 1px solid var(--border);
         }
 
         .accounting-table td {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid var(--border);
             text-align: right;
         }
@@ -1090,140 +926,6 @@
             line-height: 1.5;
         }
         
-        /* بهبود رسپانسیو برای تبلت */
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .content-body {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            
-            .sidebar {
-                width: 250px;
-            }
-            
-            .content-header {
-                padding: 15px 20px;
-            }
-        }
-        
-        /* بهبود رسپانسیو برای موبایل */
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 30px 20px;
-            }
-            
-            .brand-name {
-                font-size: 2rem;
-            }
-            
-            .brand-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.8rem;
-            }
-            
-            .input-field {
-                padding: 14px 16px 14px 45px;
-                font-size: 1rem;
-            }
-            
-            .card {
-                padding: 20px 15px;
-            }
-            
-            .accounting-table {
-                font-size: 0.75rem;
-            }
-            
-            .accounting-table th, 
-            .accounting-table td {
-                padding: 6px 3px;
-            }
-            
-            .document-description {
-                font-size: 0.85rem;
-                padding: 10px;
-            }
-            
-            .document-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .document-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            /* بهبود نمایش دفترکل در موبایل */
-            .ledger-table-container {
-                width: 100%;
-                overflow-x: auto;
-                border-radius: var(--border-radius);
-                border: 1px solid var(--border);
-            }
-            
-            .ledger-table {
-                min-width: 100%;
-                table-layout: fixed;
-            }
-            
-            .ledger-table th, 
-            .ledger-table td {
-                padding: 8px 6px;
-                font-size: 0.8rem;
-                word-break: break-word;
-                white-space: normal;
-            }
-            
-            .ledger-table .account-name {
-                min-width: 100px;
-            }
-            
-            .ledger-table .date-cell {
-                min-width: 80px;
-            }
-            
-            .ledger-table .amount-cell {
-                min-width: 70px;
-            }
-            
-            .ledger-table .balance-cell {
-                min-width: 90px;
-            }
-        }
-        
-        /* بهبود نمایش در حالت لنداسکیپ موبایل */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .auth-container {
-                padding: 10px;
-            }
-            
-            .login-card {
-                padding: 20px;
-            }
-            
-            .brand {
-                margin-bottom: 20px;
-            }
-            
-            .brand-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-            
-            .brand-name {
-                font-size: 1.8rem;
-            }
-            
-            .input-group {
-                margin-bottom: 15px;
-            }
-        }
-
         /* استایل فوتر */
         .footer {
             text-align: center;
@@ -1256,18 +958,19 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: var(--border-radius);
             overflow: hidden;
+            font-size: 0.8rem;
         }
 
         .trial-balance-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             border: 1px solid var(--border);
         }
 
         .trial-balance-table td {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid var(--border);
             text-align: center;
         }
@@ -1308,18 +1011,19 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
+            font-size: 0.8rem;
         }
 
         .ledger-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             border: 1px solid var(--border);
         }
 
         .ledger-table td {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid var(--border);
             text-align: center;
             word-break: break-word;
@@ -1376,6 +1080,342 @@
         .balance-status.credit {
             background-color: rgba(78, 205, 196, 0.1);
             color: var(--secondary);
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-header {
+                padding: 15px 20px;
+            }
+
+            .app-logo-text {
+                font-size: 1.2rem;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                justify-content: space-around;
+                padding: 10px 0;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                flex-direction: column;
+                padding: 10px 15px;
+                margin: 0 5px;
+                text-align: center;
+                min-width: 70px;
+                gap: 8px;
+            }
+
+            .nav-item-text {
+                font-size: 0.75rem;
+                opacity: 1;
+            }
+
+            .nav-item i {
+                font-size: 1.4rem;
+                margin-bottom: 0;
+            }
+
+            .main-content {
+                padding: 0;
+            }
+
+            .content-header {
+                padding: 15px;
+            }
+
+            .content-body {
+                padding: 15px;
+                grid-template-columns: 1fr;
+            }
+
+            .account-form {
+                flex-direction: column;
+            }
+
+            .document-summary {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .summary-item {
+                min-width: 100%;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions .btn {
+                width: 100%;
+            }
+
+            .document-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .document-actions .document-action-btn {
+                width: 100%;
+            }
+            
+            /* بهبود نمایش سند حسابداری در موبایل */
+            .accounting-table {
+                font-size: 0.7rem;
+            }
+            
+            .accounting-table th, 
+            .accounting-table td {
+                padding: 6px 4px;
+            }
+            
+            .document-description {
+                font-size: 0.85rem;
+            }
+            
+            /* بهبود نمایش دفترکل در موبایل */
+            .ledger-table-container {
+                width: 100%;
+                overflow-x: auto;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border);
+            }
+            
+            .ledger-table {
+                min-width: 100%;
+                table-layout: fixed;
+                font-size: 0.7rem;
+            }
+            
+            .ledger-table th, 
+            .ledger-table td {
+                padding: 6px 4px;
+                word-break: break-word;
+                white-space: normal;
+            }
+            
+            .ledger-table .account-name {
+                min-width: 100px;
+            }
+            
+            .ledger-table .date-cell {
+                min-width: 80px;
+            }
+            
+            .ledger-table .amount-cell {
+                min-width: 70px;
+            }
+            
+            .ledger-table .balance-cell {
+                min-width: 90px;
+            }
+            
+            /* بهبود نمایش تراز آزمایشی در موبایل */
+            .trial-balance-table {
+                font-size: 0.7rem;
+            }
+            
+            .trial-balance-table th, 
+            .trial-balance-table td {
+                padding: 6px 4px;
+            }
+        }
+
+        /* نمایش متن در حالت بزرگتر */
+        @media (min-width: 769px) {
+            .nav-item-text {
+                opacity: 1;
+            }
+        }
+
+        /* اسکرول بار سفارشی */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F1F1F1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* بهبود رسپانسیو برای تبلت */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .content-body {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .sidebar {
+                width: 250px;
+            }
+            
+            .content-header {
+                padding: 15px 20px;
+            }
+            
+            /* بهبود جداول در تبلت */
+            .accounting-table,
+            .trial-balance-table,
+            .ledger-table {
+                font-size: 0.75rem;
+            }
+            
+            .accounting-table th, 
+            .accounting-table td,
+            .trial-balance-table th, 
+            .trial-balance-table td,
+            .ledger-table th, 
+            .ledger-table td {
+                padding: 8px 6px;
+            }
+        }
+        
+        /* بهبود رسپانسیو برای موبایل */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .brand-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            
+            .input-field {
+                padding: 14px 16px 14px 45px;
+                font-size: 1rem;
+            }
+            
+            .card {
+                padding: 20px 15px;
+            }
+            
+            .accounting-table {
+                font-size: 0.65rem;
+            }
+            
+            .accounting-table th, 
+            .accounting-table td {
+                padding: 4px 2px;
+            }
+            
+            .document-description {
+                font-size: 0.8rem;
+                padding: 10px;
+            }
+            
+            .document-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .document-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            /* بهبود نمایش دفترکل در موبایل */
+            .ledger-table-container {
+                width: 100%;
+                overflow-x: auto;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border);
+            }
+            
+            .ledger-table {
+                min-width: 100%;
+                table-layout: fixed;
+                font-size: 0.65rem;
+            }
+            
+            .ledger-table th, 
+            .ledger-table td {
+                padding: 5px 3px;
+                word-break: break-word;
+                white-space: normal;
+            }
+            
+            .ledger-table .account-name {
+                min-width: 80px;
+            }
+            
+            .ledger-table .date-cell {
+                min-width: 70px;
+            }
+            
+            .ledger-table .amount-cell {
+                min-width: 60px;
+            }
+            
+            .ledger-table .balance-cell {
+                min-width: 80px;
+            }
+            
+            /* بهبود نمایش تراز آزمایشی در موبایل */
+            .trial-balance-table {
+                font-size: 0.65rem;
+            }
+            
+            .trial-balance-table th, 
+            .trial-balance-table td {
+                padding: 5px 3px;
+            }
+        }
+        
+        /* بهبود نمایش در حالت لنداسکیپ موبایل */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .auth-container {
+                padding: 10px;
+            }
+            
+            .login-card {
+                padding: 20px;
+            }
+            
+            .brand {
+                margin-bottom: 20px;
+            }
+            
+            .brand-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .brand-name {
+                font-size: 1.8rem;
+            }
+            
+            .input-group {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
