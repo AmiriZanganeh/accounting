@@ -2009,14 +2009,8 @@
                     // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
                     if (accounts.length === 0) {
                         const defaultAccounts = [
-                            { id: 1, name: 'موجودی نقد', isSystem: true },
-                            { id: 2, name: 'حساب های دریافتنی', isSystem: true },
-                            { id: 3, name: 'اسناد دریافتنی', isSystem: true },
-                            { id: 4, name: 'حساب های پرداختنی', isSystem: true },
-                            { id: 5, name: 'اسناد پرداختنی', isSystem: true },
-                            { id: 6, name: 'فروش', isSystem: false },
-                            { id: 7, name: 'هزینه اجاره', isSystem: false },
-                            { id: 8, name: 'هزینه حقوق', isSystem: false }
+                            { id: 1, name: 'هزینه', isSystem: false },
+                            { id: 8, name: 'درآمد', isSystem: false }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -2051,9 +2045,8 @@
                     // اگر طرف‌های حساب خالی هستند، طرف‌های حساب پیش‌فرض را اضافه کن
                     if (parties.length === 0) {
                         const defaultParties = [
-                            { id: 1, name: 'شرکت البرز', type: 'مشتری' },
-                            { id: 2, name: 'شرکت پارس', type: 'فروشنده' },
-                            { id: 3, name: 'فروشگاه مرکزی', type: 'مشتری' }
+                            { id: 1, name: 'امیری', type: 'مشتری' },
+                            { id: 2, name: 'امیری', type: 'فروشنده' },
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
@@ -3252,3 +3245,4 @@
     </script>
 </body>
 </html>
+
