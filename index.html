@@ -2009,8 +2009,13 @@
                     // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
                     if (accounts.length === 0) {
                         const defaultAccounts = [
-                            { id: 1, name: 'هزینه', isSystem: false },
-                            { id: 2, name: 'درآمد', isSystem: false }
+                            { id: 1, name: 'موجودی نقد', isSystem: true },
+                            { id: 2, name: 'حساب های دریافتنی', isSystem: true },
+                            { id: 3, name: 'حساب های پرداختنی', isSystem: true },
+                            { id: 4, name: 'اسناد دریافتنی', isSystem: true },
+                            { id: 5, name: 'اسناد پرداختنی', isSystem: true },
+                            { id: 6, name: 'هزینه', isSystem: false },
+                            { id: 7, name: 'درآمد', isSystem: false }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -3245,5 +3250,3 @@
     </script>
 </body>
 </html>
-
-
