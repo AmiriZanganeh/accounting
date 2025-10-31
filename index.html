@@ -488,7 +488,7 @@
             font-size: 0.9rem;
         }
 
-        .transaction-list, .documents-list, .accounts-list, .parties-list {
+        .transaction-list, .documents-list, .accounts-list, .parties-list, .journal-list {
             max-height: 350px;
             overflow-y: auto;
             border: 2px solid var(--border);
@@ -497,7 +497,7 @@
             background: var(--light);
         }
 
-        .transaction-item, .document-item, .account-item, .party-item {
+        .transaction-item, .document-item, .account-item, .party-item, .journal-item {
             padding: 14px;
             border-bottom: 2px solid var(--border);
             display: flex;
@@ -507,12 +507,12 @@
             margin-bottom: 8px;
         }
 
-        .transaction-item:hover, .document-item:hover, .account-item:hover, .party-item:hover {
+        .transaction-item:hover, .document-item:hover, .account-item:hover, .party-item:hover, .journal-item:hover {
             background: white;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
-        .transaction-item:last-child, .document-item:last-child, .account-item:last-child, .party-item:last-child {
+        .transaction-item:last-child, .document-item:last-child, .account-item:last-child, .party-item:last-child, .journal-item:last-child {
             border-bottom: none;
             margin-bottom: 0;
         }
@@ -1096,6 +1096,159 @@
             font-weight: 600;
         }
         
+        /* استایل‌های جدید برای دفتر روزنامه */
+        .journal-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .journal-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .journal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            table-layout: fixed;
+            font-size: 0.75rem;
+        }
+
+        .journal-table th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .journal-table td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .journal-table .account-name {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* استایل‌های جدید برای پشتیبان‌گیری */
+        .backup-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .backup-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .backup-actions .btn {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* استایل‌های جدید برای انتخاب نوع فرم */
+        .form-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .form-type-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .form-type-btn.active {
+            background: var(--bg-gradient);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .form-type-btn:hover:not(.active) {
+            background: white;
+            border-color: var(--primary);
+        }
+
+        /* استایل‌های جدید برای فرم سند دستی */
+        .manual-document-form {
+            display: none;
+        }
+
+        .manual-transaction-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            align-items: flex-end;
+        }
+
+        .manual-transaction-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .remove-transaction-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(239, 71, 111, 0.3);
+        }
+
+        .remove-transaction-btn:hover {
+            box-shadow: 0 12px 25px rgba(239, 71, 111, 0.4);
+        }
+
+        .add-transaction-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(6, 214, 160, 0.3);
+            margin-top: 10px;
+        }
+
+        .add-transaction-btn:hover {
+            box-shadow: 0 12px 25px rgba(6, 214, 160, 0.4);
+        }
+
         /* ریسپانسیو */
         @media (max-width: 768px) {
             .app-layout {
@@ -1247,6 +1400,24 @@
             
             .trial-balance-table .account-name {
                 font-size: 0.65rem;
+            }
+
+            /* بهبود نمایش فرم‌ها در موبایل */
+            .form-type-selector {
+                flex-direction: column;
+            }
+
+            .manual-transaction-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .backup-actions {
+                flex-direction: column;
+            }
+
+            .backup-actions .btn {
+                width: 100%;
             }
         }
 
@@ -1454,14 +1625,6 @@
             </div>
             <form class="login-form" id="login-form">
                 <div class="input-group">
-                    <label for="username" class="input-label">نام کاربری</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user input-icon"></i>
-                        <input type="text" id="username" class="input-field" placeholder="نام کاربری خود را وارد کنید" required>
-                    </div>
-                </div>
-                
-                <div class="input-group">
                     <label for="password" class="input-label">رمز عبور</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock input-icon"></i>
@@ -1476,7 +1639,7 @@
                 
                 <div class="error-message" id="error-message">
                     <i class="fas fa-exclamation-circle"></i>
-                    نام کاربری یا رمز عبور اشتباه است!
+                    رمز عبور اشتباه است!
                 </div>
             </form>
         </div>
@@ -1541,7 +1704,18 @@
                         </div>
                         
                         <div id="transaction-tab" class="tab-content">
-                            <form id="transaction-form">
+                            <div class="form-type-selector">
+                                <button type="button" class="form-type-btn active" data-form="transaction-form">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    فرم ثبت معامله
+                                </button>
+                                <button type="button" class="form-type-btn" data-form="manual-document-form">
+                                    <i class="fas fa-file-alt"></i>
+                                    سند دستی
+                                </button>
+                            </div>
+                            
+                            <form id="transaction-form" class="active-form">
                                 <div class="form-group">
                                     <label for="transaction-date" class="form-label">تاریخ معامله</label>
                                     <input type="date" id="transaction-date" class="form-control" required>
@@ -1574,13 +1748,6 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="party" class="form-label">طرف حساب (اختیاری)</label>
-                                    <select id="party" class="form-control">
-                                        <option value="">انتخاب کنید</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
@@ -1597,6 +1764,58 @@
                                     <i class="fas fa-file-alt"></i>
                                     ثبت سند
                                 </button>
+                            </form>
+                            
+                            <form id="manual-document-form" class="manual-document-form">
+                                <div class="form-group">
+                                    <label for="manual-document-date" class="form-label">تاریخ سند</label>
+                                    <input type="date" id="manual-document-date" class="form-control" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="manual-document-description" class="form-label">شرح سند</label>
+                                    <textarea id="manual-document-description" class="form-control" rows="2" placeholder="شرح کلی سند" required></textarea>
+                                </div>
+                                
+                                <div class="manual-transactions-container" id="manual-transactions-container">
+                                    <div class="manual-transaction-row">
+                                        <div class="form-group">
+                                            <label class="form-label">حساب</label>
+                                            <select class="form-control manual-account" required>
+                                                <option value="">انتخاب کنید</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">بدهکار</label>
+                                            <div class="amount-input-container">
+                                                <span class="currency-symbol">﷼</span>
+                                                <input type="number" class="form-control amount-input manual-debit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">بستانکار</label>
+                                            <div class="amount-input-container">
+                                                <span class="currency-symbol">﷼</span>
+                                                <input type="number" class="form-control amount-input manual-credit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            </div>
+                                        </div>
+                                        <button type="button" class="remove-transaction-btn" disabled>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="add-transaction-btn" class="add-transaction-btn">
+                                    <i class="fas fa-plus"></i>
+                                    افزودن ردیف
+                                </button>
+                                
+                                <div class="form-group" style="margin-top: 20px;">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-file-alt"></i>
+                                        ثبت سند دستی
+                                    </button>
+                                </div>
                             </form>
                         </div>
                         
@@ -1619,23 +1838,23 @@
                                 </div>
                             </div>
                             
-                            <div class="parties-section">
-                                <h3>افزودن طرف حساب جدید</h3>
-                                <div class="party-form">
-                                    <input type="text" id="new-party-name" class="form-control" placeholder="نام طرف حساب">
-                                    <input type="text" id="new-party-type" class="form-control" placeholder="نوع طرف حساب (مشتری/فروشنده)">
-                                    <button type="button" id="add-party" class="btn btn-success">
-                                        <i class="fas fa-plus"></i>
-                                        افزودن
+                            <div class="backup-section">
+                                <h3>پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                                <div class="backup-actions">
+                                    <button type="button" id="export-data" class="btn btn-info">
+                                        <i class="fas fa-download"></i>
+                                        Export JSON
+                                    </button>
+                                    <button type="button" id="import-data" class="btn btn-warning">
+                                        <i class="fas fa-upload"></i>
+                                        Import JSON
+                                    </button>
+                                    <button type="button" id="reset-data" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        بازنشانی داده‌ها
                                     </button>
                                 </div>
-                                
-                                <div class="parties-list" id="parties-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-users"></i>
-                                        <p>هیچ طرف حسابی ثبت نشده است</p>
-                                    </div>
-                                </div>
+                                <input type="file" id="import-file" accept=".json" style="display: none;">
                             </div>
                         </div>
                         
@@ -1644,6 +1863,30 @@
                                 <div class="empty-state">
                                     <i class="fas fa-file-invoice"></i>
                                     <p>هیچ سندی ذخیره نشده است</p>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-section">
+                                <h3>دفتر روزنامه</h3>
+                                <div class="journal-table-container">
+                                    <table class="journal-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="date-cell">تاریخ</th>
+                                                <th class="description-cell">شرح حساب</th>
+                                                <th class="amount-cell">بدهکار</th>
+                                                <th class="amount-cell">بستانکار</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="journal-body">
+                                            <tr>
+                                                <td colspan="4" class="empty-state">
+                                                    <i class="fas fa-book"></i>
+                                                    <p>هیچ سندی برای نمایش در دفتر روزنامه وجود ندارد</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -1740,8 +1983,7 @@
 
     <script>
         // اطلاعات ورود
-        const VALID_USERNAME = "Amiri";
-        const VALID_PASSWORD = "1360";
+        const VALID_PASSWORD = "1";
         
         // نام و نسخه پایگاه داده
         const DB_NAME = 'AuraAccountingDB';
@@ -1763,9 +2005,6 @@
         // آرایه برای ذخیره حساب‌ها
         let accounts = [];
         
-        // آرایه برای ذخیره طرف‌های حساب
-        let parties = [];
-        
         // آرایه برای ذخیره اسناد
         let savedDocuments = [];
         let documentCounter = 1;
@@ -1784,34 +2023,37 @@
         const formTitle = document.getElementById('form-title');
         
         const transactionForm = document.getElementById('transaction-form');
+        const manualDocumentForm = document.getElementById('manual-document-form');
         const documentPreview = document.getElementById('document-preview');
         const saveDocumentBtn = document.getElementById('save-document');
         const clearDocumentBtn = document.getElementById('clear-document');
         const accountSelect = document.getElementById('account');
-        const partySelect = document.getElementById('party');
         const navItems = document.querySelectorAll('.nav-item');
         const tabContents = document.querySelectorAll('.tab-content');
         const addAccountBtn = document.getElementById('add-account');
         const newAccountNameInput = document.getElementById('new-account-name');
         const accountsList = document.getElementById('accounts-list');
-        const addPartyBtn = document.getElementById('add-party');
-        const newPartyNameInput = document.getElementById('new-party-name');
-        const newPartyTypeInput = document.getElementById('new-party-type');
-        const partiesList = document.getElementById('parties-list');
         const documentsList = document.getElementById('documents-list');
         const trialBalanceBody = document.getElementById('trial-balance-body');
         const ledgerAccountSelect = document.getElementById('ledger-account-select');
         const ledgerBody = document.getElementById('ledger-body');
         const amountInput = document.getElementById('amount');
+        const formTypeBtns = document.querySelectorAll('.form-type-btn');
+        const manualTransactionsContainer = document.getElementById('manual-transactions-container');
+        const addTransactionBtn = document.getElementById('add-transaction-btn');
+        const journalBody = document.getElementById('journal-body');
+        const exportDataBtn = document.getElementById('export-data');
+        const importDataBtn = document.getElementById('import-data');
+        const resetDataBtn = document.getElementById('reset-data');
+        const importFileInput = document.getElementById('import-file');
         
         // مدیریت ورود به سیستم
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+            if (password === VALID_PASSWORD) {
                 // ورود موفق
                 loginPage.style.display = 'none';
                 mainApp.style.display = 'block';
@@ -1832,6 +2074,38 @@
             }
         });
         
+        // مدیریت تغییر نوع فرم
+        formTypeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const formType = this.getAttribute('data-form');
+                
+                // غیرفعال کردن همه دکمه‌ها
+                formTypeBtns.forEach(b => b.classList.remove('active'));
+                
+                // فعال کردن دکمه انتخاب شده
+                this.classList.add('active');
+                
+                // مخفی کردن همه فرم‌ها
+                document.querySelectorAll('.active-form, .manual-document-form').forEach(form => {
+                    form.style.display = 'none';
+                });
+                
+                // نمایش فرم انتخاب شده
+                document.getElementById(formType).style.display = 'block';
+            });
+        });
+        
+        // مدیریت افزودن ردیف جدید در فرم سند دستی
+        addTransactionBtn.addEventListener('click', function() {
+            addManualTransactionRow();
+        });
+        
+        // مدیریت پشتیبان‌گیری و بازیابی
+        exportDataBtn.addEventListener('click', exportData);
+        importDataBtn.addEventListener('click', () => importFileInput.click());
+        importFileInput.addEventListener('change', importData);
+        resetDataBtn.addEventListener('click', resetData);
+        
         // مقداردهی اولیه برنامه پس از ورود
         function initializeApp() {
             // باز کردن پایگاه داده
@@ -1839,7 +2113,6 @@
                 // بارگذاری داده‌ها از IndexedDB
                 return Promise.all([
                     loadAccounts(),
-                    loadParties(),
                     loadDocuments(),
                     loadDocumentCounter(),
                     loadCurrentDocument()
@@ -1848,18 +2121,13 @@
                 // تنظیم تاریخ امروز
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('transaction-date').value = today;
+                document.getElementById('manual-document-date').value = today;
                 
                 // بارگذاری حساب‌ها در dropdown
                 updateAccountSelect();
                 
-                // بارگذاری طرف‌های حساب در dropdown
-                updatePartySelect();
-                
                 // بارگذاری لیست حساب‌ها
                 updateAccountsList();
-                
-                // بارگذاری لیست طرف‌های حساب
-                updatePartiesList();
                 
                 // بارگذاری اسناد ذخیره شده
                 updateDocumentsList();
@@ -1878,7 +2146,6 @@
                     const transactionType = document.getElementById('transaction-type').value;
                     const paymentType = document.getElementById('payment-type').value;
                     const accountId = document.getElementById('account').value;
-                    const partyId = document.getElementById('party').value;
                     const amountText = document.getElementById('amount').value;
                     const description = document.getElementById('description').value;
                     
@@ -1903,13 +2170,6 @@
                         return;
                     }
                     
-                    // پیدا کردن نام طرف حساب
-                    let partyName = '';
-                    if (partyId) {
-                        const party = parties.find(p => p.id == partyId);
-                        partyName = party ? party.name : '';
-                    }
-                    
                     // ایجاد شیء معامله
                     const transaction = {
                         id: Date.now(),
@@ -1918,8 +2178,6 @@
                         paymentType,
                         accountId,
                         accountName: account.name,
-                        partyId: partyId || null,
-                        partyName: partyName,
                         amount: amount,
                         description
                     };
@@ -1938,6 +2196,103 @@
                     
                     // نمایش پیام موفقیت
                     showNotification('معامله با موفقیت ثبت شد!', 'success');
+                    
+                    // تولید خودکار سند حسابداری
+                    generateAccountingDocument();
+                });
+                
+                // رویداد ثبت فرم سند دستی
+                manualDocumentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const date = document.getElementById('manual-document-date').value;
+                    const description = document.getElementById('manual-document-description').value;
+                    
+                    // اعتبارسنجی
+                    if (!date || !description) {
+                        alert('لطفاً تاریخ و شرح سند را وارد کنید!');
+                        return;
+                    }
+                    
+                    // جمع‌آوری اطلاعات ردیف‌ها
+                    const transactionRows = document.querySelectorAll('.manual-transaction-row');
+                    let totalDebit = 0;
+                    let totalCredit = 0;
+                    const transactions = [];
+                    
+                    for (let row of transactionRows) {
+                        const accountSelect = row.querySelector('.manual-account');
+                        const debitInput = row.querySelector('.manual-debit');
+                        const creditInput = row.querySelector('.manual-credit');
+                        
+                        const accountId = accountSelect.value;
+                        const debit = parseAmount(debitInput.value) || 0;
+                        const credit = parseAmount(creditInput.value) || 0;
+                        
+                        // اعتبارسنجی ردیف
+                        if (!accountId) {
+                            alert('لطفاً تمام حساب‌ها را انتخاب کنید!');
+                            return;
+                        }
+                        
+                        if (debit === 0 && credit === 0) {
+                            alert('لطفاً برای هر ردیف حداقل یک مبلغ وارد کنید!');
+                            return;
+                        }
+                        
+                        if (debit > 0 && credit > 0) {
+                            alert('لطفاً برای هر ردیف فقط یکی از فیلدهای بدهکار یا بستانکار را پر کنید!');
+                            return;
+                        }
+                        
+                        // پیدا کردن نام حساب
+                        const account = accounts.find(acc => acc.id == accountId);
+                        if (!account) {
+                            alert('حساب انتخاب شده معتبر نیست!');
+                            return;
+                        }
+                        
+                        totalDebit += debit;
+                        totalCredit += credit;
+                        
+                        // ایجاد شیء معامله برای سند دستی
+                        const transaction = {
+                            id: Date.now(),
+                            date: formatDate(date),
+                            accountId,
+                            accountName: account.name,
+                            debit: debit,
+                            credit: credit,
+                            description: description,
+                            isManual: true // علامت برای شناسایی سند دستی
+                        };
+                        
+                        transactions.push(transaction);
+                    }
+                    
+                    // بررسی توازن بدهکار و بستانکار
+                    if (totalDebit !== totalCredit) {
+                        alert(`جمع بدهکار (${formatCurrency(totalDebit)}) با جمع بستانکار (${formatCurrency(totalCredit)}) برابر نیست!`);
+                        return;
+                    }
+                    
+                    // افزودن به آرایه معاملات سند جاری
+                    currentDocumentTransactions = transactions;
+                    
+                    // ذخیره در IndexedDB
+                    saveCurrentDocument();
+                    
+                    // پاک کردن فرم
+                    manualDocumentForm.reset();
+                    
+                    // تنظیم مجدد تاریخ به امروز
+                    document.getElementById('manual-document-date').value = today;
+                    
+                    // بازنشانی ردیف‌ها
+                    resetManualTransactionRows();
+                    
+                    // نمایش پیام موفقیت
+                    showNotification('سند دستی با موفقیت ثبت شد!', 'success');
                     
                     // تولید خودکار سند حسابداری
                     generateAccountingDocument();
@@ -1973,46 +2328,6 @@
                     
                     // نمایش پیام موفقیت
                     showNotification('حساب جدید با موفقیت افزوده شد!', 'success');
-                });
-                
-                // رویداد افزودن طرف حساب جدید
-                addPartyBtn.addEventListener('click', function() {
-                    const partyName = newPartyNameInput.value.trim();
-                    const partyType = newPartyTypeInput.value.trim();
-                    
-                    if (!partyName) {
-                        showNotification('لطفاً نام طرف حساب را وارد کنید!', 'error');
-                        return;
-                    }
-                    
-                    if (!partyType) {
-                        showNotification('لطفاً نوع طرف حساب را وارد کنید!', 'error');
-                        return;
-                    }
-                    
-                    // ایجاد طرف حساب جدید
-                    const newParty = {
-                        id: Date.now(),
-                        name: partyName,
-                        type: partyType
-                    };
-                    
-                    // افزودن به آرایه طرف‌های حساب
-                    parties.push(newParty);
-                    
-                    // ذخیره در IndexedDB
-                    saveParty(newParty);
-                    
-                    // به‌روزرسانی dropdown و لیست طرف‌های حساب
-                    updatePartySelect();
-                    updatePartiesList();
-                    
-                    // پاک کردن فیلد ورودی
-                    newPartyNameInput.value = '';
-                    newPartyTypeInput.value = '';
-                    
-                    // نمایش پیام موفقیت
-                    showNotification('طرف حساب جدید با موفقیت افزوده شد!', 'success');
                 });
                 
                 // رویداد ذخیره سند
@@ -2060,6 +2375,11 @@
                         if (tabId === 'statistics') {
                             updateStatistics();
                         }
+                        
+                        // اگر تب اسناد انتخاب شده، دفتر روزنامه را به‌روزرسانی کن
+                        if (tabId === 'documents') {
+                            updateJournal();
+                        }
                     });
                 });
                 
@@ -2095,16 +2415,6 @@
                     if (!db.objectStoreNames.contains(STORE_NAMES.ACCOUNTS)) {
                         const accountsStore = db.createObjectStore(STORE_NAMES.ACCOUNTS, { keyPath: 'id' });
                         accountsStore.createIndex('name', 'name', { unique: false });
-                    }
-                    
-                    if (!db.objectStoreNames.contains(STORE_NAMES.PARTIES)) {
-                        const partiesStore = db.createObjectStore(STORE_NAMES.PARTIES, { keyPath: 'id' });
-                        partiesStore.createIndex('name', 'name', { unique: false });
-                    }
-                    
-                    if (!db.objectStoreNames.contains(STORE_NAMES.TRANSACTIONS)) {
-                        const transactionsStore = db.createObjectStore(STORE_NAMES.TRANSACTIONS, { keyPath: 'id' });
-                        transactionsStore.createIndex('date', 'date', { unique: false });
                     }
                     
                     if (!db.objectStoreNames.contains(STORE_NAMES.DOCUMENTS)) {
@@ -2160,42 +2470,6 @@
                 
                 request.onerror = () => {
                     reject(new Error('خطا در بارگذاری حساب‌ها'));
-                };
-            });
-        }
-        
-        // بارگذاری طرف‌های حساب از IndexedDB
-        function loadParties() {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction([STORE_NAMES.PARTIES], 'readonly');
-                const store = transaction.objectStore(STORE_NAMES.PARTIES);
-                const request = store.getAll();
-                
-                request.onsuccess = () => {
-                    parties = request.result;
-                    
-                    // اگر طرف‌های حساب خالی هستند، طرف‌های حساب پیش‌فرض را اضافه کن
-                    if (parties.length === 0) {
-                        const defaultParties = [
-                            { id: 1, name: 'امیری', type: 'مشتری' },
-                            { id: 2, name: 'امیری', type: 'فروشنده' },
-                        ];
-                        
-                        const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
-                        const store = transaction.objectStore(STORE_NAMES.PARTIES);
-                        
-                        defaultParties.forEach(party => {
-                            store.add(party);
-                        });
-                        
-                        parties = defaultParties;
-                    }
-                    
-                    resolve();
-                };
-                
-                request.onerror = () => {
-                    reject(new Error('خطا در بارگذاری طرف‌های حساب'));
                 };
             });
         }
@@ -2271,13 +2545,6 @@
             store.put(account);
         }
         
-        // ذخیره طرف حساب در IndexedDB
-        function saveParty(party) {
-            const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
-            const store = transaction.objectStore(STORE_NAMES.PARTIES);
-            store.put(party);
-        }
-        
         // ذخیره سند در IndexedDB
         function saveDocument(document) {
             const transaction = db.transaction([STORE_NAMES.DOCUMENTS], 'readwrite');
@@ -2304,13 +2571,6 @@
             const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
             const store = transaction.objectStore(STORE_NAMES.ACCOUNTS);
             store.delete(accountId);
-        }
-        
-        // حذف طرف حساب از IndexedDB
-        function deletePartyFromDB(partyId) {
-            const transaction = db.transaction([STORE_NAMES.PARTIES], 'readwrite');
-            const store = transaction.objectStore(STORE_NAMES.PARTIES);
-            store.delete(partyId);
         }
         
         // حذف سند از IndexedDB
@@ -2421,16 +2681,17 @@
             });
             
             ledgerAccountSelect.innerHTML = ledgerHtml;
-        }
-        
-        // تابع به‌روزرسانی dropdown طرف‌های حساب
-        function updatePartySelect() {
-            let html = '<option value="">انتخاب کنید</option>';
-            parties.forEach(party => {
-                html += `<option value="${party.id}">${party.name} (${party.type})</option>`;
+            
+            // به‌روزرسانی dropdown حساب‌ها در فرم سند دستی - نمایش همه حساب‌ها
+            const manualAccountSelects = document.querySelectorAll('.manual-account');
+            let manualHtml = '<option value="">انتخاب کنید</option>';
+            accounts.forEach(account => {
+                manualHtml += `<option value="${account.id}">${account.name}</option>`;
             });
             
-            partySelect.innerHTML = html;
+            manualAccountSelects.forEach(select => {
+                select.innerHTML = manualHtml;
+            });
         }
         
         // تابع به‌روزرسانی لیست حساب‌ها
@@ -2464,37 +2725,6 @@
             accountsList.innerHTML = html;
         }
         
-        // تابع به‌روزرسانی لیست طرف‌های حساب
-        function updatePartiesList() {
-            if (parties.length === 0) {
-                partiesList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-users"></i>
-                        <p>هیچ طرف حسابی ثبت نشده است</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            parties.forEach(party => {
-                html += `
-                    <div class="party-item">
-                        <div>
-                            <span>${party.name}</span>
-                            <small style="color: var(--success);">(${party.type})</small>
-                        </div>
-                        <button class="btn btn-danger btn-sm" onclick="deleteParty(${party.id})">
-                            <i class="fas fa-trash"></i>
-                            حذف
-                        </button>
-                    </div>
-                `;
-            });
-            
-            partiesList.innerHTML = html;
-        }
-        
         // تابع به‌روزرسانی لیست اسناد
         function updateDocumentsList() {
             if (savedDocuments.length === 0) {
@@ -2510,15 +2740,7 @@
             let html = '';
             savedDocuments.forEach(document => {
                 // ایجاد شرح از معاملات
-                let descriptionText = '';
-                document.transactions.forEach(transaction => {
-                    descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}) - `;
-                });
-                
-                // حذف آخرین خط تیره از شرح
-                if (descriptionText.endsWith(' - ')) {
-                    descriptionText = descriptionText.slice(0, -3);
-                }
+                let descriptionText = document.transactions[0]?.description || '';
                 
                 html += `
                     <div class="document-item">
@@ -2553,6 +2775,126 @@
             });
             
             documentsList.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی دفتر روزنامه - اصلاح شده
+        function updateJournal() {
+            if (savedDocuments.length === 0) {
+                journalBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <i class="fas fa-book"></i>
+                            <p>هیچ سندی برای نمایش در دفتر روزنامه وجود ندارد</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            // مرتب‌سازی اسناد بر اساس تاریخ
+            const sortedDocuments = [...savedDocuments].sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            sortedDocuments.forEach(document => {
+                // برای هر سند، ردیف‌های مربوط به آن را اضافه کن
+                document.transactions.forEach((transaction, index) => {
+                    // فقط اولین ردیف تاریخ را نمایش بده
+                    const showDate = index === 0;
+                    
+                    // اگر سند دستی است، نمایش مستقیم بدهکار و بستانکار
+                    if (transaction.isManual) {
+                        html += `
+                            <tr>
+                                <td class="date-cell">${showDate ? document.date : ''}</td>
+                                <td class="description-cell">${transaction.accountName}</td>
+                                <td class="amount-cell">${transaction.debit > 0 ? formatCurrency(transaction.debit) : '-'}</td>
+                                <td class="amount-cell">${transaction.credit > 0 ? formatCurrency(transaction.credit) : '-'}</td>
+                            </tr>
+                        `;
+                    } else {
+                        // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                        
+                        if (transaction.transactionType === 'receipt') {
+                            // دریافت: حساب انتخاب شده بستانکار می‌شود
+                            let debitAccount = '';
+                            
+                            // تعیین حساب بدهکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    debitAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    debitAccount = 'حساب های دریافتنی';
+                                    break;
+                                case 'check':
+                                    debitAccount = 'اسناد دریافتنی';
+                                    break;
+                            }
+                            
+                            html += `
+                                <tr>
+                                    <td class="date-cell">${showDate ? document.date : ''}</td>
+                                    <td class="description-cell">${debitAccount}</td>
+                                    <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
+                                    <td class="amount-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="date-cell"></td>
+                                    <td class="description-cell">${transaction.accountName}</td>
+                                    <td class="amount-cell">-</td>
+                                    <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
+                                </tr>
+                            `;
+                        } else if (transaction.transactionType === 'payment') {
+                            // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                            let creditAccount = '';
+                            
+                            // تعیین حساب بستانکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    creditAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    creditAccount = 'حساب های پرداختنی';
+                                    break;
+                                case 'check':
+                                    creditAccount = 'اسناد پرداختنی';
+                                    break;
+                            }
+                            
+                            html += `
+                                <tr>
+                                    <td class="date-cell">${showDate ? document.date : ''}</td>
+                                    <td class="description-cell">${transaction.accountName}</td>
+                                    <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
+                                    <td class="amount-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="date-cell"></td>
+                                    <td class="description-cell">${creditAccount}</td>
+                                    <td class="amount-cell">-</td>
+                                    <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+                
+                // اضافه کردن ردیف شرح سند
+                html += `
+                    <tr style="background-color: rgba(0,0,0,0.03);">
+                        <td class="date-cell"></td>
+                        <td class="description-cell" style="text-align: right; font-style: italic;">${document.transactions[0]?.description || ''}</td>
+                        <td class="amount-cell"></td>
+                        <td class="amount-cell"></td>
+                    </tr>
+                `;
+            });
+            
+            journalBody.innerHTML = html;
         }
         
         // تابع به‌روزرسانی آمار
@@ -3023,23 +3365,6 @@
             }
         }
         
-        // تابع حذف طرف حساب
-        function deleteParty(partyId) {
-            if (confirm('آیا از حذف این طرف حساب اطمینان دارید؟')) {
-                // حذف طرف حساب از آرایه
-                parties = parties.filter(party => party.id !== partyId);
-                
-                // حذف از IndexedDB
-                deletePartyFromDB(partyId);
-                
-                // به‌روزرسانی dropdown و لیست طرف‌های حساب
-                updatePartySelect();
-                updatePartiesList();
-                
-                showNotification('طرف حساب با موفقیت حذف شد!', 'success');
-            }
-        }
-        
         // تابع تولید سند حسابداری با منطق جدید
         function generateAccountingDocument() {
             let documentDate = new Date().toLocaleDateString('fa-IR');
@@ -3049,21 +3374,11 @@
             let descriptionText = '';
             
             currentDocumentTransactions.forEach(transaction => {
-                totalAmount += transaction.amount;
+                totalAmount += transaction.amount || transaction.debit || transaction.credit || 0;
                 
-                // اضافه کردن طرف حساب به شرح
-                let partyInfo = '';
-                if (transaction.partyName) {
-                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
-                }
-                
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
+                // فقط شرح را نمایش بده (بدون پرانتز)
+                descriptionText = transaction.description;
             });
-            
-            // حذف آخرین خط تیره از شرح
-            if (descriptionText.endsWith(' - ')) {
-                descriptionText = descriptionText.slice(0, -3);
-            }
             
             let html = `
                 <div class="accounting-document">
@@ -3083,66 +3398,77 @@
             `;
             
             currentDocumentTransactions.forEach(transaction => {
-                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
-                
-                if (transaction.transactionType === 'receipt') {
-                    // دریافت: حساب انتخاب شده بستانکار می‌شود
-                    let debitAccount = '';
-                    
-                    // تعیین حساب بدهکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            debitAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            debitAccount = 'حساب های دریافتنی';
-                            break;
-                        case 'check':
-                            debitAccount = 'اسناد دریافتنی';
-                            break;
-                    }
-                    
-                    html += `
-                        <tr>
-                            <td>${debitAccount}</td>
-                            <td class="debit">${formatCurrency(transaction.amount)}</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>${transaction.accountName}</td>
-                            <td>-</td>
-                            <td class="credit">${formatCurrency(transaction.amount)}</td>
-                        </tr>
-                    `;
-                } else if (transaction.transactionType === 'payment') {
-                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
-                    let creditAccount = '';
-                    
-                    // تعیین حساب بستانکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            creditAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            creditAccount = 'حساب های پرداختنی';
-                            break;
-                        case 'check':
-                            creditAccount = 'اسناد پرداختنی';
-                            break;
-                    }
-                    
+                // اگر سند دستی است، نمایش مستقیم بدهکار و بستانکار
+                if (transaction.isManual) {
                     html += `
                         <tr>
                             <td>${transaction.accountName}</td>
-                            <td class="debit">${formatCurrency(transaction.amount)}</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>${creditAccount}</td>
-                            <td>-</td>
-                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            <td class="debit">${transaction.debit > 0 ? formatCurrency(transaction.debit) : '-'}</td>
+                            <td class="credit">${transaction.credit > 0 ? formatCurrency(transaction.credit) : '-'}</td>
                         </tr>
                     `;
+                } else {
+                    // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                    
+                    if (transaction.transactionType === 'receipt') {
+                        // دریافت: حساب انتخاب شده بستانکار می‌شود
+                        let debitAccount = '';
+                        
+                        // تعیین حساب بدهکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                debitAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                debitAccount = 'حساب های دریافتنی';
+                                break;
+                            case 'check':
+                                debitAccount = 'اسناد دریافتنی';
+                                break;
+                        }
+                        
+                        html += `
+                            <tr>
+                                <td>${debitAccount}</td>
+                                <td class="debit">${formatCurrency(transaction.amount)}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>${transaction.accountName}</td>
+                                <td>-</td>
+                                <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            </tr>
+                        `;
+                    } else if (transaction.transactionType === 'payment') {
+                        // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                        let creditAccount = '';
+                        
+                        // تعیین حساب بستانکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                creditAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                creditAccount = 'حساب های پرداختنی';
+                                break;
+                            case 'check':
+                                creditAccount = 'اسناد پرداختنی';
+                                break;
+                        }
+                        
+                        html += `
+                            <tr>
+                                <td>${transaction.accountName}</td>
+                                <td class="debit">${formatCurrency(transaction.amount)}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>${creditAccount}</td>
+                                <td>-</td>
+                                <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            </tr>
+                        `;
+                    }
                 }
             });
             
@@ -3166,7 +3492,7 @@
             // محاسبه جمع مبلغ کل
             let totalAmount = 0;
             currentDocumentTransactions.forEach(transaction => {
-                totalAmount += transaction.amount;
+                totalAmount += transaction.amount || transaction.debit || transaction.credit || 0;
             });
             
             // ایجاد سند جدید
@@ -3192,6 +3518,9 @@
             // به‌روزرسانی لیست اسناد
             updateDocumentsList();
             
+            // به‌روزرسانی دفتر روزنامه
+            updateJournal();
+            
             // پاک کردن پیش‌نمایش
             documentPreview.innerHTML = `
                 <div class="empty-state">
@@ -3214,21 +3543,7 @@
             }
             
             // ایجاد شرح از معاملات
-            let descriptionText = '';
-            document.transactions.forEach(transaction => {
-                // اضافه کردن طرف حساب به شرح
-                let partyInfo = '';
-                if (transaction.partyName) {
-                    partyInfo = ` - طرف حساب: ${transaction.partyName}`;
-                }
-                
-                descriptionText += `${transaction.description} (${getPaymentTypeText(transaction.paymentType)}${partyInfo}) - `;
-            });
-            
-            // حذف آخرین خط تیره از شرح
-            if (descriptionText.endsWith(' - ')) {
-                descriptionText = descriptionText.slice(0, -3);
-            }
+            let descriptionText = document.transactions[0]?.description || '';
             
             // نمایش سند در پیش‌نمایش
             let html = `
@@ -3249,66 +3564,77 @@
             `;
             
             document.transactions.forEach(transaction => {
-                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
-                
-                if (transaction.transactionType === 'receipt') {
-                    // دریافت: حساب انتخاب شده بستانکار می‌شود
-                    let debitAccount = '';
-                    
-                    // تعیین حساب بدهکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            debitAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            debitAccount = 'حساب های دریافتنی';
-                            break;
-                        case 'check':
-                            debitAccount = 'اسناد دریافتنی';
-                            break;
-                    }
-                    
-                    html += `
-                        <tr>
-                            <td>${debitAccount}</td>
-                            <td class="debit">${formatCurrency(transaction.amount)}</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>${transaction.accountName}</td>
-                            <td>-</td>
-                            <td class="credit">${formatCurrency(transaction.amount)}</td>
-                        </tr>
-                    `;
-                } else if (transaction.transactionType === 'payment') {
-                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
-                    let creditAccount = '';
-                    
-                    // تعیین حساب بستانکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            creditAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            creditAccount = 'حساب های پرداختنی';
-                            break;
-                        case 'check':
-                            creditAccount = 'اسناد پرداختنی';
-                            break;
-                    }
-                    
+                // اگر سند دستی است، نمایش مستقیم بدهکار و بستانکار
+                if (transaction.isManual) {
                     html += `
                         <tr>
                             <td>${transaction.accountName}</td>
-                            <td class="debit">${formatCurrency(transaction.amount)}</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>${creditAccount}</td>
-                            <td>-</td>
-                            <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            <td class="debit">${transaction.debit > 0 ? formatCurrency(transaction.debit) : '-'}</td>
+                            <td class="credit">${transaction.credit > 0 ? formatCurrency(transaction.credit) : '-'}</td>
                         </tr>
                     `;
+                } else {
+                    // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                    
+                    if (transaction.transactionType === 'receipt') {
+                        // دریافت: حساب انتخاب شده بستانکار می‌شود
+                        let debitAccount = '';
+                        
+                        // تعیین حساب بدهکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                debitAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                debitAccount = 'حساب های دریافتنی';
+                                break;
+                            case 'check':
+                                debitAccount = 'اسناد دریافتنی';
+                                break;
+                        }
+                        
+                        html += `
+                            <tr>
+                                <td>${debitAccount}</td>
+                                <td class="debit">${formatCurrency(transaction.amount)}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>${transaction.accountName}</td>
+                                <td>-</td>
+                                <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            </tr>
+                        `;
+                    } else if (transaction.transactionType === 'payment') {
+                        // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                        let creditAccount = '';
+                        
+                        // تعیین حساب بستانکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                creditAccount = 'موجودی نقد';
+                                break;
+                            case 'credit':
+                                creditAccount = 'حساب های پرداختنی';
+                                break;
+                            case 'check':
+                                creditAccount = 'اسناد پرداختنی';
+                                break;
+                        }
+                        
+                        html += `
+                            <tr>
+                                <td>${transaction.accountName}</td>
+                                <td class="debit">${formatCurrency(transaction.amount)}</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>${creditAccount}</td>
+                                <td>-</td>
+                                <td class="credit">${formatCurrency(transaction.amount)}</td>
+                            </tr>
+                        `;
+                    }
                 }
             });
             
@@ -3336,6 +3662,9 @@
                 
                 // به‌روزرسانی لیست اسناد
                 updateDocumentsList();
+                
+                // به‌روزرسانی دفتر روزنامه
+                updateJournal();
                 
                 showNotification('سند با موفقیت حذف شد!', 'success');
             }
@@ -3380,6 +3709,205 @@
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 3000);
+        }
+        
+        // تابع افزودن ردیف جدید در فرم سند دستی
+        function addManualTransactionRow() {
+            const row = document.createElement('div');
+            row.className = 'manual-transaction-row';
+            
+            row.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">حساب</label>
+                    <select class="form-control manual-account" required>
+                        <option value="">انتخاب کنید</option>
+                        ${accounts.map(acc => `<option value="${acc.id}">${acc.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">بدهکار</label>
+                    <div class="amount-input-container">
+                        <span class="currency-symbol">﷼</span>
+                        <input type="number" class="form-control amount-input manual-debit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">بستانکار</label>
+                    <div class="amount-input-container">
+                        <span class="currency-symbol">﷼</span>
+                        <input type="number" class="form-control amount-input manual-credit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                    </div>
+                </div>
+                <button type="button" class="remove-transaction-btn">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            // رویداد حذف ردیف
+            const removeBtn = row.querySelector('.remove-transaction-btn');
+            removeBtn.addEventListener('click', function() {
+                row.remove();
+                updateRemoveButtons();
+            });
+            
+            manualTransactionsContainer.appendChild(row);
+            updateRemoveButtons();
+        }
+        
+        // تابع به‌روزرسانی وضعیت دکمه‌های حذف
+        function updateRemoveButtons() {
+            const rows = document.querySelectorAll('.manual-transaction-row');
+            const removeButtons = document.querySelectorAll('.remove-transaction-btn');
+            
+            // اگر فقط یک ردیف وجود دارد، دکمه حذف آن را غیرفعال کن
+            if (rows.length === 1) {
+                removeButtons[0].disabled = true;
+            } else {
+                removeButtons.forEach(btn => {
+                    btn.disabled = false;
+                });
+            }
+        }
+        
+        // تابع بازنشانی ردیف‌های فرم سند دستی
+        function resetManualTransactionRows() {
+            manualTransactionsContainer.innerHTML = '';
+            addManualTransactionRow();
+        }
+        
+        // تابع صادر کردن داده‌ها به JSON
+        function exportData() {
+            const data = {
+                accounts: accounts,
+                documents: savedDocuments,
+                documentCounter: documentCounter
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `mohraz-system-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showNotification('داده‌ها با موفقیت صادر شدند!', 'success');
+        }
+        
+        // تابع وارد کردن داده‌ها از JSON
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (confirm('آیا از وارد کردن داده‌های جدید اطمینان دارید؟ داده‌های فعلی جایگزین خواهند شد.')) {
+                        // ذخیره داده‌های جدید
+                        accounts = data.accounts || [];
+                        savedDocuments = data.documents || [];
+                        documentCounter = data.documentCounter || 1;
+                        
+                        // ذخیره در IndexedDB
+                        const promises = [];
+                        
+                        // پاک کردن داده‌های قدیمی
+                        promises.push(clearStore(STORE_NAMES.ACCOUNTS));
+                        promises.push(clearStore(STORE_NAMES.DOCUMENTS));
+                        promises.push(clearStore(STORE_NAMES.DOCUMENT_COUNTER));
+                        
+                        Promise.all(promises).then(() => {
+                            // ذخیره داده‌های جدید
+                            const savePromises = [];
+                            
+                            accounts.forEach(account => {
+                                savePromises.push(saveAccount(account));
+                            });
+                            
+                            savedDocuments.forEach(document => {
+                                savePromises.push(saveDocument(document));
+                            });
+                            
+                            savePromises.push(saveDocumentCounter());
+                            
+                            Promise.all(savePromises).then(() => {
+                                // به‌روزرسانی رابط کاربری
+                                updateAccountSelect();
+                                updateAccountsList();
+                                updateDocumentsList();
+                                updateJournal();
+                                
+                                showNotification('داده‌ها با موفقیت وارد شدند!', 'success');
+                            });
+                        });
+                    }
+                } catch (error) {
+                    console.error('خطا در وارد کردن داده‌ها:', error);
+                    showNotification('خطا در وارد کردن فایل! لطفاً از صحت فایل اطمینان حاصل کنید.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // پاک کردن مقدار فایل برای امکان انتخاب مجدد همان فایل
+            event.target.value = '';
+        }
+        
+        // تابع پاک کردن یک store از IndexedDB
+        function clearStore(storeName) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.clear();
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(new Error(`خطا در پاک کردن ${storeName}`));
+            });
+        }
+        
+        // تابع بازنشانی داده‌ها
+        function resetData() {
+            if (confirm('آیا از بازنشانی تمام داده‌ها اطمینان دارید؟ این عمل غیرقابل بازگشت است!')) {
+                // پاک کردن تمام داده‌ها
+                accounts = [];
+                savedDocuments = [];
+                documentCounter = 1;
+                currentDocumentTransactions = [];
+                
+                // پاک کردن IndexedDB
+                const promises = [
+                    clearStore(STORE_NAMES.ACCOUNTS),
+                    clearStore(STORE_NAMES.DOCUMENTS),
+                    clearStore(STORE_NAMES.CURRENT_DOCUMENT),
+                    clearStore(STORE_NAMES.DOCUMENT_COUNTER)
+                ];
+                
+                Promise.all(promises).then(() => {
+                    // بارگذاری مجدد حساب‌های پیش‌فرض
+                    loadAccounts().then(() => {
+                        // به‌روزرسانی رابط کاربری
+                        updateAccountSelect();
+                        updateAccountsList();
+                        updateDocumentsList();
+                        updateJournal();
+                        
+                        // پاک کردن پیش‌نمایش
+                        documentPreview.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                            </div>
+                        `;
+                        
+                        showNotification('تمامی داده‌ها با موفقیت بازنشانی شدند!', 'success');
+                    });
+                });
+            }
         }
     </script>
 </body>
