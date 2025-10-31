@@ -831,7 +831,7 @@
         .description-content {
             color: var(--gray);
             line-height: 1.6;
-            font-size: 0.8rem;
+            font-size: 0.75rem; /* کاهش سایز فونت شرح سند */
         }
 
         /* استایل‌های جدید برای بخش آمار */
@@ -1116,23 +1116,25 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.75rem;
+            font-size: 0.7rem; /* کاهش سایز فونت دفتر روزنامه */
         }
 
         .journal-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 10px;
+            padding: 8px; /* کاهش padding برای فونت کوچک‌تر */
             text-align: center;
             border: 1px solid var(--border);
+            font-size: 0.7rem; /* کاهش سایز فونت هدر */
         }
 
         .journal-table td {
-            padding: 8px;
+            padding: 6px; /* کاهش padding برای فونت کوچک‌تر */
             border: 1px solid var(--border);
             text-align: center;
             word-break: break-word;
             white-space: normal;
+            font-size: 0.7rem; /* کاهش سایز فونت محتوا */
         }
 
         .journal-table .account-name {
@@ -1872,6 +1874,7 @@
                                     <table class="journal-table">
                                         <thead>
                                             <tr>
+                                                <th class="document-number-cell">شماره سند</th>
                                                 <th class="date-cell">تاریخ</th>
                                                 <th class="description-cell">شرح حساب</th>
                                                 <th class="amount-cell">بدهکار</th>
@@ -1880,7 +1883,7 @@
                                         </thead>
                                         <tbody id="journal-body">
                                             <tr>
-                                                <td colspan="4" class="empty-state">
+                                                <td colspan="5" class="empty-state">
                                                     <i class="fas fa-book"></i>
                                                     <p>هیچ سندی برای نمایش در دفتر روزنامه وجود ندارد</p>
                                                 </td>
@@ -2782,7 +2785,7 @@
             if (savedDocuments.length === 0) {
                 journalBody.innerHTML = `
                     <tr>
-                        <td colspan="4" class="empty-state">
+                        <td colspan="5" class="empty-state">
                             <i class="fas fa-book"></i>
                             <p>هیچ سندی برای نمایش در دفتر روزنامه وجود ندارد</p>
                         </td>
@@ -2803,11 +2806,14 @@
                 document.transactions.forEach((transaction, index) => {
                     // فقط اولین ردیف تاریخ را نمایش بده
                     const showDate = index === 0;
+                    // فقط اولین ردیف شماره سند را نمایش بده
+                    const showDocumentNumber = index === 0;
                     
                     // اگر سند دستی است، نمایش مستقیم بدهکار و بستانکار
                     if (transaction.isManual) {
                         html += `
                             <tr>
+                                <td class="document-number-cell">${showDocumentNumber ? toPersianNumbers(document.number) : ''}</td>
                                 <td class="date-cell">${showDate ? document.date : ''}</td>
                                 <td class="description-cell">${transaction.accountName}</td>
                                 <td class="amount-cell">${transaction.debit > 0 ? formatCurrency(transaction.debit) : '-'}</td>
@@ -2836,12 +2842,14 @@
                             
                             html += `
                                 <tr>
+                                    <td class="document-number-cell">${showDocumentNumber ? toPersianNumbers(document.number) : ''}</td>
                                     <td class="date-cell">${showDate ? document.date : ''}</td>
                                     <td class="description-cell">${debitAccount}</td>
                                     <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
                                     <td class="amount-cell">-</td>
                                 </tr>
                                 <tr>
+                                    <td class="document-number-cell"></td>
                                     <td class="date-cell"></td>
                                     <td class="description-cell">${transaction.accountName}</td>
                                     <td class="amount-cell">-</td>
@@ -2867,12 +2875,14 @@
                             
                             html += `
                                 <tr>
+                                    <td class="document-number-cell">${showDocumentNumber ? toPersianNumbers(document.number) : ''}</td>
                                     <td class="date-cell">${showDate ? document.date : ''}</td>
                                     <td class="description-cell">${transaction.accountName}</td>
                                     <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
                                     <td class="amount-cell">-</td>
                                 </tr>
                                 <tr>
+                                    <td class="document-number-cell"></td>
                                     <td class="date-cell"></td>
                                     <td class="description-cell">${creditAccount}</td>
                                     <td class="amount-cell">-</td>
@@ -2886,6 +2896,7 @@
                 // اضافه کردن ردیف شرح سند
                 html += `
                     <tr style="background-color: rgba(0,0,0,0.03);">
+                        <td class="document-number-cell"></td>
                         <td class="date-cell"></td>
                         <td class="description-cell" style="text-align: right; font-style: italic;">${document.transactions[0]?.description || ''}</td>
                         <td class="amount-cell"></td>
