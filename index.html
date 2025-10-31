@@ -1116,25 +1116,25 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.7rem; /* کاهش سایز فونت دفتر روزنامه */
+            font-size: 0.65rem; /* کاهش بیشتر سایز فونت دفتر روزنامه */
         }
 
         .journal-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 8px; /* کاهش padding برای فونت کوچک‌تر */
+            padding: 6px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
             text-align: center;
             border: 1px solid var(--border);
-            font-size: 0.7rem; /* کاهش سایز فونت هدر */
+            font-size: 0.65rem; /* کاهش بیشتر سایز فونت هدر */
         }
 
         .journal-table td {
-            padding: 6px; /* کاهش padding برای فونت کوچک‌تر */
+            padding: 5px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
             border: 1px solid var(--border);
             text-align: center;
             word-break: break-word;
             white-space: normal;
-            font-size: 0.7rem; /* کاهش سایز فونت محتوا */
+            font-size: 0.65rem; /* کاهش بیشتر سایز فونت محتوا */
         }
 
         .journal-table .account-name {
@@ -2343,19 +2343,16 @@
                     saveAccountingDocument();
                 });
                 
-                // رویداد پاک کردن سند جاری
+                // رویداد پاک کردن سند جاری - بدون اعلان
                 clearDocumentBtn.addEventListener('click', function() {
-                    if (confirm('آیا از پاک کردن سند جاری اطمینان دارید؟')) {
-                        currentDocumentTransactions = [];
-                        saveCurrentDocument();
-                        documentPreview.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-file-alt"></i>
-                                <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
-                            </div>
-                        `;
-                        showNotification('سند جاری با موفقیت پاک شد!', 'success');
-                    }
+                    currentDocumentTransactions = [];
+                    saveCurrentDocument();
+                    documentPreview.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <p>پس از ثبت معامله، سند حسابداری در اینجا نمایش داده می‌شود</p>
+                        </div>
+                    `;
                 });
                 
                 // مدیریت ناوبری
