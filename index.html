@@ -1096,7 +1096,7 @@
             font-weight: 600;
         }
         
-        /* استایل‌های جدید برای دفتر روزنامه */
+        /* استایل‌های جدید برای دفتر روزنامه - بهبود یافته */
         .journal-section {
             margin-top: 30px;
             padding-top: 20px;
@@ -1116,25 +1116,25 @@
             border-collapse: collapse;
             margin-top: 0;
             table-layout: fixed;
-            font-size: 0.65rem; /* کاهش بیشتر سایز فونت دفتر روزنامه */
+            font-size: 0.6rem; /* کاهش بیشتر سایز فونت دفتر روزنامه */
         }
 
         .journal-table th {
             background: var(--bg-gradient);
             color: white;
-            padding: 6px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
+            padding: 5px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
             text-align: center;
             border: 1px solid var(--border);
-            font-size: 0.65rem; /* کاهش بیشتر سایز فونت هدر */
+            font-size: 0.6rem; /* کاهش بیشتر سایز فونت هدر */
         }
 
         .journal-table td {
-            padding: 5px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
+            padding: 4px; /* کاهش بیشتر padding برای فونت کوچک‌تر */
             border: 1px solid var(--border);
             text-align: center;
             word-break: break-word;
             white-space: normal;
-            font-size: 0.65rem; /* کاهش بیشتر سایز فونت محتوا */
+            font-size: 0.6rem; /* کاهش بیشتر سایز فونت محتوا */
         }
 
         .journal-table .account-name {
@@ -2777,7 +2777,7 @@
             documentsList.innerHTML = html;
         }
         
-        // تابع به‌روزرسانی دفتر روزنامه - اصلاح شده
+        // تابع به‌روزرسانی دفتر روزنامه - بهبود یافته
         function updateJournal() {
             if (savedDocuments.length === 0) {
                 journalBody.innerHTML = `
@@ -2911,7 +2911,7 @@
             updateLedger(ledgerAccountSelect.value);
         }
         
-        // تابع به‌روزرسانی تراز آزمایشی
+        // تابع به‌روزرسانی تراز آزمایشی - بهبود یافته برای نمایش اسناد دستی
         function updateTrialBalance() {
             if (savedDocuments.length === 0 && currentDocumentTransactions.length === 0) {
                 trialBalanceBody.innerHTML = `
@@ -2940,6 +2940,75 @@
             // محاسبه از اسناد ذخیره شده
             savedDocuments.forEach(document => {
                 document.transactions.forEach(transaction => {
+                    // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                    if (transaction.isManual) {
+                        accountBalances[transaction.accountId].debit += transaction.debit || 0;
+                        accountBalances[transaction.accountId].credit += transaction.credit || 0;
+                    } else {
+                        // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                        
+                        if (transaction.transactionType === 'receipt') {
+                            // دریافت: حساب انتخاب شده بستانکار می‌شود
+                            let debitAccount = '';
+                            
+                            // تعیین حساب بدهکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    debitAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    debitAccount = 'حساب های دریافتنی';
+                                    break;
+                                case 'check':
+                                    debitAccount = 'اسناد دریافتنی';
+                                    break;
+                            }
+                            
+                            // پیدا کردن حساب بدهکار
+                            const debitAcc = accounts.find(acc => acc.name === debitAccount);
+                            if (debitAcc) {
+                                accountBalances[debitAcc.id].debit += transaction.amount;
+                            }
+                            
+                            // حساب انتخاب شده بستانکار می‌شود
+                            accountBalances[transaction.accountId].credit += transaction.amount;
+                        } else if (transaction.transactionType === 'payment') {
+                            // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                            let creditAccount = '';
+                            
+                            // تعیین حساب بستانکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    creditAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    creditAccount = 'حساب های پرداختنی';
+                                    break;
+                                case 'check':
+                                    creditAccount = 'اسناد پرداختنی';
+                                    break;
+                            }
+                            
+                            // حساب انتخاب شده بدهکار می‌شود
+                            accountBalances[transaction.accountId].debit += transaction.amount;
+                            
+                            // پیدا کردن حساب بستانکار
+                            const creditAcc = accounts.find(acc => acc.name === creditAccount);
+                            if (creditAcc) {
+                                accountBalances[creditAcc.id].credit += transaction.amount;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // محاسبه از سند جاری
+            currentDocumentTransactions.forEach(transaction => {
+                // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                if (transaction.isManual) {
+                    accountBalances[transaction.accountId].debit += transaction.debit || 0;
+                    accountBalances[transaction.accountId].credit += transaction.credit || 0;
+                } else {
                     // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                     
                     if (transaction.transactionType === 'receipt') {
@@ -2993,63 +3062,6 @@
                             accountBalances[creditAcc.id].credit += transaction.amount;
                         }
                     }
-                });
-            });
-            
-            // محاسبه از سند جاری
-            currentDocumentTransactions.forEach(transaction => {
-                // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
-                
-                if (transaction.transactionType === 'receipt') {
-                    // دریافت: حساب انتخاب شده بستانکار می‌شود
-                    let debitAccount = '';
-                    
-                    // تعیین حساب بدهکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            debitAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            debitAccount = 'حساب های دریافتنی';
-                            break;
-                        case 'check':
-                            debitAccount = 'اسناد دریافتنی';
-                            break;
-                    }
-                    
-                    // پیدا کردن حساب بدهکار
-                    const debitAcc = accounts.find(acc => acc.name === debitAccount);
-                    if (debitAcc) {
-                        accountBalances[debitAcc.id].debit += transaction.amount;
-                    }
-                    
-                    // حساب انتخاب شده بستانکار می‌شود
-                    accountBalances[transaction.accountId].credit += transaction.amount;
-                } else if (transaction.transactionType === 'payment') {
-                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
-                    let creditAccount = '';
-                    
-                    // تعیین حساب بستانکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            creditAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            creditAccount = 'حساب های پرداختنی';
-                            break;
-                        case 'check':
-                            creditAccount = 'اسناد پرداختنی';
-                            break;
-                    }
-                    
-                    // حساب انتخاب شده بدهکار می‌شود
-                    accountBalances[transaction.accountId].debit += transaction.amount;
-                    
-                    // پیدا کردن حساب بستانکار
-                    const creditAcc = accounts.find(acc => acc.name === creditAccount);
-                    if (creditAcc) {
-                        accountBalances[creditAcc.id].credit += transaction.amount;
-                    }
                 }
             });
             
@@ -3085,7 +3097,7 @@
             trialBalanceBody.innerHTML = html;
         }
         
-        // تابع به‌روزرسانی دفترکل
+        // تابع به‌روزرسانی دفترکل - بهبود یافته برای نمایش اسناد دستی
         function updateLedger(accountId) {
             if (!accountId) {
                 ledgerBody.innerHTML = `
@@ -3124,12 +3136,19 @@
                         let debit = 0;
                         let credit = 0;
                         
-                        if (transaction.transactionType === 'receipt') {
-                            credit = transaction.amount;
-                            balance -= transaction.amount;
-                        } else if (transaction.transactionType === 'payment') {
-                            debit = transaction.amount;
-                            balance += transaction.amount;
+                        // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                        if (transaction.isManual) {
+                            debit = transaction.debit || 0;
+                            credit = transaction.credit || 0;
+                            balance += debit - credit;
+                        } else {
+                            if (transaction.transactionType === 'receipt') {
+                                credit = transaction.amount;
+                                balance -= transaction.amount;
+                            } else if (transaction.transactionType === 'payment') {
+                                debit = transaction.amount;
+                                balance += transaction.amount;
+                            }
                         }
                         
                         ledgerEntries.push({
@@ -3141,7 +3160,107 @@
                         });
                     }
                     
-                    // بررسی معاملات مربوط به حساب‌های مرتبط
+                    // بررسی معاملات مربوط به حساب‌های مرتبط (برای اسناد غیردستی)
+                    if (!transaction.isManual) {
+                        let relatedAccount = '';
+                        if (transaction.transactionType === 'receipt') {
+                            // دریافت: حساب انتخاب شده بستانکار می‌شود
+                            let debitAccount = '';
+                            
+                            // تعیین حساب بدهکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    debitAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    debitAccount = 'حساب های دریافتنی';
+                                    break;
+                                case 'check':
+                                    debitAccount = 'اسناد دریافتنی';
+                                    break;
+                            }
+                            
+                            if (debitAccount === account.name) {
+                                debit = transaction.amount;
+                                credit = 0;
+                                balance += transaction.amount;
+                                
+                                ledgerEntries.push({
+                                    date: document.date,
+                                    description: transaction.description,
+                                    debit: debit,
+                                    credit: credit,
+                                    balance: balance
+                                });
+                            }
+                        } else if (transaction.transactionType === 'payment') {
+                            // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                            let creditAccount = '';
+                            
+                            // تعیین حساب بستانکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    creditAccount = 'موجودی نقد';
+                                    break;
+                                case 'credit':
+                                    creditAccount = 'حساب های پرداختنی';
+                                    break;
+                                case 'check':
+                                    creditAccount = 'اسناد پرداختنی';
+                                    break;
+                            }
+                            
+                            if (creditAccount === account.name) {
+                                debit = 0;
+                                credit = transaction.amount;
+                                balance -= transaction.amount;
+                                
+                                ledgerEntries.push({
+                                    date: document.date,
+                                    description: transaction.description,
+                                    debit: debit,
+                                    credit: credit,
+                                    balance: balance
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // بررسی سند جاری
+            currentDocumentTransactions.forEach(transaction => {
+                // بررسی معاملات مربوط به حساب انتخاب شده
+                if (transaction.accountId == accountId) {
+                    let debit = 0;
+                    let credit = 0;
+                    
+                    // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                    if (transaction.isManual) {
+                        debit = transaction.debit || 0;
+                        credit = transaction.credit || 0;
+                        balance += debit - credit;
+                    } else {
+                        if (transaction.transactionType === 'receipt') {
+                            credit = transaction.amount;
+                            balance -= transaction.amount;
+                        } else if (transaction.transactionType === 'payment') {
+                            debit = transaction.amount;
+                            balance += transaction.amount;
+                        }
+                    }
+                    
+                    ledgerEntries.push({
+                        date: transaction.date,
+                        description: transaction.description,
+                        debit: debit,
+                        credit: credit,
+                        balance: balance
+                    });
+                }
+                
+                // بررسی معاملات مربوط به حساب‌های مرتبط (برای اسناد غیردستی)
+                if (!transaction.isManual) {
                     let relatedAccount = '';
                     if (transaction.transactionType === 'receipt') {
                         // دریافت: حساب انتخاب شده بستانکار می‌شود
@@ -3166,7 +3285,7 @@
                             balance += transaction.amount;
                             
                             ledgerEntries.push({
-                                date: document.date,
+                                date: transaction.date,
                                 description: transaction.description,
                                 debit: debit,
                                 credit: credit,
@@ -3196,102 +3315,13 @@
                             balance -= transaction.amount;
                             
                             ledgerEntries.push({
-                                date: document.date,
+                                date: transaction.date,
                                 description: transaction.description,
                                 debit: debit,
                                 credit: credit,
                                 balance: balance
                             });
                         }
-                    }
-                });
-            });
-            
-            // بررسی سند جاری
-            currentDocumentTransactions.forEach(transaction => {
-                // بررسی معاملات مربوط به حساب انتخاب شده
-                if (transaction.accountId == accountId) {
-                    let debit = 0;
-                    let credit = 0;
-                    
-                    if (transaction.transactionType === 'receipt') {
-                        credit = transaction.amount;
-                        balance -= transaction.amount;
-                    } else if (transaction.transactionType === 'payment') {
-                        debit = transaction.amount;
-                        balance += transaction.amount;
-                    }
-                    
-                    ledgerEntries.push({
-                        date: transaction.date,
-                        description: transaction.description,
-                        debit: debit,
-                        credit: credit,
-                        balance: balance
-                    });
-                }
-                
-                // بررسی معاملات مربوط به حساب‌های مرتبط
-                let relatedAccount = '';
-                if (transaction.transactionType === 'receipt') {
-                    // دریافت: حساب انتخاب شده بستانکار می‌شود
-                    let debitAccount = '';
-                    
-                    // تعیین حساب بدهکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            debitAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            debitAccount = 'حساب های دریافتنی';
-                            break;
-                        case 'check':
-                            debitAccount = 'اسناد دریافتنی';
-                            break;
-                    }
-                    
-                    if (debitAccount === account.name) {
-                        debit = transaction.amount;
-                        credit = 0;
-                        balance += transaction.amount;
-                        
-                        ledgerEntries.push({
-                            date: transaction.date,
-                            description: transaction.description,
-                            debit: debit,
-                            credit: credit,
-                            balance: balance
-                        });
-                    }
-                } else if (transaction.transactionType === 'payment') {
-                    // پرداخت: حساب انتخاب شده بدهکار می‌شود
-                    let creditAccount = '';
-                    
-                    // تعیین حساب بستانکار بر اساس نوع پرداخت
-                    switch(transaction.paymentType) {
-                        case 'cash':
-                            creditAccount = 'موجودی نقد';
-                            break;
-                        case 'credit':
-                            creditAccount = 'حساب های پرداختنی';
-                            break;
-                        case 'check':
-                            creditAccount = 'اسناد پرداختنی';
-                            break;
-                    }
-                    
-                    if (creditAccount === account.name) {
-                        debit = 0;
-                        credit = transaction.amount;
-                        balance -= transaction.amount;
-                        
-                        ledgerEntries.push({
-                            date: transaction.date,
-                            description: transaction.description,
-                            debit: debit,
-                            credit: credit,
-                            balance: balance
-                        });
                     }
                 }
             });
