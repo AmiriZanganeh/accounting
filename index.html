@@ -1389,32 +1389,6 @@
             margin-bottom: 0;
         }
 
-        /* استایل‌های جدید برای مالیات بر ارزش افزوده */
-        .vat-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border);
-        }
-
-        .vat-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .vat-checkbox input {
-            width: 18px;
-            height: 18px;
-        }
-
-        .vat-settings {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
         /* استایل‌های جدید برای گروه‌های حساب */
         .account-group-form {
             display: grid;
@@ -1730,10 +1704,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .vat-settings {
-                grid-template-columns: 1fr;
-            }
-
             .account-group-form {
                 grid-template-columns: 1fr;
             }
@@ -1997,14 +1967,6 @@
                         <i class="fas fa-plus-circle"></i>
                         <span class="nav-item-text">ثبت</span>
                     </div>
-                    <div class="nav-item" data-tab="salary">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span class="nav-item-text">حقوق</span>
-                    </div>
-                    <div class="nav-item" data-tab="accounts">
-                        <i class="fas fa-wallet"></i>
-                        <span class="nav-item-text">حساب</span>
-                    </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
                         <span class="nav-item-text">اسناد</span>
@@ -2012,6 +1974,14 @@
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
                         <span class="nav-item-text">آمار</span>
+                    </div>
+                    <div class="nav-item" data-tab="salary">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span class="nav-item-text">حقوق</span>
+                    </div>
+                    <div class="nav-item" data-tab="accounts">
+                        <i class="fas fa-wallet"></i>
+                        <span class="nav-item-text">حساب</span>
                     </div>
                 </div>
             </div>
@@ -2089,19 +2059,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="vat-section">
-                                    <div class="vat-checkbox">
-                                        <input type="checkbox" id="vat-checkbox">
-                                        <label for="vat-checkbox" class="form-label">ثبت خودکار مالیات بر ارزش افزوده</label>
-                                    </div>
-                                    <div class="vat-settings" id="vat-settings" style="display: none;">
-                                        <div class="form-group">
-                                            <label for="vat-percentage" class="form-label">درصد مالیات بر ارزش افزوده</label>
-                                            <input type="number" id="vat-percentage" class="form-control" value="9" min="0" max="100" step="0.1">
-                                        </div>
-                                    </div>
-                                </div>
-                                
                                 <div class="form-group">
                                     <label for="description" class="form-label">شرح</label>
                                     <textarea id="description" class="form-control" rows="3" placeholder="شرح معامله" required></textarea>
@@ -2164,132 +2121,6 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        
-                        <div id="salary-tab" class="tab-content hidden">
-                            <div class="salary-section">
-                                <h3>مدیریت حقوق و دستمزد</h3>
-                                <div class="salary-form">
-                                    <div class="form-group">
-                                        <label for="employee-name" class="form-label">نام پرسنل</label>
-                                        <input type="text" id="employee-name" class="form-control" placeholder="نام پرسنل">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-salary" class="form-label">حقوق پایه</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-salary" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-bonus" class="form-label">پاداش</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-bonus" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-deduction" class="form-label">کسورات</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-deduction" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="salary-actions">
-                                    <button type="button" id="add-employee" class="btn btn-success">
-                                        <i class="fas fa-user-plus"></i>
-                                        افزودن پرسنل
-                                    </button>
-                                    <button type="button" id="generate-salary-document" class="btn btn-info">
-                                        <i class="fas fa-file-invoice-dollar"></i>
-                                        ایجاد سند حقوق
-                                    </button>
-                                </div>
-                                
-                                <div class="salary-list" id="salary-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-users"></i>
-                                        <p>هیچ پرسنلی ثبت نشده است</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="accounts-tab" class="tab-content hidden">
-                            <div class="account-management">
-                                <h3>افزودن حساب جدید</h3>
-                                <div class="account-group-form">
-                                    <div class="form-group">
-                                        <label for="new-account-name" class="form-label">نام حساب</label>
-                                        <input type="text" id="new-account-name" class="form-control" placeholder="نام حساب جدید">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account-group" class="form-label">گروه حساب</label>
-                                        <select id="account-group" class="form-control">
-                                            <option value="asset">دارایی</option>
-                                            <option value="liability">بدهی</option>
-                                            <option value="equity">حقوق صاحبان سهام</option>
-                                            <option value="income">درآمد</option>
-                                            <option value="expense">هزینه</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account-type" class="form-label">نوع حساب</label>
-                                        <select id="account-type" class="form-control">
-                                            <option value="permanent">حساب ثابت</option>
-                                            <option value="temporary">حساب موقت</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" id="add-account" class="btn btn-success">
-                                            <i class="fas fa-plus"></i>
-                                            افزودن حساب
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="accounts-list" id="accounts-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-wallet"></i>
-                                        <p>هیچ حسابی ثبت نشده است</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="opening-closing-section">
-                                <h3>افتتاحیه و اختتامیه</h3>
-                                <div class="opening-closing-actions">
-                                    <button type="button" id="opening-entry" class="btn btn-info">
-                                        <i class="fas fa-play-circle"></i>
-                                        ایجاد سند افتتاحیه
-                                    </button>
-                                    <button type="button" id="closing-entry" class="btn btn-warning">
-                                        <i class="fas fa-stop-circle"></i>
-                                        ایجاد سند اختتامیه
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="backup-section">
-                                <h3>پشتیبان‌گیری و بازیابی داده‌ها</h3>
-                                <div class="backup-actions">
-                                    <button type="button" id="export-data" class="btn btn-info">
-                                        <i class="fas fa-download"></i>
-                                        Export JSON
-                                    </button>
-                                    <button type="button" id="import-data" class="btn btn-warning">
-                                        <i class="fas fa-upload"></i>
-                                        Import JSON
-                                    </button>
-                                    <button type="button" id="reset-data" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                        بازنشانی داده‌ها
-                                    </button>
-                                </div>
-                                <input type="file" id="import-file" accept=".json" style="display: none;">
-                            </div>
                         </div>
                         
                         <div id="documents-tab" class="tab-content hidden">
@@ -2421,6 +2252,132 @@
                             </div>
                         </div>
                         
+                        <div id="salary-tab" class="tab-content hidden">
+                            <div class="salary-section">
+                                <h3>مدیریت حقوق و دستمزد</h3>
+                                <div class="salary-form">
+                                    <div class="form-group">
+                                        <label for="employee-name" class="form-label">نام پرسنل</label>
+                                        <input type="text" id="employee-name" class="form-control" placeholder="نام پرسنل">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-salary" class="form-label">حقوق پایه</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-salary" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-bonus" class="form-label">پاداش</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-bonus" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-deduction" class="form-label">کسورات</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-deduction" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="salary-actions">
+                                    <button type="button" id="add-employee" class="btn btn-success">
+                                        <i class="fas fa-user-plus"></i>
+                                        افزودن پرسنل
+                                    </button>
+                                    <button type="button" id="generate-salary-document" class="btn btn-info">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        ایجاد سند حقوق
+                                    </button>
+                                </div>
+                                
+                                <div class="salary-list" id="salary-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <p>هیچ پرسنلی ثبت نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="accounts-tab" class="tab-content hidden">
+                            <div class="account-management">
+                                <h3>افزودن حساب جدید</h3>
+                                <div class="account-group-form">
+                                    <div class="form-group">
+                                        <label for="new-account-name" class="form-label">نام حساب</label>
+                                        <input type="text" id="new-account-name" class="form-control" placeholder="نام حساب جدید">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="account-group" class="form-label">گروه حساب</label>
+                                        <select id="account-group" class="form-control">
+                                            <option value="asset">دارایی</option>
+                                            <option value="liability">بدهی</option>
+                                            <option value="equity">حقوق صاحبان سهام</option>
+                                            <option value="income">درآمد</option>
+                                            <option value="expense">هزینه</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="account-type" class="form-label">نوع حساب</label>
+                                        <select id="account-type" class="form-control">
+                                            <option value="permanent">حساب ثابت</option>
+                                            <option value="temporary">حساب موقت</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" id="add-account" class="btn btn-success">
+                                            <i class="fas fa-plus"></i>
+                                            افزودن حساب
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="accounts-list" id="accounts-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-wallet"></i>
+                                        <p>هیچ حسابی ثبت نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="opening-closing-section">
+                                <h3>افتتاحیه و اختتامیه</h3>
+                                <div class="opening-closing-actions">
+                                    <button type="button" id="opening-entry" class="btn btn-info">
+                                        <i class="fas fa-play-circle"></i>
+                                        ایجاد سند افتتاحیه
+                                    </button>
+                                    <button type="button" id="closing-entry" class="btn btn-warning">
+                                        <i class="fas fa-stop-circle"></i>
+                                        ایجاد سند اختتامیه
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="backup-section">
+                                <h3>پشتیبان‌گیری و بازیابی داده‌ها</h3>
+                                <div class="backup-actions">
+                                    <button type="button" id="export-data" class="btn btn-info">
+                                        <i class="fas fa-download"></i>
+                                        Export JSON
+                                    </button>
+                                    <button type="button" id="import-data" class="btn btn-warning">
+                                        <i class="fas fa-upload"></i>
+                                        Import JSON
+                                    </button>
+                                    <button type="button" id="reset-data" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        بازنشانی داده‌ها
+                                    </button>
+                                </div>
+                                <input type="file" id="import-file" accept=".json" style="display: none;">
+                            </div>
+                        </div>
+                        
                         <div id="dashboard-tab" class="tab-content hidden">
                             <div class="dashboard-container">
                                 <div class="fiscal-period-section">
@@ -2459,6 +2416,24 @@
                                             ثبت معاملات مالی جدید و مدیریت اسناد حسابداری
                                         </div>
                                     </div>
+                                    <div class="dashboard-action" data-tab="documents">
+                                        <div class="dashboard-action-icon">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </div>
+                                        <div class="dashboard-action-title">اسناد</div>
+                                        <div class="dashboard-action-description">
+                                            مشاهده و مدیریت اسناد حسابداری ذخیره شده
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-action" data-tab="statistics">
+                                        <div class="dashboard-action-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                        <div class="dashboard-action-title">آمار و گزارشات</div>
+                                        <div class="dashboard-action-description">
+                                            مشاهده تراز آزمایشی، دفترکل و صورت سود و زیان
+                                        </div>
+                                    </div>
                                     <div class="dashboard-action" data-tab="salary">
                                         <div class="dashboard-action-icon">
                                             <i class="fas fa-money-bill-wave"></i>
@@ -2475,15 +2450,6 @@
                                         <div class="dashboard-action-title">مدیریت حساب‌ها</div>
                                         <div class="dashboard-action-description">
                                             ایجاد و مدیریت حساب‌های مالی و گروه‌های حساب
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="statistics">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-chart-bar"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">گزارشات مالی</div>
-                                        <div class="dashboard-action-description">
-                                            مشاهده تراز آزمایشی، دفترکل و صورت سود و زیان
                                         </div>
                                     </div>
                                 </div>
@@ -2611,9 +2577,6 @@
         const importDataBtn = document.getElementById('import-data');
         const resetDataBtn = document.getElementById('reset-data');
         const importFileInput = document.getElementById('import-file');
-        const vatCheckbox = document.getElementById('vat-checkbox');
-        const vatSettings = document.getElementById('vat-settings');
-        const vatPercentageInput = document.getElementById('vat-percentage');
         const openingEntryBtn = document.getElementById('opening-entry');
         const closingEntryBtn = document.getElementById('closing-entry');
         const employeeNameInput = document.getElementById('employee-name');
@@ -2680,15 +2643,6 @@
                 // نمایش فرم انتخاب شده
                 document.getElementById(formType).style.display = 'block';
             });
-        });
-        
-        // مدیریت مالیات بر ارزش افزوده
-        vatCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                vatSettings.style.display = 'grid';
-            } else {
-                vatSettings.style.display = 'none';
-            }
         });
         
         // مدیریت افزودن ردیف جدید در فرم سند دستی
@@ -2790,8 +2744,6 @@
                     const accountId = document.getElementById('account').value;
                     const amountText = document.getElementById('amount').value;
                     const description = document.getElementById('description').value;
-                    const includeVAT = vatCheckbox.checked;
-                    const vatPercentage = parseFloat(vatPercentageInput.value) || 0;
                     
                     // اعتبارسنجی
                     if (!date || !transactionType || !paymentType || !accountId || !amountText || !description) {
@@ -2823,44 +2775,11 @@
                         accountId,
                         accountName: account.name,
                         amount: amount,
-                        description,
-                        includeVAT,
-                        vatPercentage
+                        description
                     };
                     
                     // افزودن به آرایه معاملات سند جاری
                     currentDocumentTransactions.push(transaction);
-                    
-                    // اگر مالیات بر ارزش افزوده فعال است، معامله مالیات را نیز اضافه کن
-                    if (includeVAT) {
-                        const vatAmount = amount * (vatPercentage / 100);
-                        
-                        // تعیین حساب مالیات بر اساس نوع معامله
-                        let vatAccountName = '';
-                        if (transactionType === 'payment') {
-                            vatAccountName = 'سایر حساب های دریافتنی-مالیات بر ارزش افزوده';
-                        } else if (transactionType === 'receipt') {
-                            vatAccountName = 'سایر حساب های پرداختنی-مالیات بر ارزش افزوده';
-                        }
-                        
-                        const vatAccount = accounts.find(acc => acc.name === vatAccountName);
-                        
-                        if (vatAccount) {
-                            const vatTransaction = {
-                                id: Date.now() + 1,
-                                date: formatDate(date),
-                                transactionType,
-                                paymentType,
-                                accountId: vatAccount.id,
-                                accountName: vatAccount.name,
-                                amount: vatAmount,
-                                description: `مالیات بر ارزش افزوده ${vatPercentage}% - ${description}`,
-                                isVAT: true
-                            };
-                            
-                            currentDocumentTransactions.push(vatTransaction);
-                        }
-                    }
                     
                     // ذخیره در IndexedDB
                     saveCurrentDocument();
@@ -2870,10 +2789,6 @@
                     
                     // تنظیم مجدد تاریخ به امروز
                     document.getElementById('transaction-date').value = today;
-                    
-                    // غیرفعال کردن مالیات بر ارزش افزوده
-                    vatCheckbox.checked = false;
-                    vatSettings.style.display = 'none';
                     
                     // نمایش پیام موفقیت
                     showNotification('معامله با موفقیت ثبت شد!', 'success');
@@ -3146,8 +3061,6 @@
                             { id: 3, name: 'حساب های پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
                             { id: 4, name: 'اسناد دریافتنی', group: 'asset', isSystem: true, type: 'permanent' },
                             { id: 5, name: 'اسناد پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
-                            { id: 6, name: 'سایر حساب های دریافتنی-مالیات بر ارزش افزوده', group: 'asset', isSystem: true, type: 'permanent' },
-                            { id: 7, name: 'سایر حساب های پرداختنی-مالیات بر ارزش افزوده', group: 'liability', isSystem: true, type: 'permanent' },
                             { id: 8, name: 'هزینه', group: 'expense', isSystem: false, type: 'temporary' },
                             { id: 9, name: 'درآمد', group: 'income', isSystem: false, type: 'temporary' },
                             { id: 10, name: 'سرمایه', group: 'equity', isSystem: true, type: 'permanent' }
@@ -3286,7 +3199,6 @@
                 request.onsuccess = () => {
                     if (request.result) {
                         settings = request.result;
-                        vatPercentageInput.value = settings.vatPercentage || 9;
                     }
                     resolve();
                 };
@@ -3405,16 +3317,6 @@
                     description: 'در این بخش می‌توانید معاملات مالی خود را ثبت و مدیریت کنید',
                     formTitle: 'فرم ثبت معامله'
                 },
-                'salary': {
-                    title: 'حقوق و دستمزد',
-                    description: 'در این بخش می‌توانید حقوق پرسنل را مدیریت کنید',
-                    formTitle: 'مدیریت حقوق'
-                },
-                'accounts': {
-                    title: 'مدیریت حساب‌ها',
-                    description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
-                    formTitle: 'لیست حساب‌ها'
-                },
                 'documents': {
                     title: 'اسناد ذخیره شده',
                     description: 'در این بخش می‌توانید اسناد حسابداری ذخیره شده را مشاهده کنید',
@@ -3424,6 +3326,16 @@
                     title: 'آمار و گزارشات',
                     description: 'در این بخش می‌توانید تراز آزمایشی و دفترکل حساب‌ها را مشاهده کنید',
                     formTitle: 'گزارشات مالی'
+                },
+                'salary': {
+                    title: 'حقوق و دستمزد',
+                    description: 'در این بخش می‌توانید حقوق پرسنل را مدیریت کنید',
+                    formTitle: 'مدیریت حقوق'
+                },
+                'accounts': {
+                    title: 'مدیریت حساب‌ها',
+                    description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
+                    formTitle: 'لیست حساب‌ها'
                 },
                 'dashboard': {
                     title: 'داشبورد مدیریتی',
@@ -3442,10 +3354,10 @@
         function getTabIcon(tabId) {
             const icons = {
                 'transaction': 'edit',
-                'salary': 'money-bill-wave',
-                'accounts': 'wallet',
                 'documents': 'file-invoice',
                 'statistics': 'chart-bar',
+                'salary': 'money-bill-wave',
+                'accounts': 'wallet',
                 'dashboard': 'tachometer-alt'
             };
             return icons[tabId];
@@ -3709,21 +3621,6 @@
                                     <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
                                 </tr>
                             `;
-                            
-                            // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                            if (transaction.includeVAT && transaction.isVAT !== true) {
-                                const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                                
-                                html += `
-                                    <tr>
-                                        <td class="document-number-cell"></td>
-                                        <td class="date-cell"></td>
-                                        <td class="description-cell">سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
-                                        <td class="amount-cell">-</td>
-                                        <td class="amount-cell">${formatCurrency(vatAmount)}</td>
-                                    </tr>
-                                `;
-                            }
                         } else if (transaction.transactionType === 'payment') {
                             // پرداخت: حساب انتخاب شده بدهکار می‌شود
                             let creditAccount = '';
@@ -3757,21 +3654,6 @@
                                     <td class="amount-cell">${formatCurrency(transaction.amount)}</td>
                                 </tr>
                             `;
-                            
-                            // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                            if (transaction.includeVAT && transaction.isVAT !== true) {
-                                const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                                
-                                html += `
-                                    <tr>
-                                        <td class="document-number-cell"></td>
-                                        <td class="date-cell"></td>
-                                        <td class="description-cell">سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
-                                        <td class="amount-cell">${formatCurrency(vatAmount)}</td>
-                                        <td class="amount-cell">-</td>
-                                    </tr>
-                                `;
-                            }
                         }
                     }
                 });
@@ -4684,6 +4566,7 @@
                 updateAccountSelect();
                 updateAccountsList();
                 
+                // نمایش پیام موفقیت
                 showNotification('حساب با موفقیت حذف شد!', 'success');
             }
         }
@@ -4700,6 +4583,7 @@
                 // به‌روزرسانی لیست پرسنل
                 updateEmployeesList();
                 
+                // نمایش پیام موفقیت
                 showNotification('پرسنل با موفقیت حذف شد!', 'success');
             }
         }
@@ -4778,19 +4662,6 @@
                                 <td class="credit">${formatCurrency(transaction.amount)}</td>
                             </tr>
                         `;
-                        
-                        // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                        if (transaction.includeVAT && transaction.isVAT !== true) {
-                            const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            
-                            html += `
-                                <tr>
-                                    <td>سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
-                                    <td>-</td>
-                                    <td class="credit">${formatCurrency(vatAmount)}</td>
-                                </tr>
-                            `;
-                        }
                     } else if (transaction.transactionType === 'payment') {
                         // پرداخت: حساب انتخاب شده بدهکار می‌شود
                         let creditAccount = '';
@@ -4820,19 +4691,6 @@
                                 <td class="credit">${formatCurrency(transaction.amount)}</td>
                             </tr>
                         `;
-                        
-                        // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                        if (transaction.includeVAT && transaction.isVAT !== true) {
-                            const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            
-                            html += `
-                                <tr>
-                                    <td>سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
-                                    <td class="debit">${formatCurrency(vatAmount)}</td>
-                                    <td>-</td>
-                                </tr>
-                            `;
-                        }
                     }
                 }
             });
@@ -4970,19 +4828,6 @@
                                 <td class="credit">${formatCurrency(transaction.amount)}</td>
                             </tr>
                         `;
-                        
-                        // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                        if (transaction.includeVAT && transaction.isVAT !== true) {
-                            const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            
-                            html += `
-                                <tr>
-                                    <td>سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
-                                    <td>-</td>
-                                    <td class="credit">${formatCurrency(vatAmount)}</td>
-                                </tr>
-                            `;
-                        }
                     } else if (transaction.transactionType === 'payment') {
                         // پرداخت: حساب انتخاب شده بدهکار می‌شود
                         let creditAccount = '';
@@ -5012,19 +4857,6 @@
                                 <td class="credit">${formatCurrency(transaction.amount)}</td>
                             </tr>
                         `;
-                        
-                        // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
-                        if (transaction.includeVAT && transaction.isVAT !== true) {
-                            const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            
-                            html += `
-                                <tr>
-                                    <td>سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
-                                    <td class="debit">${formatCurrency(vatAmount)}</td>
-                                    <td>-</td>
-                                </tr>
-                            `;
-                        }
                     }
                 }
             });
@@ -5057,6 +4889,7 @@
                 // به‌روزرسانی دفتر روزنامه
                 updateJournal();
                 
+                // نمایش پیام موفقیت
                 showNotification('سند با موفقیت حذف شد!', 'success');
             }
         }
@@ -5252,7 +5085,6 @@
                                 updateJournal();
                                 
                                 // به‌روزرسانی تنظیمات
-                                vatPercentageInput.value = settings.vatPercentage || 9;
                                 fiscalPeriodStart.value = fiscalPeriod.startDate || '';
                                 fiscalPeriodEnd.value = fiscalPeriod.endDate || '';
                                 
@@ -5317,7 +5149,6 @@
                         updateJournal();
                         
                         // به‌روزرسانی تنظیمات
-                        vatPercentageInput.value = settings.vatPercentage || 9;
                         fiscalPeriodStart.value = '';
                         fiscalPeriodEnd.value = '';
                         
