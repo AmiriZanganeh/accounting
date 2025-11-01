@@ -1511,6 +1511,42 @@
             min-width: 150px;
         }
 
+        /* استایل‌های جدید برای ترازنامه */
+        .balance-sheet-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .balance-sheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            font-size: 0.75rem;
+        }
+
+        .balance-sheet-table th {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .balance-sheet-table td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .balance-sheet-table .total-row {
+            background-color: rgba(255, 107, 107, 0.1);
+            font-weight: bold;
+        }
+
         /* ریسپانسیو */
         @media (max-width: 768px) {
             .app-layout {
@@ -1961,6 +1997,14 @@
                         <i class="fas fa-plus-circle"></i>
                         <span class="nav-item-text">ثبت</span>
                     </div>
+                    <div class="nav-item" data-tab="salary">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span class="nav-item-text">حقوق</span>
+                    </div>
+                    <div class="nav-item" data-tab="accounts">
+                        <i class="fas fa-wallet"></i>
+                        <span class="nav-item-text">حساب</span>
+                    </div>
                     <div class="nav-item" data-tab="documents">
                         <i class="fas fa-file-invoice"></i>
                         <span class="nav-item-text">اسناد</span>
@@ -1968,14 +2012,6 @@
                     <div class="nav-item" data-tab="statistics">
                         <i class="fas fa-chart-bar"></i>
                         <span class="nav-item-text">آمار</span>
-                    </div>
-                    <div class="nav-item" data-tab="accounts">
-                        <i class="fas fa-wallet"></i>
-                        <span class="nav-item-text">حساب</span>
-                    </div>
-                    <div class="nav-item" data-tab="salary">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span class="nav-item-text">حقوق</span>
                     </div>
                 </div>
             </div>
@@ -2063,12 +2099,6 @@
                                             <label for="vat-percentage" class="form-label">درصد مالیات بر ارزش افزوده</label>
                                             <input type="number" id="vat-percentage" class="form-control" value="9" min="0" max="100" step="0.1">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="vat-account" class="form-label">حساب مالیات بر ارزش افزوده</label>
-                                            <select id="vat-account" class="form-control">
-                                                <option value="">انتخاب کنید</option>
-                                            </select>
-                                        </div>
                                     </div>
                                 </div>
                                 
@@ -2136,6 +2166,57 @@
                             </form>
                         </div>
                         
+                        <div id="salary-tab" class="tab-content hidden">
+                            <div class="salary-section">
+                                <h3>مدیریت حقوق و دستمزد</h3>
+                                <div class="salary-form">
+                                    <div class="form-group">
+                                        <label for="employee-name" class="form-label">نام پرسنل</label>
+                                        <input type="text" id="employee-name" class="form-control" placeholder="نام پرسنل">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-salary" class="form-label">حقوق پایه</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-salary" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-bonus" class="form-label">پاداش</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-bonus" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employee-deduction" class="form-label">کسورات</label>
+                                        <div class="amount-input-container">
+                                            <span class="currency-symbol">﷼</span>
+                                            <input type="number" id="employee-deduction" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="salary-actions">
+                                    <button type="button" id="add-employee" class="btn btn-success">
+                                        <i class="fas fa-user-plus"></i>
+                                        افزودن پرسنل
+                                    </button>
+                                    <button type="button" id="generate-salary-document" class="btn btn-info">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        ایجاد سند حقوق
+                                    </button>
+                                </div>
+                                
+                                <div class="salary-list" id="salary-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-users"></i>
+                                        <p>هیچ پرسنلی ثبت نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div id="accounts-tab" class="tab-content hidden">
                             <div class="account-management">
                                 <h3>افزودن حساب جدید</h3>
@@ -2155,8 +2236,11 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="vat-percentage-setting" class="form-label">درصد مالیات بر ارزش افزوده</label>
-                                        <input type="number" id="vat-percentage-setting" class="form-control" value="0" min="0" max="100" step="0.1">
+                                        <label for="account-type" class="form-label">نوع حساب</label>
+                                        <select id="account-type" class="form-control">
+                                            <option value="permanent">حساب ثابت</option>
+                                            <option value="temporary">حساب موقت</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <button type="button" id="add-account" class="btn btn-success">
@@ -2313,56 +2397,27 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div id="salary-tab" class="tab-content hidden">
-                            <div class="salary-section">
-                                <h3>مدیریت حقوق و دستمزد</h3>
-                                <div class="salary-form">
-                                    <div class="form-group">
-                                        <label for="employee-name" class="form-label">نام پرسنل</label>
-                                        <input type="text" id="employee-name" class="form-control" placeholder="نام پرسنل">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-salary" class="form-label">حقوق پایه</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-salary" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-bonus" class="form-label">پاداش</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-bonus" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="employee-deduction" class="form-label">کسورات</label>
-                                        <div class="amount-input-container">
-                                            <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-deduction" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="salary-actions">
-                                    <button type="button" id="add-employee" class="btn btn-success">
-                                        <i class="fas fa-user-plus"></i>
-                                        افزودن پرسنل
-                                    </button>
-                                    <button type="button" id="generate-salary-document" class="btn btn-info">
-                                        <i class="fas fa-file-invoice-dollar"></i>
-                                        ایجاد سند حقوق
-                                    </button>
-                                </div>
-                                
-                                <div class="salary-list" id="salary-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-users"></i>
-                                        <p>هیچ پرسنلی ثبت نشده است</p>
-                                    </div>
-                                </div>
+                            
+                            <div class="balance-sheet-section">
+                                <h3>ترازنامه</h3>
+                                <table class="balance-sheet-table">
+                                    <thead>
+                                        <tr>
+                                            <th>دارایی‌ها</th>
+                                            <th>مبلغ</th>
+                                            <th>بدهی‌ها و سرمایه</th>
+                                            <th>مبلغ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="balance-sheet-body">
+                                        <tr>
+                                            <td colspan="4" class="empty-state">
+                                                <i class="fas fa-balance-scale"></i>
+                                                <p>داده‌ای برای محاسبه ترازنامه وجود ندارد</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         
@@ -2394,25 +2449,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="dashboard-stats">
-                                    <div class="dashboard-stat">
-                                        <div class="dashboard-stat-value" id="total-assets">0</div>
-                                        <div class="dashboard-stat-label">جمع دارایی‌ها</div>
-                                    </div>
-                                    <div class="dashboard-stat">
-                                        <div class="dashboard-stat-value" id="total-liabilities">0</div>
-                                        <div class="dashboard-stat-label">جمع بدهی‌ها</div>
-                                    </div>
-                                    <div class="dashboard-stat">
-                                        <div class="dashboard-stat-value" id="net-profit">0</div>
-                                        <div class="dashboard-stat-label">سود خالص</div>
-                                    </div>
-                                    <div class="dashboard-stat">
-                                        <div class="dashboard-stat-value" id="total-documents">0</div>
-                                        <div class="dashboard-stat-label">تعداد اسناد</div>
-                                    </div>
-                                </div>
-                                
                                 <div class="dashboard-actions">
                                     <div class="dashboard-action" data-tab="transaction">
                                         <div class="dashboard-action-icon">
@@ -2423,13 +2459,13 @@
                                             ثبت معاملات مالی جدید و مدیریت اسناد حسابداری
                                         </div>
                                     </div>
-                                    <div class="dashboard-action" data-tab="statistics">
+                                    <div class="dashboard-action" data-tab="salary">
                                         <div class="dashboard-action-icon">
-                                            <i class="fas fa-chart-bar"></i>
+                                            <i class="fas fa-money-bill-wave"></i>
                                         </div>
-                                        <div class="dashboard-action-title">گزارشات مالی</div>
+                                        <div class="dashboard-action-title">حقوق و دستمزد</div>
                                         <div class="dashboard-action-description">
-                                            مشاهده تراز آزمایشی، دفترکل و صورت سود و زیان
+                                            مدیریت حقوق پرسنل و ایجاد اسناد حقوقی
                                         </div>
                                     </div>
                                     <div class="dashboard-action" data-tab="accounts">
@@ -2441,13 +2477,13 @@
                                             ایجاد و مدیریت حساب‌های مالی و گروه‌های حساب
                                         </div>
                                     </div>
-                                    <div class="dashboard-action" data-tab="salary">
+                                    <div class="dashboard-action" data-tab="statistics">
                                         <div class="dashboard-action-icon">
-                                            <i class="fas fa-money-bill-wave"></i>
+                                            <i class="fas fa-chart-bar"></i>
                                         </div>
-                                        <div class="dashboard-action-title">حقوق و دستمزد</div>
+                                        <div class="dashboard-action-title">گزارشات مالی</div>
                                         <div class="dashboard-action-description">
-                                            مدیریت حقوق پرسنل و ایجاد اسناد حقوقی
+                                            مشاهده تراز آزمایشی، دفترکل و صورت سود و زیان
                                         </div>
                                     </div>
                                 </div>
@@ -2497,7 +2533,7 @@
         
         // نام و نسخه پایگاه داده
         const DB_NAME = 'AuraAccountingDB';
-        const DB_VERSION = 2; // افزایش نسخه برای اضافه شدن جداول جدید
+        const DB_VERSION = 3; // افزایش نسخه برای اضافه شدن جداول جدید
         
         // نام جداول
         const STORE_NAMES = {
@@ -2560,6 +2596,7 @@
         const addAccountBtn = document.getElementById('add-account');
         const newAccountNameInput = document.getElementById('new-account-name');
         const accountGroupSelect = document.getElementById('account-group');
+        const accountTypeSelect = document.getElementById('account-type');
         const accountsList = document.getElementById('accounts-list');
         const documentsList = document.getElementById('documents-list');
         const trialBalanceBody = document.getElementById('trial-balance-body');
@@ -2577,8 +2614,6 @@
         const vatCheckbox = document.getElementById('vat-checkbox');
         const vatSettings = document.getElementById('vat-settings');
         const vatPercentageInput = document.getElementById('vat-percentage');
-        const vatAccountSelect = document.getElementById('vat-account');
-        const vatPercentageSetting = document.getElementById('vat-percentage-setting');
         const openingEntryBtn = document.getElementById('opening-entry');
         const closingEntryBtn = document.getElementById('closing-entry');
         const employeeNameInput = document.getElementById('employee-name');
@@ -2592,11 +2627,8 @@
         const fiscalPeriodEnd = document.getElementById('fiscal-period-end');
         const saveFiscalPeriodBtn = document.getElementById('save-fiscal-period');
         const bankConnectionBtn = document.getElementById('bank-connection');
-        const totalAssetsElement = document.getElementById('total-assets');
-        const totalLiabilitiesElement = document.getElementById('total-liabilities');
-        const netProfitElement = document.getElementById('net-profit');
-        const totalDocumentsElement = document.getElementById('total-documents');
         const profitLossBody = document.getElementById('profit-loss-body');
+        const balanceSheetBody = document.getElementById('balance-sheet-body');
         const dashboardActions = document.querySelectorAll('.dashboard-action');
         
         // مدیریت ورود به سیستم
@@ -2627,9 +2659,6 @@
             
             // به‌روزرسانی عنوان صفحه
             updatePageTitle('dashboard');
-            
-            // به‌روزرسانی آمار داشبورد
-            updateDashboardStats();
         });
         
         // مدیریت تغییر نوع فرم
@@ -2763,7 +2792,6 @@
                     const description = document.getElementById('description').value;
                     const includeVAT = vatCheckbox.checked;
                     const vatPercentage = parseFloat(vatPercentageInput.value) || 0;
-                    const vatAccountId = vatAccountSelect.value;
                     
                     // اعتبارسنجی
                     if (!date || !transactionType || !paymentType || !accountId || !amountText || !description) {
@@ -2797,17 +2825,25 @@
                         amount: amount,
                         description,
                         includeVAT,
-                        vatPercentage,
-                        vatAccountId
+                        vatPercentage
                     };
                     
                     // افزودن به آرایه معاملات سند جاری
                     currentDocumentTransactions.push(transaction);
                     
                     // اگر مالیات بر ارزش افزوده فعال است، معامله مالیات را نیز اضافه کن
-                    if (includeVAT && vatAccountId) {
+                    if (includeVAT) {
                         const vatAmount = amount * (vatPercentage / 100);
-                        const vatAccount = accounts.find(acc => acc.id == vatAccountId);
+                        
+                        // تعیین حساب مالیات بر اساس نوع معامله
+                        let vatAccountName = '';
+                        if (transactionType === 'payment') {
+                            vatAccountName = 'سایر حساب های دریافتنی-مالیات بر ارزش افزوده';
+                        } else if (transactionType === 'receipt') {
+                            vatAccountName = 'سایر حساب های پرداختنی-مالیات بر ارزش افزوده';
+                        }
+                        
+                        const vatAccount = accounts.find(acc => acc.name === vatAccountName);
                         
                         if (vatAccount) {
                             const vatTransaction = {
@@ -2815,7 +2851,7 @@
                                 date: formatDate(date),
                                 transactionType,
                                 paymentType,
-                                accountId: vatAccountId,
+                                accountId: vatAccount.id,
                                 accountName: vatAccount.name,
                                 amount: vatAmount,
                                 description: `مالیات بر ارزش افزوده ${vatPercentage}% - ${description}`,
@@ -2947,7 +2983,7 @@
                 addAccountBtn.addEventListener('click', function() {
                     const accountName = newAccountNameInput.value.trim();
                     const accountGroup = accountGroupSelect.value;
-                    const vatPercentage = parseFloat(vatPercentageSetting.value) || 0;
+                    const accountType = accountTypeSelect.value;
                     
                     if (!accountName) {
                         showNotification('لطفاً نام حساب را وارد کنید!', 'error');
@@ -2959,7 +2995,7 @@
                         id: Date.now(),
                         name: accountName,
                         group: accountGroup,
-                        vatPercentage: vatPercentage
+                        type: accountType
                     };
                     
                     // افزودن به آرایه حساب‌ها
@@ -2974,7 +3010,6 @@
                     
                     // پاک کردن فیلد ورودی
                     newAccountNameInput.value = '';
-                    vatPercentageSetting.value = '0';
                     
                     // نمایش پیام موفقیت
                     showNotification('حساب جدید با موفقیت افزوده شد!', 'success');
@@ -3106,16 +3141,16 @@
                     // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
                     if (accounts.length === 0) {
                         const defaultAccounts = [
-                            { id: 1, name: 'موجودی نقد-بانک', group: 'asset', isSystem: true },
-                            { id: 2, name: 'حساب های دریافتنی', group: 'asset', isSystem: true },
-                            { id: 3, name: 'حساب های پرداختنی', group: 'liability', isSystem: true },
-                            { id: 4, name: 'اسناد دریافتنی', group: 'asset', isSystem: true },
-                            { id: 5, name: 'اسناد پرداختنی', group: 'liability', isSystem: true },
-                            { id: 6, name: 'سایر حساب های دریافتنی-مالیات بر ارزش افزوده', group: 'asset', isSystem: true, vatPercentage: 9 },
-                            { id: 7, name: 'سایر حساب های پرداختنی-مالیات بر ارزش افزوده', group: 'liability', isSystem: true, vatPercentage: 9 },
-                            { id: 8, name: 'هزینه', group: 'expense', isSystem: false },
-                            { id: 9, name: 'درآمد', group: 'income', isSystem: false },
-                            { id: 10, name: 'سرمایه', group: 'equity', isSystem: true }
+                            { id: 1, name: 'موجودی نقد-بانک', group: 'asset', isSystem: true, type: 'permanent' },
+                            { id: 2, name: 'حساب های دریافتنی', group: 'asset', isSystem: true, type: 'permanent' },
+                            { id: 3, name: 'حساب های پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
+                            { id: 4, name: 'اسناد دریافتنی', group: 'asset', isSystem: true, type: 'permanent' },
+                            { id: 5, name: 'اسناد پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
+                            { id: 6, name: 'سایر حساب های دریافتنی-مالیات بر ارزش افزوده', group: 'asset', isSystem: true, type: 'permanent' },
+                            { id: 7, name: 'سایر حساب های پرداختنی-مالیات بر ارزش افزوده', group: 'liability', isSystem: true, type: 'permanent' },
+                            { id: 8, name: 'هزینه', group: 'expense', isSystem: false, type: 'temporary' },
+                            { id: 9, name: 'درآمد', group: 'income', isSystem: false, type: 'temporary' },
+                            { id: 10, name: 'سرمایه', group: 'equity', isSystem: true, type: 'permanent' }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -3370,6 +3405,11 @@
                     description: 'در این بخش می‌توانید معاملات مالی خود را ثبت و مدیریت کنید',
                     formTitle: 'فرم ثبت معامله'
                 },
+                'salary': {
+                    title: 'حقوق و دستمزد',
+                    description: 'در این بخش می‌توانید حقوق پرسنل را مدیریت کنید',
+                    formTitle: 'مدیریت حقوق'
+                },
                 'accounts': {
                     title: 'مدیریت حساب‌ها',
                     description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
@@ -3384,11 +3424,6 @@
                     title: 'آمار و گزارشات',
                     description: 'در این بخش می‌توانید تراز آزمایشی و دفترکل حساب‌ها را مشاهده کنید',
                     formTitle: 'گزارشات مالی'
-                },
-                'salary': {
-                    title: 'حقوق و دستمزد',
-                    description: 'در این بخش می‌توانید حقوق پرسنل را مدیریت کنید',
-                    formTitle: 'مدیریت حقوق'
                 },
                 'dashboard': {
                     title: 'داشبورد مدیریتی',
@@ -3407,10 +3442,10 @@
         function getTabIcon(tabId) {
             const icons = {
                 'transaction': 'edit',
+                'salary': 'money-bill-wave',
                 'accounts': 'wallet',
                 'documents': 'file-invoice',
                 'statistics': 'chart-bar',
-                'salary': 'money-bill-wave',
                 'dashboard': 'tachometer-alt'
             };
             return icons[tabId];
@@ -3436,6 +3471,15 @@
                 'expense': 'هزینه'
             };
             return groups[group] || group;
+        }
+        
+        // تابع دریافت متن نوع حساب
+        function getAccountTypeText(type) {
+            const types = {
+                'permanent': 'ثابت',
+                'temporary': 'موقت'
+            };
+            return types[type] || type;
         }
         
         // تابع به‌روزرسانی dropdown حساب‌ها
@@ -3468,16 +3512,6 @@
             manualAccountSelects.forEach(select => {
                 select.innerHTML = manualHtml;
             });
-            
-            // به‌روزرسالی dropdown حساب مالیات بر ارزش افزوده
-            let vatHtml = '<option value="">انتخاب کنید</option>';
-            accounts.forEach(account => {
-                if (account.group === 'asset' || account.group === 'liability') {
-                    vatHtml += `<option value="${account.id}">${account.name}</option>`;
-                }
-            });
-            
-            vatAccountSelect.innerHTML = vatHtml;
         }
         
         // تابع به‌روزرسانی لیست حساب‌ها
@@ -3501,8 +3535,7 @@
                     <div class="account-item">
                         <div>
                             <div>${account.name}</div>
-                            <small class="text-muted">${getAccountGroupText(account.group)}</small>
-                            ${account.vatPercentage > 0 ? `<div><small>مالیات: ${account.vatPercentage}%</small></div>` : ''}
+                            <small class="text-muted">${getAccountGroupText(account.group)} - ${getAccountTypeText(account.type)}</small>
                         </div>
                         <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">
                             <i class="fas fa-trash"></i>
@@ -3680,19 +3713,16 @@
                             // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                             if (transaction.includeVAT && transaction.isVAT !== true) {
                                 const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                                const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                                 
-                                if (vatAccount) {
-                                    html += `
-                                        <tr>
-                                            <td class="document-number-cell"></td>
-                                            <td class="date-cell"></td>
-                                            <td class="description-cell">${vatAccount.name}</td>
-                                            <td class="amount-cell">${formatCurrency(vatAmount)}</td>
-                                            <td class="amount-cell">-</td>
-                                        </tr>
-                                    `;
-                                }
+                                html += `
+                                    <tr>
+                                        <td class="document-number-cell"></td>
+                                        <td class="date-cell"></td>
+                                        <td class="description-cell">سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
+                                        <td class="amount-cell">-</td>
+                                        <td class="amount-cell">${formatCurrency(vatAmount)}</td>
+                                    </tr>
+                                `;
                             }
                         } else if (transaction.transactionType === 'payment') {
                             // پرداخت: حساب انتخاب شده بدهکار می‌شود
@@ -3731,19 +3761,16 @@
                             // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                             if (transaction.includeVAT && transaction.isVAT !== true) {
                                 const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                                const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                                 
-                                if (vatAccount) {
-                                    html += `
-                                        <tr>
-                                            <td class="document-number-cell"></td>
-                                            <td class="date-cell"></td>
-                                            <td class="description-cell">${vatAccount.name}</td>
-                                            <td class="amount-cell">-</td>
-                                            <td class="amount-cell">${formatCurrency(vatAmount)}</td>
-                                        </tr>
-                                    `;
-                                }
+                                html += `
+                                    <tr>
+                                        <td class="document-number-cell"></td>
+                                        <td class="date-cell"></td>
+                                        <td class="description-cell">سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
+                                        <td class="amount-cell">${formatCurrency(vatAmount)}</td>
+                                        <td class="amount-cell">-</td>
+                                    </tr>
+                                `;
                             }
                         }
                     }
@@ -3769,6 +3796,7 @@
             updateProfitLoss();
             updateTrialBalance();
             updateLedger(ledgerAccountSelect.value);
+            updateBalanceSheet();
         }
         
         // تابع به‌روزرسانی صورت سود و زیان
@@ -4330,33 +4358,33 @@
             ledgerBody.innerHTML = html;
         }
         
-        // تابع به‌روزرسانی آمار داشبورد
-        function updateDashboardStats() {
+        // تابع به‌روزرسانی ترازنامه
+        function updateBalanceSheet() {
             // محاسبه جمع دارایی‌ها و بدهی‌ها
             let totalAssets = 0;
             let totalLiabilities = 0;
-            let totalIncome = 0;
-            let totalExpense = 0;
+            let totalEquity = 0;
             
-            // بررسی اسناد ذخیره شده
+            // محاسبه مانده هر حساب
+            const accountBalances = {};
+            
+            // مقداردهی اولیه
+            accounts.forEach(account => {
+                accountBalances[account.id] = {
+                    name: account.name,
+                    group: account.group,
+                    debit: 0,
+                    credit: 0
+                };
+            });
+            
+            // محاسبه از اسناد ذخیره شده
             savedDocuments.forEach(document => {
                 document.transactions.forEach(transaction => {
                     // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
                     if (transaction.isManual) {
-                        const account = accounts.find(acc => acc.id == transaction.accountId);
-                        if (account) {
-                            if (account.group === 'asset') {
-                                totalAssets += transaction.debit || 0;
-                                totalAssets -= transaction.credit || 0;
-                            } else if (account.group === 'liability') {
-                                totalLiabilities += transaction.credit || 0;
-                                totalLiabilities -= transaction.debit || 0;
-                            } else if (account.group === 'income') {
-                                totalIncome += transaction.credit || 0;
-                            } else if (account.group === 'expense') {
-                                totalExpense += transaction.debit || 0;
-                            }
-                        }
+                        accountBalances[transaction.accountId].debit += transaction.debit || 0;
+                        accountBalances[transaction.accountId].credit += transaction.credit || 0;
                     } else {
                         // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                         
@@ -4380,24 +4408,11 @@
                             // پیدا کردن حساب بدهکار
                             const debitAcc = accounts.find(acc => acc.name === debitAccount);
                             if (debitAcc) {
-                                if (debitAcc.group === 'asset') {
-                                    totalAssets += transaction.amount;
-                                } else if (debitAcc.group === 'liability') {
-                                    totalLiabilities -= transaction.amount;
-                                }
+                                accountBalances[debitAcc.id].debit += transaction.amount;
                             }
                             
                             // حساب انتخاب شده بستانکار می‌شود
-                            const account = accounts.find(acc => acc.id == transaction.accountId);
-                            if (account) {
-                                if (account.group === 'income') {
-                                    totalIncome += transaction.amount;
-                                } else if (account.group === 'liability') {
-                                    totalLiabilities += transaction.amount;
-                                } else if (account.group === 'equity') {
-                                    // برای حقوق صاحبان سهام
-                                }
-                            }
+                            accountBalances[transaction.accountId].credit += transaction.amount;
                         } else if (transaction.transactionType === 'payment') {
                             // پرداخت: حساب انتخاب شده بدهکار می‌شود
                             let creditAccount = '';
@@ -4416,23 +4431,12 @@
                             }
                             
                             // حساب انتخاب شده بدهکار می‌شود
-                            const account = accounts.find(acc => acc.id == transaction.accountId);
-                            if (account) {
-                                if (account.group === 'expense') {
-                                    totalExpense += transaction.amount;
-                                } else if (account.group === 'asset') {
-                                    totalAssets -= transaction.amount;
-                                }
-                            }
+                            accountBalances[transaction.accountId].debit += transaction.amount;
                             
                             // پیدا کردن حساب بستانکار
                             const creditAcc = accounts.find(acc => acc.name === creditAccount);
                             if (creditAcc) {
-                                if (creditAcc.group === 'liability') {
-                                    totalLiabilities += transaction.amount;
-                                } else if (creditAcc.group === 'asset') {
-                                    totalAssets -= transaction.amount;
-                                }
+                                accountBalances[creditAcc.id].credit += transaction.amount;
                             }
                         }
                     }
@@ -4443,20 +4447,8 @@
             currentDocumentTransactions.forEach(transaction => {
                 // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
                 if (transaction.isManual) {
-                    const account = accounts.find(acc => acc.id == transaction.accountId);
-                    if (account) {
-                        if (account.group === 'asset') {
-                            totalAssets += transaction.debit || 0;
-                            totalAssets -= transaction.credit || 0;
-                        } else if (account.group === 'liability') {
-                            totalLiabilities += transaction.credit || 0;
-                            totalLiabilities -= transaction.debit || 0;
-                        } else if (account.group === 'income') {
-                            totalIncome += transaction.credit || 0;
-                        } else if (account.group === 'expense') {
-                            totalExpense += transaction.debit || 0;
-                        }
-                    }
+                    accountBalances[transaction.accountId].debit += transaction.debit || 0;
+                    accountBalances[transaction.accountId].credit += transaction.credit || 0;
                 } else {
                     // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
                     
@@ -4480,24 +4472,11 @@
                         // پیدا کردن حساب بدهکار
                         const debitAcc = accounts.find(acc => acc.name === debitAccount);
                         if (debitAcc) {
-                            if (debitAcc.group === 'asset') {
-                                totalAssets += transaction.amount;
-                            } else if (debitAcc.group === 'liability') {
-                                totalLiabilities -= transaction.amount;
-                            }
+                            accountBalances[debitAcc.id].debit += transaction.amount;
                         }
                         
                         // حساب انتخاب شده بستانکار می‌شود
-                        const account = accounts.find(acc => acc.id == transaction.accountId);
-                        if (account) {
-                            if (account.group === 'income') {
-                                totalIncome += transaction.amount;
-                            } else if (account.group === 'liability') {
-                                totalLiabilities += transaction.amount;
-                            } else if (account.group === 'equity') {
-                                // برای حقوق صاحبان سهام
-                            }
-                        }
+                        accountBalances[transaction.accountId].credit += transaction.amount;
                     } else if (transaction.transactionType === 'payment') {
                         // پرداخت: حساب انتخاب شده بدهکار می‌شود
                         let creditAccount = '';
@@ -4516,35 +4495,160 @@
                         }
                         
                         // حساب انتخاب شده بدهکار می‌شود
-                        const account = accounts.find(acc => acc.id == transaction.accountId);
-                        if (account) {
-                            if (account.group === 'expense') {
-                                totalExpense += transaction.amount;
-                            } else if (account.group === 'asset') {
-                                totalAssets -= transaction.amount;
-                            }
-                        }
+                        accountBalances[transaction.accountId].debit += transaction.amount;
                         
                         // پیدا کردن حساب بستانکار
                         const creditAcc = accounts.find(acc => acc.name === creditAccount);
                         if (creditAcc) {
-                            if (creditAcc.group === 'liability') {
-                                totalLiabilities += transaction.amount;
-                            } else if (creditAcc.group === 'asset') {
-                                totalAssets -= transaction.amount;
-                            }
+                            accountBalances[creditAcc.id].credit += transaction.amount;
                         }
                     }
                 }
             });
             
-            const netProfit = totalIncome - totalExpense;
+            // محاسبه مانده هر حساب
+            const accountNetBalances = {};
+            Object.keys(accountBalances).forEach(accountId => {
+                const account = accountBalances[accountId];
+                const netBalance = account.debit - account.credit;
+                accountNetBalances[accountId] = netBalance;
+            });
             
-            // به‌روزرسانی عناصر داشبورد
-            totalAssetsElement.textContent = formatCurrency(totalAssets);
-            totalLiabilitiesElement.textContent = formatCurrency(totalLiabilities);
-            netProfitElement.textContent = formatCurrency(netProfit);
-            totalDocumentsElement.textContent = toPersianNumbers(savedDocuments.length);
+            // محاسبه جمع دارایی‌ها، بدهی‌ها و سرمایه
+            accounts.forEach(account => {
+                const netBalance = accountNetBalances[account.id] || 0;
+                
+                if (account.group === 'asset') {
+                    totalAssets += netBalance > 0 ? netBalance : 0;
+                } else if (account.group === 'liability') {
+                    totalLiabilities += netBalance < 0 ? Math.abs(netBalance) : 0;
+                } else if (account.group === 'equity') {
+                    totalEquity += netBalance < 0 ? Math.abs(netBalance) : 0;
+                }
+            });
+            
+            // محاسبه سود و زیان خالص
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            accounts.forEach(account => {
+                const netBalance = accountNetBalances[account.id] || 0;
+                
+                if (account.group === 'income') {
+                    totalIncome += netBalance < 0 ? Math.abs(netBalance) : 0;
+                } else if (account.group === 'expense') {
+                    totalExpense += netBalance > 0 ? netBalance : 0;
+                }
+            });
+            
+            const netProfit = totalIncome - totalExpense;
+            totalEquity += netProfit; // اضافه کردن سود خالص به سرمایه
+            
+            let html = '';
+            
+            if (totalAssets === 0 && totalLiabilities === 0 && totalEquity === 0) {
+                html = `
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <i class="fas fa-balance-scale"></i>
+                            <p>داده‌ای برای محاسبه ترازنامه وجود ندارد</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                // نمایش دارایی‌ها
+                html += `
+                    <tr>
+                        <td><strong>دارایی‌ها</strong></td>
+                        <td></td>
+                        <td><strong>بدهی‌ها و سرمایه</strong></td>
+                        <td></td>
+                    </tr>
+                `;
+                
+                // نمایش حساب‌های دارایی
+                accounts.forEach(account => {
+                    if (account.group === 'asset' && account.type === 'permanent') {
+                        const netBalance = accountNetBalances[account.id] || 0;
+                        if (netBalance > 0) {
+                            html += `
+                                <tr>
+                                    <td>${account.name}</td>
+                                    <td>${formatCurrency(netBalance)}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+                
+                // نمایش جمع دارایی‌ها
+                html += `
+                    <tr class="total-row">
+                        <td><strong>جمع دارایی‌ها</strong></td>
+                        <td><strong>${formatCurrency(totalAssets)}</strong></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                `;
+                
+                // نمایش حساب‌های بدهی
+                accounts.forEach(account => {
+                    if (account.group === 'liability' && account.type === 'permanent') {
+                        const netBalance = accountNetBalances[account.id] || 0;
+                        if (netBalance < 0) {
+                            html += `
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>${account.name}</td>
+                                    <td>${formatCurrency(Math.abs(netBalance))}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+                
+                // نمایش حساب‌های سرمایه
+                accounts.forEach(account => {
+                    if (account.group === 'equity' && account.type === 'permanent') {
+                        const netBalance = accountNetBalances[account.id] || 0;
+                        if (netBalance < 0) {
+                            html += `
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>${account.name}</td>
+                                    <td>${formatCurrency(Math.abs(netBalance))}</td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+                
+                // نمایش سود/زیان خالص
+                html += `
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>سود (زیان) خالص</td>
+                        <td>${formatCurrency(Math.abs(netProfit))}</td>
+                    </tr>
+                `;
+                
+                // نمایش جمع بدهی‌ها و سرمایه
+                html += `
+                    <tr class="total-row">
+                        <td></td>
+                        <td></td>
+                        <td><strong>جمع بدهی‌ها و سرمایه</strong></td>
+                        <td><strong>${formatCurrency(totalLiabilities + totalEquity)}</strong></td>
+                    </tr>
+                `;
+            }
+            
+            balanceSheetBody.innerHTML = html;
         }
         
         // تابع حذف حساب
@@ -4678,17 +4782,14 @@
                         // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                         if (transaction.includeVAT && transaction.isVAT !== true) {
                             const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                             
-                            if (vatAccount) {
-                                html += `
-                                    <tr>
-                                        <td>${vatAccount.name}</td>
-                                        <td class="debit">${formatCurrency(vatAmount)}</td>
-                                        <td>-</td>
-                                    </tr>
-                                `;
-                            }
+                            html += `
+                                <tr>
+                                    <td>سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
+                                    <td>-</td>
+                                    <td class="credit">${formatCurrency(vatAmount)}</td>
+                                </tr>
+                            `;
                         }
                     } else if (transaction.transactionType === 'payment') {
                         // پرداخت: حساب انتخاب شده بدهکار می‌شود
@@ -4723,17 +4824,14 @@
                         // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                         if (transaction.includeVAT && transaction.isVAT !== true) {
                             const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                             
-                            if (vatAccount) {
-                                html += `
-                                    <tr>
-                                        <td>${vatAccount.name}</td>
-                                        <td>-</td>
-                                        <td class="credit">${formatCurrency(vatAmount)}</td>
-                                    </tr>
-                                `;
-                            }
+                            html += `
+                                <tr>
+                                    <td>سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
+                                    <td class="debit">${formatCurrency(vatAmount)}</td>
+                                    <td>-</td>
+                                </tr>
+                            `;
                         }
                     }
                 }
@@ -4787,9 +4885,6 @@
             
             // به‌روزرسانی دفتر روزنامه
             updateJournal();
-            
-            // به‌روزرسانی آمار داشبورد
-            updateDashboardStats();
             
             // پاک کردن پیش‌نمایش
             documentPreview.innerHTML = `
@@ -4879,17 +4974,14 @@
                         // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                         if (transaction.includeVAT && transaction.isVAT !== true) {
                             const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                             
-                            if (vatAccount) {
-                                html += `
-                                    <tr>
-                                        <td>${vatAccount.name}</td>
-                                        <td class="debit">${formatCurrency(vatAmount)}</td>
-                                        <td>-</td>
-                                    </tr>
-                                `;
-                            }
+                            html += `
+                                <tr>
+                                    <td>سایر حساب های پرداختنی-مالیات بر ارزش افزوده</td>
+                                    <td>-</td>
+                                    <td class="credit">${formatCurrency(vatAmount)}</td>
+                                </tr>
+                            `;
                         }
                     } else if (transaction.transactionType === 'payment') {
                         // پرداخت: حساب انتخاب شده بدهکار می‌شود
@@ -4924,17 +5016,14 @@
                         // اگر مالیات بر ارزش افزوده فعال است، ردیف مالیات را نیز اضافه کن
                         if (transaction.includeVAT && transaction.isVAT !== true) {
                             const vatAmount = transaction.amount * (transaction.vatPercentage / 100);
-                            const vatAccount = accounts.find(acc => acc.id == transaction.vatAccountId);
                             
-                            if (vatAccount) {
-                                html += `
-                                    <tr>
-                                        <td>${vatAccount.name}</td>
-                                        <td>-</td>
-                                        <td class="credit">${formatCurrency(vatAmount)}</td>
-                                    </tr>
-                                `;
-                            }
+                            html += `
+                                <tr>
+                                    <td>سایر حساب های دریافتنی-مالیات بر ارزش افزوده</td>
+                                    <td class="debit">${formatCurrency(vatAmount)}</td>
+                                    <td>-</td>
+                                </tr>
+                            `;
                         }
                     }
                 }
@@ -4967,9 +5056,6 @@
                 
                 // به‌روزرسانی دفتر روزنامه
                 updateJournal();
-                
-                // به‌روزرسانی آمار داشبورد
-                updateDashboardStats();
                 
                 showNotification('سند با موفقیت حذف شد!', 'success');
             }
@@ -5163,7 +5249,6 @@
                                 updateAccountsList();
                                 updateDocumentsList();
                                 updateEmployeesList();
-                                updateDashboardStats();
                                 updateJournal();
                                 
                                 // به‌روزرسانی تنظیمات
@@ -5229,7 +5314,6 @@
                         updateAccountsList();
                         updateDocumentsList();
                         updateEmployeesList();
-                        updateDashboardStats();
                         updateJournal();
                         
                         // به‌روزرسانی تنظیمات
@@ -5256,7 +5340,7 @@
             const today = new Date().toISOString().split('T')[0];
             const date = formatDate(today);
             
-            // ایجاد معاملات افتتاحیه بر اساس مانده حساب‌ها
+            // ایجاد معاملات افتتاحیه بر اساس مانده حساب‌های ثابت
             const openingTransactions = [];
             
             // محاسبه مانده هر حساب
@@ -5267,6 +5351,7 @@
                 accountBalances[account.id] = {
                     name: account.name,
                     group: account.group,
+                    type: account.type,
                     debit: 0,
                     credit: 0
                 };
@@ -5337,24 +5422,26 @@
                 });
             });
             
-            // ایجاد معاملات برای حساب‌هایی که مانده دارند
+            // ایجاد معاملات برای حساب‌های ثابت که مانده دارند
             Object.values(accountBalances).forEach(account => {
-                const balance = account.debit - account.credit;
-                
-                if (balance !== 0) {
-                    const transaction = {
-                        id: Date.now(),
-                        date: date,
-                        accountId: account.id,
-                        accountName: account.name,
-                        debit: balance > 0 ? balance : 0,
-                        credit: balance < 0 ? Math.abs(balance) : 0,
-                        description: 'مانده افتتاحیه',
-                        isManual: true,
-                        isOpening: true
-                    };
+                if (account.type === 'permanent') {
+                    const balance = account.debit - account.credit;
                     
-                    openingTransactions.push(transaction);
+                    if (balance !== 0) {
+                        const transaction = {
+                            id: Date.now(),
+                            date: date,
+                            accountId: account.id,
+                            accountName: account.name,
+                            debit: balance > 0 ? balance : 0,
+                            credit: balance < 0 ? Math.abs(balance) : 0,
+                            description: 'مانده افتتاحیه',
+                            isManual: true,
+                            isOpening: true
+                        };
+                        
+                        openingTransactions.push(transaction);
+                    }
                 }
             });
             
@@ -5392,6 +5479,7 @@
                 accountBalances[account.id] = {
                     name: account.name,
                     group: account.group,
+                    type: account.type,
                     debit: 0,
                     credit: 0
                 };
@@ -5462,9 +5550,23 @@
                 });
             });
             
+            // محاسبه سود و زیان خالص
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            Object.values(accountBalances).forEach(account => {
+                if (account.group === 'income') {
+                    totalIncome += account.credit - account.debit;
+                } else if (account.group === 'expense') {
+                    totalExpense += account.debit - account.credit;
+                }
+            });
+            
+            const netProfit = totalIncome - totalExpense;
+            
             // ایجاد معاملات برای حساب‌های موقت (درآمد و هزینه)
             Object.values(accountBalances).forEach(account => {
-                if (account.group === 'income' || account.group === 'expense') {
+                if (account.type === 'temporary') {
                     const balance = account.debit - account.credit;
                     
                     if (balance !== 0) {
@@ -5481,28 +5583,30 @@
                         };
                         
                         closingTransactions.push(transaction);
-                        
-                        // ایجاد معامله مقابل برای حساب سود و زیان
-                        const profitLossAccount = accounts.find(acc => acc.name === 'سود و زیان') || accounts.find(acc => acc.group === 'equity');
-                        
-                        if (profitLossAccount) {
-                            const oppositeTransaction = {
-                                id: Date.now() + 1,
-                                date: date,
-                                accountId: profitLossAccount.id,
-                                accountName: profitLossAccount.name,
-                                debit: balance > 0 ? balance : 0,
-                                credit: balance < 0 ? Math.abs(balance) : 0,
-                                description: 'بستن حساب',
-                                isManual: true,
-                                isClosing: true
-                            };
-                            
-                            closingTransactions.push(oppositeTransaction);
-                        }
                     }
                 }
             });
+            
+            // ایجاد معامله برای سود و زیان
+            if (netProfit !== 0) {
+                const profitLossAccount = accounts.find(acc => acc.group === 'equity');
+                
+                if (profitLossAccount) {
+                    const profitLossTransaction = {
+                        id: Date.now() + 1000,
+                        date: date,
+                        accountId: profitLossAccount.id,
+                        accountName: profitLossAccount.name,
+                        debit: netProfit < 0 ? Math.abs(netProfit) : 0,
+                        credit: netProfit > 0 ? netProfit : 0,
+                        description: 'سود (زیان) خالص',
+                        isManual: true,
+                        isClosing: true
+                    };
+                    
+                    closingTransactions.push(profitLossTransaction);
+                }
+            }
             
             if (closingTransactions.length === 0) {
                 showNotification('هیچ حساب موقتی برای ایجاد سند اختتامیه وجود ندارد!', 'error');
