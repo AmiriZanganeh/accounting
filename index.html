@@ -2087,6 +2087,64 @@
                 margin-bottom: 15px;
             }
         }
+
+        /* استایل‌های جدید برای بخش فاکتور */
+        .invoice-items-container {
+            margin-top: 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            background: var(--light);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .invoice-item-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .invoice-item-display:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .invoice-item-info {
+            flex: 1;
+        }
+
+        .invoice-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .invoice-item-details {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .invoice-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .invoice-phone-header {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -2668,13 +2726,17 @@
                                             <input type="text" class="form-control invoice-description" placeholder="شرح">
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="form-group">
                                     <button type="button" id="add-invoice-item" class="add-transaction-btn">
                                         <i class="fas fa-plus"></i>
                                         افزودن ردیف فاکتور
                                     </button>
+                                </div>
+                                
+                                <div class="invoice-items-container" id="invoice-items-container">
+                                    <div class="empty-state">
+                                        <i class="fas fa-receipt"></i>
+                                        <p>هیچ موردی به فاکتور اضافه نشده است</p>
+                                    </div>
                                 </div>
                                 
                                 <div class="invoice-preview" id="invoice-preview">
@@ -2990,6 +3052,12 @@
         const printInvoiceBtn = document.getElementById('print-invoice');
         const resetInvoiceBtn = document.getElementById('reset-invoice');
         const invoicesList = document.getElementById('invoices-list');
+        
+        // عناصر جدید برای بخش فاکتور
+        const invoiceItemsContainer = document.getElementById('invoice-items-container');
+        
+        // آرایه برای ذخیره اقلام فاکتور
+        let invoiceItems = [];
         
         // مدیریت ورود به سیستم
         loginForm.addEventListener('submit', function(e) {
@@ -6605,23 +6673,79 @@
                 description: description
             };
             
-            // نمایش پیش‌نمایش فاکتور
-            generateInvoicePreview(invoiceItem);
+            // افزودن به آرایه اقلام فاکتور
+            invoiceItems.push(invoiceItem);
+            
+            // به‌روزرسانی نمایش اقلام فاکتور
+            updateInvoiceItemsDisplay();
             
             // پاک کردن فیلدهای ورودی
             invoiceProductSelect.value = '';
             invoiceQuantityInput.value = '';
             invoiceDescriptionInput.value = '';
+            
+            // تولید پیش‌نمایش فاکتور
+            generateInvoicePreview();
+        }
+        
+        // تابع به‌روزرسانی نمایش اقلام فاکتور
+        function updateInvoiceItemsDisplay() {
+            if (invoiceItems.length === 0) {
+                invoiceItemsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>هیچ موردی به فاکتور اضافه نشده است</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            invoiceItems.forEach((item, index) => {
+                html += `
+                    <div class="invoice-item-display">
+                        <div class="invoice-item-info">
+                            <div class="invoice-item-name">${item.productName}</div>
+                            <div class="invoice-item-details">
+                                <span>مقدار: ${toPersianNumbers(item.quantity)}</span>
+                                <span>بهای واحد: ${formatCurrency(item.unitPrice)}</span>
+                                <span>بهای کل: ${formatCurrency(item.totalPrice)}</span>
+                                <span>شرح: ${item.description}</span>
+                            </div>
+                        </div>
+                        <div class="invoice-item-actions">
+                            <button class="btn btn-danger btn-sm" onclick="removeInvoiceItem(${index})">
+                                <i class="fas fa-trash"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            invoiceItemsContainer.innerHTML = html;
+        }
+        
+        // تابع حذف ردیف فاکتور
+        function removeInvoiceItem(index) {
+            invoiceItems.splice(index, 1);
+            updateInvoiceItemsDisplay();
+            generateInvoicePreview();
         }
         
         // تابع تولید پیش‌نمایش فاکتور
-        function generateInvoicePreview(invoiceItem) {
+        function generateInvoicePreview() {
             const date = invoiceDateInput.value;
             const partyId = invoicePartySelect.value;
             const number = invoiceNumberInput.value.trim();
             
-            if (!date || !partyId || !number) {
-                showNotification('لطفاً تاریخ، طرف حساب و شماره فاکتور را وارد کنید!', 'error');
+            if (!date || !partyId || !number || invoiceItems.length === 0) {
+                invoicePreview.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>پس از پر کردن فرم، پیش‌نمایش فاکتور در اینجا نمایش داده می‌شود</p>
+                    </div>
+                `;
                 return;
             }
             
@@ -6631,13 +6755,30 @@
                 return;
             }
             
+            let itemsHtml = '';
+            let totalAmount = 0;
+            
+            invoiceItems.forEach((item, index) => {
+                totalAmount += item.totalPrice;
+                itemsHtml += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.productName}</td>
+                        <td>${toPersianNumbers(item.quantity)}</td>
+                        <td>${formatCurrency(item.unitPrice)}</td>
+                        <td>${formatCurrency(item.totalPrice)}</td>
+                        <td>${item.description}</td>
+                    </tr>
+                `;
+            });
+            
             let html = `
                 <div class="invoice-preview-content">
                     <div class="invoice-header">
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                             <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
-                            <div>شماره تماس: ${party.phone}</div>
+                            <div class="invoice-phone-header">شماره تماس: ${party.phone}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
@@ -6663,19 +6804,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>${invoiceItem.productName}</td>
-                                <td>${toPersianNumbers(invoiceItem.quantity)}</td>
-                                <td>${formatCurrency(invoiceItem.unitPrice)}</td>
-                                <td>${formatCurrency(invoiceItem.totalPrice)}</td>
-                                <td>${invoiceItem.description}</td>
-                            </tr>
+                            ${itemsHtml}
                         </tbody>
                     </table>
                     
                     <div class="invoice-total">
-                        مبلغ کل فاکتور: ${formatCurrency(invoiceItem.totalPrice)}
+                        مبلغ کل فاکتور: ${formatCurrency(totalAmount)}
                     </div>
                     
                     <div class="invoice-signature">
@@ -6705,23 +6839,16 @@
                 return;
             }
             
+            if (invoiceItems.length === 0) {
+                showNotification('لطفاً حداقل یک مورد به فاکتور اضافه کنید!', 'error');
+                return;
+            }
+            
             const party = parties.find(p => p.id == partyId);
             if (!party) {
                 showNotification('طرف حساب انتخاب شده معتبر نیست!', 'error');
                 return;
             }
-            
-            // در اینجا باید اطلاعات ردیف فاکتور از پیش‌نمایش استخراج شود
-            // برای سادگی، از یک ردیف نمونه استفاده می‌کنیم
-            const invoiceItems = [{
-                id: Date.now(),
-                productId: 1,
-                productName: 'کالای نمونه',
-                quantity: 1,
-                unitPrice: 100000,
-                totalPrice: 100000,
-                description: 'شرح نمونه'
-            }];
             
             const totalAmount = invoiceItems.reduce((sum, item) => sum + item.totalPrice, 0);
             
@@ -6734,7 +6861,7 @@
                 partyPhone: party.phone,
                 partyAddress: party.address,
                 number: number,
-                items: invoiceItems,
+                items: [...invoiceItems],
                 totalAmount: totalAmount
             };
             
@@ -6848,6 +6975,8 @@
             invoiceProductSelect.value = '';
             invoiceQuantityInput.value = '';
             invoiceDescriptionInput.value = '';
+            invoiceItems = [];
+            updateInvoiceItemsDisplay();
             invoicePreview.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-receipt"></i>
@@ -6885,7 +7014,7 @@
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                             <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
-                            <div>شماره تماس: ${invoice.partyPhone}</div>
+                            <div class="invoice-phone-header">شماره تماس: ${invoice.partyPhone}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
@@ -7028,7 +7157,7 @@
                             <div class="invoice-company-info">
                                 <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                                 <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
-                                <div>شماره تماس: ${invoice.partyPhone}</div>
+                                <div class="invoice-phone-header">شماره تماس: ${invoice.partyPhone}</div>
                             </div>
                             <div class="invoice-title">فاکتور فروش</div>
                             <div class="invoice-details">
