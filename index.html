@@ -2135,7 +2135,7 @@
                         <div class="app-logo-text">مهراز سیستم</div>
                     </div>
                     <button class="dashboard-btn" id="dashboard-btn">
-                        <i class="fas fa-tachometer-alt"></i>
+                        <i class="fas fa-user"></i>
                     </button>
                 </div>
                 
@@ -2744,12 +2744,6 @@
                                                 ذخیره دوره مالی
                                             </button>
                                         </div>
-                                        <div class="form-group">
-                                            <button type="button" id="bank-connection" class="btn btn-info">
-                                                <i class="fas fa-university"></i>
-                                                اتصال به بانک
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
                                 
@@ -2966,7 +2960,6 @@
         const fiscalPeriodStart = document.getElementById('fiscal-period-start');
         const fiscalPeriodEnd = document.getElementById('fiscal-period-end');
         const saveFiscalPeriodBtn = document.getElementById('save-fiscal-period');
-        const bankConnectionBtn = document.getElementById('bank-connection');
         const profitLossBody = document.getElementById('profit-loss-body');
         const balanceSheetBody = document.getElementById('balance-sheet-body');
         const dashboardActions = document.querySelectorAll('.dashboard-action');
@@ -3070,7 +3063,6 @@
         
         // مدیریت دوره مالی
         saveFiscalPeriodBtn.addEventListener('click', saveFiscalPeriod);
-        bankConnectionBtn.addEventListener('click', connectToBank);
         
         // مدیریت کلیک روی اکشن‌های داشبورد
         dashboardActions.forEach(action => {
@@ -3999,7 +3991,7 @@
                 'salary': 'money-bill-wave',
                 'accounts': 'wallet',
                 'inventory': 'warehouse',
-                'dashboard': 'tachometer-alt'
+                'dashboard': 'user'
             };
             return icons[tabId];
         }
@@ -6479,11 +6471,6 @@
             showNotification('دوره مالی با موفقیت ذخیره شد!', 'success');
         }
         
-        // تابع اتصال به بانک
-        function connectToBank() {
-            showNotification('امکان اتصال به بانک در نسخه فعلی وجود ندارد. این قابلیت در نسخه‌های آینده اضافه خواهد شد.', 'info');
-        }
-        
         // تابع افزودن طرف حساب
         function addParty() {
             const name = partyNameInput.value.trim();
@@ -6650,6 +6637,7 @@
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                             <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
+                            <div>شماره تماس: ${party.phone}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
@@ -6743,6 +6731,7 @@
                 date: date,
                 partyId: partyId,
                 partyName: party.name,
+                partyPhone: party.phone,
                 partyAddress: party.address,
                 number: number,
                 items: invoiceItems,
@@ -6896,6 +6885,7 @@
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                             <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
+                            <div>شماره تماس: ${invoice.partyPhone}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
@@ -7038,6 +7028,7 @@
                             <div class="invoice-company-info">
                                 <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
                                 <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
+                                <div>شماره تماس: ${invoice.partyPhone}</div>
                             </div>
                             <div class="invoice-title">فاکتور فروش</div>
                             <div class="invoice-details">
