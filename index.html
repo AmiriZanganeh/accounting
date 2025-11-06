@@ -1568,7 +1568,7 @@
 
         .invoice-item-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr;
             gap: 12px;
             margin-bottom: 15px;
             align-items: end;
@@ -1648,7 +1648,8 @@
         }
 
         .invoice-signature {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
             margin-top: 40px;
         }
 
@@ -2202,7 +2203,7 @@
                             <form id="transaction-form" class="active-form">
                                 <div class="form-group">
                                     <label for="transaction-date" class="form-label">تاریخ معامله</label>
-                                    <input type="date" id="transaction-date" class="form-control" required>
+                                    <input type="text" id="transaction-date" class="form-control" placeholder="مثال: ۱۴۰۴/۸/۱۵" required>
                                 </div>
                                 
                                 <div class="form-group">
@@ -2235,7 +2236,7 @@
                                     <label for="amount" class="form-label">مبلغ</label>
                                     <div class="amount-input-container">
                                         <span class="currency-symbol">﷼</span>
-                                        <input type="number" id="amount" class="form-control amount-input" placeholder="0" required inputmode="numeric" pattern="[0-9]*">
+                                        <input type="text" id="amount" class="form-control amount-input" placeholder="0" required>
                                     </div>
                                 </div>
                                 
@@ -2253,7 +2254,7 @@
                             <form id="manual-document-form" class="manual-document-form">
                                 <div class="form-group">
                                     <label for="manual-document-date" class="form-label">تاریخ سند</label>
-                                    <input type="date" id="manual-document-date" class="form-control" required>
+                                    <input type="text" id="manual-document-date" class="form-control" placeholder="مثال: ۱۴۰۴/۸/۱۵" required>
                                 </div>
                                 
                                 <div class="form-group">
@@ -2273,14 +2274,14 @@
                                             <label class="form-label">بدهکار</label>
                                             <div class="amount-input-container">
                                                 <span class="currency-symbol">﷼</span>
-                                                <input type="number" class="form-control amount-input manual-debit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                                <input type="text" class="form-control amount-input manual-debit" placeholder="0">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">بستانکار</label>
                                             <div class="amount-input-container">
                                                 <span class="currency-symbol">﷼</span>
-                                                <input type="number" class="form-control amount-input manual-credit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                                <input type="text" class="form-control amount-input manual-credit" placeholder="0">
                                             </div>
                                         </div>
                                         <button type="button" class="remove-transaction-btn" disabled>
@@ -2454,21 +2455,21 @@
                                         <label for="employee-salary" class="form-label">حقوق پایه</label>
                                         <div class="amount-input-container">
                                             <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-salary" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            <input type="text" id="employee-salary" class="form-control amount-input" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="employee-bonus" class="form-label">پاداش</label>
                                         <div class="amount-input-container">
                                             <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-bonus" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            <input type="text" id="employee-bonus" class="form-control amount-input" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="employee-deduction" class="form-label">کسورات</label>
                                         <div class="amount-input-container">
                                             <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="employee-deduction" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            <input type="text" id="employee-deduction" class="form-control amount-input" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -2542,16 +2543,12 @@
                                         <input type="text" id="party-name" class="form-control" placeholder="نام طرف حساب">
                                     </div>
                                     <div class="form-group">
-                                        <label for="party-title" class="form-label">عنوان طرف حساب</label>
-                                        <input type="text" id="party-title" class="form-control" placeholder="عنوان طرف حساب">
+                                        <label for="party-phone" class="form-label">شماره تماس</label>
+                                        <input type="text" id="party-phone" class="form-control" placeholder="شماره تماس">
                                     </div>
                                     <div class="form-group">
-                                        <label for="party-number" class="form-label">شماره طرف حساب</label>
-                                        <input type="text" id="party-number" class="form-control" placeholder="شماره طرف حساب">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="party-address" class="form-label">آدرس طرف حساب</label>
-                                        <textarea id="party-address" class="form-control" rows="2" placeholder="آدرس طرف حساب"></textarea>
+                                        <label for="party-address" class="form-label">آدرس</label>
+                                        <textarea id="party-address" class="form-control" rows="2" placeholder="آدرس"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <button type="button" id="add-party" class="btn btn-success">
@@ -2615,7 +2612,7 @@
                                         <label for="product-price" class="form-label">بهای واحد هر عدد کالا</label>
                                         <div class="amount-input-container">
                                             <span class="currency-symbol">﷼</span>
-                                            <input type="number" id="product-price" class="form-control amount-input" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                                            <input type="text" id="product-price" class="form-control amount-input" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -2639,7 +2636,7 @@
                                 <div class="invoice-form">
                                     <div class="form-group">
                                         <label for="invoice-date" class="form-label">تاریخ</label>
-                                        <input type="date" id="invoice-date" class="form-control">
+                                        <input type="text" id="invoice-date" class="form-control" placeholder="مثال: ۱۴۰۴/۸/۱۵">
                                     </div>
                                     <div class="form-group">
                                         <label for="invoice-party" class="form-label">صورتحساب آقای/خانم/شرکت</label>
@@ -2649,7 +2646,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="invoice-number" class="form-label">شماره فاکتور</label>
-                                        <input type="text" id="invoice-number" class="form-control" placeholder="شماره فاکتور">
+                                        <input type="text" id="invoice-number" class="form-control" placeholder="شماره فاکتور" readonly>
                                     </div>
                                 </div>
                                 
@@ -2664,21 +2661,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">مقدار</label>
-                                            <input type="number" class="form-control invoice-quantity" placeholder="0">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">بهای واحد</label>
-                                            <div class="amount-input-container">
-                                                <span class="currency-symbol">﷼</span>
-                                                <input type="number" class="form-control amount-input invoice-unit-price" placeholder="0" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">بهای کل</label>
-                                            <div class="amount-input-container">
-                                                <span class="currency-symbol">﷼</span>
-                                                <input type="number" class="form-control amount-input invoice-total-price" placeholder="0" readonly>
-                                            </div>
+                                            <input type="text" class="form-control invoice-quantity" placeholder="0">
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">شرح</label>
@@ -2710,6 +2693,10 @@
                                         <i class="fas fa-print"></i>
                                         چاپ فاکتور
                                     </button>
+                                    <button id="reset-invoice" class="btn btn-warning">
+                                        <i class="fas fa-undo"></i>
+                                        بازگشت
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -2724,12 +2711,12 @@
                                             <input type="text" id="company-name" class="form-control" placeholder="نام شرکت">
                                         </div>
                                         <div class="form-group">
-                                            <label for="company-address" class="form-label">آدرس شرکت</label>
-                                            <textarea id="company-address" class="form-control" rows="2" placeholder="آدرس شرکت"></textarea>
+                                            <label for="company-phone" class="form-label">شماره تماس شرکت</label>
+                                            <input type="text" id="company-phone" class="form-control" placeholder="شماره تماس شرکت">
                                         </div>
                                         <div class="form-group">
-                                            <label for="company-number" class="form-label">شماره شرکت</label>
-                                            <input type="text" id="company-number" class="form-control" placeholder="شماره شرکت">
+                                            <label for="company-address" class="form-label">آدرس شرکت</label>
+                                            <textarea id="company-address" class="form-control" rows="2" placeholder="آدرس شرکت"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <button type="button" id="save-company-info" class="btn btn-success">
@@ -2745,11 +2732,11 @@
                                     <div class="fiscal-period-form">
                                         <div class="form-group">
                                             <label for="fiscal-period-start" class="form-label">تاریخ شروع دوره مالی</label>
-                                            <input type="date" id="fiscal-period-start" class="form-control">
+                                            <input type="text" id="fiscal-period-start" class="form-control" placeholder="مثال: ۱۴۰۴/۸/۱۵">
                                         </div>
                                         <div class="form-group">
                                             <label for="fiscal-period-end" class="form-label">تاریخ پایان دوره مالی</label>
-                                            <input type="date" id="fiscal-period-end" class="form-control">
+                                            <input type="text" id="fiscal-period-end" class="form-control" placeholder="مثال: ۱۴۰۴/۸/۱۵">
                                         </div>
                                         <div class="form-group">
                                             <button type="button" id="save-fiscal-period" class="btn btn-success">
@@ -2868,7 +2855,7 @@
         
         // نام و نسخه پایگاه داده
         const DB_NAME = 'AuraAccountingDB';
-        const DB_VERSION = 4; // افزایش نسخه برای اضافه شدن جداول جدید
+        const DB_VERSION = 5; // افزایش نسخه برای اضافه شدن جداول جدید
         
         // نام جداول
         const STORE_NAMES = {
@@ -2883,7 +2870,8 @@
             SETTINGS: 'settings',
             COMPANY_INFO: 'company_info',
             INVENTORY: 'inventory',
-            INVOICES: 'invoices'
+            INVOICES: 'invoices',
+            INVOICE_COUNTER: 'invoice_counter'
         };
         
         // آرایه برای ذخیره معاملات سند جاری
@@ -2895,6 +2883,7 @@
         // آرایه برای ذخیره اسناد
         let savedDocuments = [];
         let documentCounter = 1;
+        let invoiceCounter = 1;
         
         // آرایه برای ذخیره پرسنل
         let employees = [];
@@ -2911,8 +2900,8 @@
         // اطلاعات شرکت
         let companyInfo = {
             name: '',
-            address: '',
-            number: ''
+            phone: '',
+            address: ''
         };
         
         // اطلاعات دوره مالی
@@ -2985,13 +2974,12 @@
         // عناصر جدید
         const addPartyBtn = document.getElementById('add-party');
         const partyNameInput = document.getElementById('party-name');
-        const partyTitleInput = document.getElementById('party-title');
-        const partyNumberInput = document.getElementById('party-number');
+        const partyPhoneInput = document.getElementById('party-phone');
         const partyAddressInput = document.getElementById('party-address');
         const partiesList = document.getElementById('parties-list');
         const companyNameInput = document.getElementById('company-name');
+        const companyPhoneInput = document.getElementById('company-phone');
         const companyAddressInput = document.getElementById('company-address');
-        const companyNumberInput = document.getElementById('company-number');
         const saveCompanyInfoBtn = document.getElementById('save-company-info');
         const addProductBtn = document.getElementById('add-product');
         const productNameInput = document.getElementById('product-name');
@@ -3002,13 +2990,12 @@
         const invoiceNumberInput = document.getElementById('invoice-number');
         const invoiceProductSelect = document.querySelector('.invoice-product');
         const invoiceQuantityInput = document.querySelector('.invoice-quantity');
-        const invoiceUnitPriceInput = document.querySelector('.invoice-unit-price');
-        const invoiceTotalPriceInput = document.querySelector('.invoice-total-price');
         const invoiceDescriptionInput = document.querySelector('.invoice-description');
         const addInvoiceItemBtn = document.getElementById('add-invoice-item');
         const invoicePreview = document.getElementById('invoice-preview');
         const saveInvoiceBtn = document.getElementById('save-invoice');
         const printInvoiceBtn = document.getElementById('print-invoice');
+        const resetInvoiceBtn = document.getElementById('reset-invoice');
         const invoicesList = document.getElementById('invoices-list');
         
         // مدیریت ورود به سیستم
@@ -3117,6 +3104,7 @@
                     updateInventoryList();
                     updateInvoicePartySelect();
                     updateInvoiceProductSelect();
+                    loadInvoiceCounter();
                 }
             });
         });
@@ -3139,6 +3127,9 @@
         // مدیریت چاپ فاکتور
         printInvoiceBtn.addEventListener('click', printInvoice);
         
+        // مدیریت بازگشت فاکتور
+        resetInvoiceBtn.addEventListener('click', resetInvoice);
+        
         // مقداردهی اولیه برنامه پس از ورود
         function initializeApp() {
             // باز کردن پایگاه داده
@@ -3155,11 +3146,12 @@
                     loadParties(),
                     loadCompanyInfo(),
                     loadInventory(),
-                    loadInvoices()
+                    loadInvoices(),
+                    loadInvoiceCounter()
                 ]);
             }).then(() => {
                 // تنظیم تاریخ امروز
-                const today = new Date().toISOString().split('T')[0];
+                const today = getTodayPersianDate();
                 document.getElementById('transaction-date').value = today;
                 document.getElementById('manual-document-date').value = today;
                 document.getElementById('invoice-date').value = today;
@@ -3233,7 +3225,7 @@
                     // ایجاد شیء معامله
                     const transaction = {
                         id: Date.now(),
-                        date: formatDate(date),
+                        date: date,
                         transactionType,
                         paymentType,
                         accountId,
@@ -3252,7 +3244,7 @@
                     transactionForm.reset();
                     
                     // تنظیم مجدد تاریخ به امروز
-                    document.getElementById('transaction-date').value = today;
+                    document.getElementById('transaction-date').value = getTodayPersianDate();
                     
                     // نمایش پیام موفقیت
                     showNotification('معامله با موفقیت ثبت شد!', 'success');
@@ -3318,7 +3310,7 @@
                         // ایجاد شیء معامله برای سند دستی
                         const transaction = {
                             id: Date.now(),
-                            date: formatDate(date),
+                            date: date,
                             accountId,
                             accountName: account.name,
                             debit: debit,
@@ -3346,7 +3338,7 @@
                     manualDocumentForm.reset();
                     
                     // تنظیم مجدد تاریخ به امروز
-                    document.getElementById('manual-document-date').value = today;
+                    document.getElementById('manual-document-date').value = getTodayPersianDate();
                     
                     // بازنشانی ردیف‌ها
                     resetManualTransactionRows();
@@ -3448,6 +3440,7 @@
                             updateInventoryList();
                             updateInvoicePartySelect();
                             updateInvoiceProductSelect();
+                            loadInvoiceCounter();
                         }
                     });
                 });
@@ -3526,6 +3519,10 @@
                     
                     if (!db.objectStoreNames.contains(STORE_NAMES.INVOICES)) {
                         db.createObjectStore(STORE_NAMES.INVOICES, { keyPath: 'id' });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.INVOICE_COUNTER)) {
+                        db.createObjectStore(STORE_NAMES.INVOICE_COUNTER, { keyPath: 'id' });
                     }
                 };
             });
@@ -3611,6 +3608,31 @@
                 
                 request.onerror = () => {
                     reject(new Error('خطا در بارگذاری شمارنده اسناد'));
+                };
+            });
+        }
+        
+        // بارگذاری شمارنده فاکتورها از IndexedDB
+        function loadInvoiceCounter() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.INVOICE_COUNTER], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.INVOICE_COUNTER);
+                const request = store.get(1);
+                
+                request.onsuccess = () => {
+                    if (request.result) {
+                        invoiceCounter = request.result.value;
+                    } else {
+                        // اگر شمارنده وجود ندارد، مقدار پیش‌فرض را تنظیم کن
+                        invoiceCounter = 1;
+                        saveInvoiceCounter();
+                    }
+                    invoiceNumberInput.value = invoiceCounter;
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری شمارنده فاکتورها'));
                 };
             });
         }
@@ -3792,6 +3814,13 @@
             store.put({ id: 1, value: documentCounter });
         }
         
+        // ذخیره شمارنده فاکتورها در IndexedDB
+        function saveInvoiceCounter() {
+            const transaction = db.transaction([STORE_NAMES.INVOICE_COUNTER], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.INVOICE_COUNTER);
+            store.put({ id: 1, value: invoiceCounter });
+        }
+        
         // ذخیره سند جاری در IndexedDB
         function saveCurrentDocument() {
             const transaction = db.transaction([STORE_NAMES.CURRENT_DOCUMENT], 'readwrite');
@@ -3902,16 +3931,11 @@
             return parseFloat(cleaned);
         }
         
-        // تابع تبدیل تاریخ میلادی به شمسی
-        function toPersianDate(dateString) {
-            const date = new Date(dateString);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('fa-IR', options);
-        }
-        
-        // تابع فرمت تاریخ
-        function formatDate(dateString) {
-            return toPersianDate(dateString);
+        // تابع دریافت تاریخ امروز به صورت شمسی
+        function getTodayPersianDate() {
+            const today = new Date();
+            const persianDate = today.toLocaleDateString('fa-IR');
+            return persianDate;
         }
         
         // تابع تبدیل اعداد به فارسی
@@ -4180,10 +4204,7 @@
                     <div class="party-item">
                         <div>
                             <div>${party.name}</div>
-                            <small class="text-muted">عنوان: ${party.title} | شماره: ${party.number}</small>
-                            <div class="document-description-preview">
-                                آدرس: ${party.address}
-                            </div>
+                            <small class="text-muted">شماره تماس: ${party.phone} | آدرس: ${party.address}</small>
                         </div>
                         <button class="btn btn-danger btn-sm" onclick="deleteParty(${party.id})">
                             <i class="fas fa-trash"></i>
@@ -4199,8 +4220,8 @@
         // تابع به‌روزرسانی اطلاعات شرکت
         function updateCompanyInfo() {
             companyNameInput.value = companyInfo.name || '';
+            companyPhoneInput.value = companyInfo.phone || '';
             companyAddressInput.value = companyInfo.address || '';
-            companyNumberInput.value = companyInfo.number || '';
         }
         
         // تابع به‌روزرسانی لیست کالاها
@@ -4238,7 +4259,7 @@
         function updateInvoicePartySelect() {
             let html = '<option value="">انتخاب کنید</option>';
             parties.forEach(party => {
-                html += `<option value="${party.id}">${party.name} - ${party.title}</option>`;
+                html += `<option value="${party.id}">${party.name}</option>`;
             });
             
             invoicePartySelect.innerHTML = html;
@@ -4252,25 +4273,6 @@
             });
             
             invoiceProductSelect.innerHTML = html;
-            
-            // افزودن رویداد تغییر محصول
-            invoiceProductSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const price = selectedOption.getAttribute('data-price') || 0;
-                invoiceUnitPriceInput.value = price;
-                calculateInvoiceTotal();
-            });
-            
-            // افزودن رویداد تغییر مقدار
-            invoiceQuantityInput.addEventListener('input', calculateInvoiceTotal);
-        }
-        
-        // تابع محاسبه جمع فاکتور
-        function calculateInvoiceTotal() {
-            const quantity = parseAmount(invoiceQuantityInput.value) || 0;
-            const unitPrice = parseAmount(invoiceUnitPriceInput.value) || 0;
-            const total = quantity * unitPrice;
-            invoiceTotalPriceInput.value = total;
         }
         
         // تابع به‌روزرسانی لیست فاکتورها
@@ -5425,7 +5427,7 @@
         
         // تابع تولید سند حسابداری با منطق جدید
         function generateAccountingDocument() {
-            let documentDate = new Date().toLocaleDateString('fa-IR');
+            let documentDate = getTodayPersianDate();
             
             // محاسبه جمع مبالغ برای شرح
             let totalAmount = 0;
@@ -5545,7 +5547,7 @@
         
         // تابع ذخیره سند
         function saveAccountingDocument() {
-            const documentDate = new Date().toLocaleDateString('fa-IR');
+            const documentDate = getTodayPersianDate();
             
             // محاسبه جمع مبلغ کل
             let totalAmount = 0;
@@ -5787,14 +5789,14 @@
                     <label class="form-label">بدهکار</label>
                     <div class="amount-input-container">
                         <span class="currency-symbol">﷼</span>
-                        <input type="number" class="form-control amount-input manual-debit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                        <input type="text" class="form-control amount-input manual-debit" placeholder="0">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">بستانکار</label>
                     <div class="amount-input-container">
                         <span class="currency-symbol">﷼</span>
-                        <input type="number" class="form-control amount-input manual-credit" placeholder="0" inputmode="numeric" pattern="[0-9]*">
+                        <input type="text" class="form-control amount-input manual-credit" placeholder="0">
                     </div>
                 </div>
                 <button type="button" class="remove-transaction-btn">
@@ -5846,7 +5848,8 @@
                 parties: parties,
                 companyInfo: companyInfo,
                 inventory: inventory,
-                invoices: invoices
+                invoices: invoices,
+                invoiceCounter: invoiceCounter
             };
             
             const dataStr = JSON.stringify(data, null, 2);
@@ -5883,9 +5886,10 @@
                         fiscalPeriod = data.fiscalPeriod || { startDate: '', endDate: '' };
                         settings = data.settings || { vatPercentage: 9 };
                         parties = data.parties || [];
-                        companyInfo = data.companyInfo || { name: '', address: '', number: '' };
+                        companyInfo = data.companyInfo || { name: '', phone: '', address: '' };
                         inventory = data.inventory || [];
                         invoices = data.invoices || [];
+                        invoiceCounter = data.invoiceCounter || 1;
                         
                         // ذخیره در IndexedDB
                         const promises = [];
@@ -5901,6 +5905,7 @@
                         promises.push(clearStore(STORE_NAMES.COMPANY_INFO));
                         promises.push(clearStore(STORE_NAMES.INVENTORY));
                         promises.push(clearStore(STORE_NAMES.INVOICES));
+                        promises.push(clearStore(STORE_NAMES.INVOICE_COUNTER));
                         
                         Promise.all(promises).then(() => {
                             // ذخیره داده‌های جدید
@@ -5936,6 +5941,8 @@
                             invoices.forEach(invoice => {
                                 savePromises.push(saveInvoice(invoice));
                             });
+                            
+                            savePromises.push(saveInvoiceCounter());
                             
                             Promise.all(savePromises).then(() => {
                                 // به‌روزرسانی رابط کاربری
@@ -5994,9 +6001,10 @@
                 fiscalPeriod = { startDate: '', endDate: '' };
                 settings = { vatPercentage: 9 };
                 parties = [];
-                companyInfo = { name: '', address: '', number: '' };
+                companyInfo = { name: '', phone: '', address: '' };
                 inventory = [];
                 invoices = [];
+                invoiceCounter = 1;
                 
                 // پاک کردن IndexedDB
                 const promises = [
@@ -6010,7 +6018,8 @@
                     clearStore(STORE_NAMES.PARTIES),
                     clearStore(STORE_NAMES.COMPANY_INFO),
                     clearStore(STORE_NAMES.INVENTORY),
-                    clearStore(STORE_NAMES.INVOICES)
+                    clearStore(STORE_NAMES.INVOICES),
+                    clearStore(STORE_NAMES.INVOICE_COUNTER)
                 ];
                 
                 Promise.all(promises).then(() => {
@@ -6049,8 +6058,7 @@
         
         // تابع ایجاد سند افتتاحیه
         function createOpeningEntry() {
-            const today = new Date().toISOString().split('T')[0];
-            const date = formatDate(today);
+            const today = getTodayPersianDate();
             
             // ایجاد معاملات افتتاحیه بر اساس مانده حساب‌های ثابت
             const openingTransactions = [];
@@ -6142,7 +6150,7 @@
                     if (balance !== 0) {
                         const transaction = {
                             id: Date.now(),
-                            date: date,
+                            date: today,
                             accountId: account.id,
                             accountName: account.name,
                             debit: balance > 0 ? balance : 0,
@@ -6177,8 +6185,7 @@
         
         // تابع ایجاد سند اختتامیه
         function createClosingEntry() {
-            const today = new Date().toISOString().split('T')[0];
-            const date = formatDate(today);
+            const today = getTodayPersianDate();
             
             // ایجاد معاملات اختتامیه بر اساس مانده حساب‌های موقت
             const closingTransactions = [];
@@ -6284,7 +6291,7 @@
                     if (balance !== 0) {
                         const transaction = {
                             id: Date.now(),
-                            date: date,
+                            date: today,
                             accountId: account.id,
                             accountName: account.name,
                             debit: balance < 0 ? Math.abs(balance) : 0,
@@ -6306,7 +6313,7 @@
                 if (profitLossAccount) {
                     const profitLossTransaction = {
                         id: Date.now() + 1000,
-                        date: date,
+                        date: today,
                         accountId: profitLossAccount.id,
                         accountName: profitLossAccount.name,
                         debit: netProfit < 0 ? Math.abs(netProfit) : 0,
@@ -6385,8 +6392,7 @@
                 return;
             }
             
-            const today = new Date().toISOString().split('T')[0];
-            const date = formatDate(today);
+            const today = getTodayPersianDate();
             
             // ایجاد معاملات حقوق
             const salaryTransactions = [];
@@ -6401,7 +6407,7 @@
                     // معامله بدهکار: هزینه حقوق
                     const expenseTransaction = {
                         id: Date.now() + employee.id,
-                        date: date,
+                        date: today,
                         accountId: 8, // حساب هزینه
                         accountName: 'هزینه',
                         debit: netSalary,
@@ -6419,7 +6425,7 @@
             if (totalSalary > 0) {
                 const liabilityTransaction = {
                     id: Date.now() + 1000,
-                    date: date,
+                    date: today,
                     accountId: 3, // حساب های پرداختنی
                     accountName: 'حساب های پرداختنی',
                     debit: 0,
@@ -6460,11 +6466,6 @@
                 return;
             }
             
-            if (new Date(startDate) >= new Date(endDate)) {
-                showNotification('تاریخ شروع باید قبل از تاریخ پایان باشد!', 'error');
-                return;
-            }
-            
             // ذخیره دوره مالی
             fiscalPeriod = {
                 startDate: startDate,
@@ -6486,12 +6487,11 @@
         // تابع افزودن طرف حساب
         function addParty() {
             const name = partyNameInput.value.trim();
-            const title = partyTitleInput.value.trim();
-            const number = partyNumberInput.value.trim();
+            const phone = partyPhoneInput.value.trim();
             const address = partyAddressInput.value.trim();
             
-            if (!name || !title || !number) {
-                showNotification('لطفاً نام، عنوان و شماره طرف حساب را وارد کنید!', 'error');
+            if (!name || !phone) {
+                showNotification('لطفاً نام و شماره تماس طرف حساب را وارد کنید!', 'error');
                 return;
             }
             
@@ -6499,8 +6499,7 @@
             const newParty = {
                 id: Date.now(),
                 name: name,
-                title: title,
-                number: number,
+                phone: phone,
                 address: address
             };
             
@@ -6516,8 +6515,7 @@
             
             // پاک کردن فیلدهای ورودی
             partyNameInput.value = '';
-            partyTitleInput.value = '';
-            partyNumberInput.value = '';
+            partyPhoneInput.value = '';
             partyAddressInput.value = '';
             
             // نمایش پیام موفقیت
@@ -6527,10 +6525,10 @@
         // تابع ذخیره اطلاعات شرکت
         function saveCompanyInfo() {
             const name = companyNameInput.value.trim();
+            const phone = companyPhoneInput.value.trim();
             const address = companyAddressInput.value.trim();
-            const number = companyNumberInput.value.trim();
             
-            if (!name || !address || !number) {
+            if (!name || !phone || !address) {
                 showNotification('لطفاً تمام اطلاعات شرکت را وارد کنید!', 'error');
                 return;
             }
@@ -6538,8 +6536,8 @@
             // ذخیره اطلاعات شرکت
             companyInfo = {
                 name: name,
-                address: address,
-                number: number
+                phone: phone,
+                address: address
             };
             
             // ذخیره در IndexedDB
@@ -6626,8 +6624,6 @@
             // پاک کردن فیلدهای ورودی
             invoiceProductSelect.value = '';
             invoiceQuantityInput.value = '';
-            invoiceUnitPriceInput.value = '';
-            invoiceTotalPriceInput.value = '';
             invoiceDescriptionInput.value = '';
         }
         
@@ -6653,19 +6649,18 @@
                     <div class="invoice-header">
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
-                            <div>${companyInfo.address || 'آدرس شرکت'}</div>
+                            <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
                             <div>شماره فاکتور: ${number}</div>
-                            <div>تاریخ: ${formatDate(date)}</div>
-                            <div>شماره طرف حساب: ${party.number}</div>
+                            <div>تاریخ: ${date}</div>
                         </div>
                     </div>
                     
                     <div class="invoice-customer-info">
-                        <div>صورتحساب آقای/خانم/شرکت: ${party.name} - ${party.title}</div>
-                        <div>آدرس طرف حساب: ${party.address}</div>
+                        <div>صورتحساب آقای/خانم/شرکت: ${party.name}</div>
+                        <div>آدرس: ${party.address}</div>
                     </div>
                     
                     <table class="invoice-table">
@@ -6696,15 +6691,13 @@
                     </div>
                     
                     <div class="invoice-signature">
+                        <div>امضا و مهر خریدار</div>
                         <div>امضا و مهر فروشنده</div>
                     </div>
                     
                     <div class="invoice-footer">
                         <div class="invoice-company-address">
                             ${companyInfo.address || 'آدرس شرکت'}
-                        </div>
-                        <div class="invoice-company-number">
-                            ${companyInfo.number || 'شماره شرکت'}
                         </div>
                     </div>
                 </div>
@@ -6747,10 +6740,9 @@
             // ایجاد فاکتور جدید
             const newInvoice = {
                 id: Date.now(),
-                date: formatDate(date),
+                date: date,
                 partyId: partyId,
                 partyName: party.name,
-                partyTitle: party.title,
                 partyAddress: party.address,
                 number: number,
                 items: invoiceItems,
@@ -6763,19 +6755,15 @@
             // ذخیره در IndexedDB
             saveInvoice(newInvoice);
             
+            // افزایش شمارنده فاکتور
+            invoiceCounter++;
+            saveInvoiceCounter();
+            
             // به‌روزرسانی لیست فاکتورها
             updateInvoicesList();
             
             // پاک کردن فرم
-            invoiceDateInput.value = new Date().toISOString().split('T')[0];
-            invoicePartySelect.value = '';
-            invoiceNumberInput.value = '';
-            invoicePreview.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-receipt"></i>
-                    <p>پس از پر کردن فرم، پیش‌نمایش فاکتور در اینجا نمایش داده می‌شود</p>
-                </div>
-            `;
+            resetInvoice();
             
             // نمایش پیام موفقیت
             showNotification('فاکتور با موفقیت ذخیره شد!', 'success');
@@ -6839,12 +6827,11 @@
                             margin-top: 20px;
                         }
                         .invoice-signature {
-                            text-align: center;
+                            display: flex;
+                            justify-content: space-between;
                             margin-top: 40px;
                         }
                         .invoice-footer {
-                            display: flex;
-                            justify-content: space-between;
                             margin-top: 30px;
                             padding-top: 20px;
                             border-top: 2px solid #000;
@@ -6862,6 +6849,22 @@
             `);
             printWindow.document.close();
             printWindow.print();
+        }
+        
+        // تابع بازگشت فاکتور
+        function resetInvoice() {
+            invoiceDateInput.value = getTodayPersianDate();
+            invoicePartySelect.value = '';
+            invoiceNumberInput.value = invoiceCounter;
+            invoiceProductSelect.value = '';
+            invoiceQuantityInput.value = '';
+            invoiceDescriptionInput.value = '';
+            invoicePreview.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-receipt"></i>
+                    <p>پس از پر کردن فرم، پیش‌نمایش فاکتور در اینجا نمایش داده می‌شود</p>
+                </div>
+            `;
         }
         
         // تابع مشاهده فاکتور
@@ -6892,19 +6895,18 @@
                     <div class="invoice-header">
                         <div class="invoice-company-info">
                             <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
-                            <div>${companyInfo.address || 'آدرس شرکت'}</div>
+                            <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
                         </div>
                         <div class="invoice-title">فاکتور فروش</div>
                         <div class="invoice-details">
                             <div>شماره فاکتور: ${invoice.number}</div>
                             <div>تاریخ: ${invoice.date}</div>
-                            <div>شماره طرف حساب: ${invoice.partyTitle}</div>
                         </div>
                     </div>
                     
                     <div class="invoice-customer-info">
-                        <div>صورتحساب آقای/خانم/شرکت: ${invoice.partyName} - ${invoice.partyTitle}</div>
-                        <div>آدرس طرف حساب: ${invoice.partyAddress}</div>
+                        <div>صورتحساب آقای/خانم/شرکت: ${invoice.partyName}</div>
+                        <div>آدرس: ${invoice.partyAddress}</div>
                     </div>
                     
                     <table class="invoice-table">
@@ -6928,15 +6930,13 @@
                     </div>
                     
                     <div class="invoice-signature">
+                        <div>امضا و مهر خریدار</div>
                         <div>امضا و مهر فروشنده</div>
                     </div>
                     
                     <div class="invoice-footer">
                         <div class="invoice-company-address">
                             ${companyInfo.address || 'آدرس شرکت'}
-                        </div>
-                        <div class="invoice-company-number">
-                            ${companyInfo.number || 'شماره شرکت'}
                         </div>
                     </div>
                 </div>
@@ -7017,12 +7017,11 @@
                             margin-top: 20px;
                         }
                         .invoice-signature {
-                            text-align: center;
+                            display: flex;
+                            justify-content: space-between;
                             margin-top: 40px;
                         }
                         .invoice-footer {
-                            display: flex;
-                            justify-content: space-between;
                             margin-top: 30px;
                             padding-top: 20px;
                             border-top: 2px solid #000;
@@ -7038,19 +7037,18 @@
                         <div class="invoice-header">
                             <div class="invoice-company-info">
                                 <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
-                                <div>${companyInfo.address || 'آدرس شرکت'}</div>
+                                <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
                             </div>
                             <div class="invoice-title">فاکتور فروش</div>
                             <div class="invoice-details">
                                 <div>شماره فاکتور: ${invoice.number}</div>
                                 <div>تاریخ: ${invoice.date}</div>
-                                <div>شماره طرف حساب: ${invoice.partyTitle}</div>
                             </div>
                         </div>
                         
                         <div class="invoice-customer-info">
-                            <div>صورتحساب آقای/خانم/شرکت: ${invoice.partyName} - ${invoice.partyTitle}</div>
-                            <div>آدرس طرف حساب: ${invoice.partyAddress}</div>
+                            <div>صورتحساب آقای/خانم/شرکت: ${invoice.partyName}</div>
+                            <div>آدرس: ${invoice.partyAddress}</div>
                         </div>
                         
                         <table class="invoice-table">
@@ -7074,15 +7072,13 @@
                         </div>
                         
                         <div class="invoice-signature">
+                            <div>امضا و مهر خریدار</div>
                             <div>امضا و مهر فروشنده</div>
                         </div>
                         
                         <div class="invoice-footer">
                             <div class="invoice-company-address">
                                 ${companyInfo.address || 'آدرس شرکت'}
-                            </div>
-                            <div class="invoice-company-number">
-                                ${companyInfo.number || 'شماره شرکت'}
                             </div>
                         </div>
                     </div>
