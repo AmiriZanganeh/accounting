@@ -1003,56 +1003,6 @@
             font-size: 0.9rem;
         }
 
-        .dashboard-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .dashboard-action {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .dashboard-action:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        .dashboard-action-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin: 0 auto 10px;
-        }
-
-        .dashboard-action-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--dark);
-            text-align: center;
-        }
-
-        .dashboard-action-description {
-            color: var(--secondary);
-            text-align: center;
-            line-height: 1.5;
-            font-size: 0.85rem;
-        }
-
         /* استایل‌های جدید برای حقوق و دستمزد */
         .salary-base-form, .salary-monthly-form, .account-group-form, .fiscal-period-form, .company-info-form, .party-form, .inventory-form, .invoice-form {
             display: grid;
@@ -1397,10 +1347,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .dashboard-actions {
-                grid-template-columns: 1fr;
-            }
-
             .form-type-selector {
                 flex-direction: column;
             }
@@ -1527,6 +1473,87 @@
         
         .section-title i {
             color: var(--primary);
+        }
+        
+        /* استایل‌های جدید برای بخش فاکتور */
+        .invoice-customer-info {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(44, 90, 160, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+        }
+        
+        .invoice-customer-info div {
+            margin-bottom: 5px;
+        }
+        
+        /* استایل‌های جدید برای بخش حساب‌ها */
+        .account-group-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .account-group-form .form-group {
+            margin-bottom: 0;
+        }
+        
+        .account-group-form .form-group:nth-child(3) {
+            margin-top: 10px;
+        }
+        
+        /* استایل‌های جدید برای بخش فاکتورهای ذخیره شده */
+        .saved-invoices-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 10px;
+            background: var(--light);
+        }
+        
+        .saved-invoice-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            background: white;
+        }
+        
+        .saved-invoice-item:hover {
+            background: rgba(44, 90, 160, 0.05);
+        }
+        
+        .saved-invoice-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .saved-invoice-info {
+            flex: 1;
+        }
+        
+        .saved-invoice-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .saved-invoice-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.75rem;
+            color: var(--secondary);
+        }
+        
+        .saved-invoice-actions {
+            display: flex;
+            gap: 5px;
         }
     </style>
 </head>
@@ -2264,6 +2291,10 @@
                                 </div>
                                 
                                 <div class="actions">
+                                    <button id="save-invoice" class="btn btn-success">
+                                        <i class="fas fa-save"></i>
+                                        ذخیره فاکتور
+                                    </button>
                                     <button id="print-invoice" class="btn btn-info">
                                         <i class="fas fa-print"></i>
                                         چاپ فاکتور
@@ -2272,6 +2303,21 @@
                                         <i class="fas fa-undo"></i>
                                         بازگشت
                                     </button>
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider"></div>
+                            
+                            <div class="saved-invoices-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-file-invoice"></i>
+                                    فاکتورهای ذخیره شده
+                                </h3>
+                                <div class="saved-invoices-list" id="saved-invoices-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-file-invoice"></i>
+                                        <p>هیچ فاکتوری ذخیره نشده است</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2353,65 +2399,6 @@
                                         <input type="file" id="import-file" accept=".json" style="display: none;">
                                     </div>
                                 </div>
-                                
-                                <div class="section-divider"></div>
-                                
-                                <div class="dashboard-actions">
-                                    <div class="dashboard-action" data-tab="transaction">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-plus-circle"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">ثبت معامله</div>
-                                        <div class="dashboard-action-description">
-                                            ثبت معاملات مالی جدید و مدیریت اسناد حسابداری
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="documents">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-file-invoice"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">اسناد</div>
-                                        <div class="dashboard-action-description">
-                                            مشاهده و مدیریت اسناد حسابداری ذخیره شده
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="statistics">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-chart-bar"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">آمار و گزارشات</div>
-                                        <div class="dashboard-action-description">
-                                            مشاهده تراز آزمایشی، دفترکل و صورت سود و زیان
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="salary">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-money-bill-wave"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">حقوق و دستمزد</div>
-                                        <div class="dashboard-action-description">
-                                            مدیریت حقوق پرسنل و ایجاد اسناد حقوقی
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="accounts">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-wallet"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">مدیریت حساب‌ها</div>
-                                        <div class="dashboard-action-description">
-                                            ایجاد و مدیریت حساب‌های مالی و گروه‌های حساب
-                                        </div>
-                                    </div>
-                                    <div class="dashboard-action" data-tab="inventory">
-                                        <div class="dashboard-action-icon">
-                                            <i class="fas fa-warehouse"></i>
-                                        </div>
-                                        <div class="dashboard-action-title">انبار</div>
-                                        <div class="dashboard-action-description">
-                                            مدیریت کالاها و صدور فاکتور
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -2459,7 +2446,7 @@
         
         // نام و نسخه پایگاه داده
         const DB_NAME = 'AuraAccountingDB';
-        const DB_VERSION = 6;
+        const DB_VERSION = 7; // افزایش نسخه برای اضافه شدن فاکتورها
         
         // نام جداول
         const STORE_NAMES = {
@@ -2474,7 +2461,8 @@
             FISCAL_PERIOD: 'fiscal_period',
             SETTINGS: 'settings',
             COMPANY_INFO: 'company_info',
-            INVENTORY: 'inventory'
+            INVENTORY: 'inventory',
+            INVOICES: 'invoices'
         };
         
         // آرایه برای ذخیره معاملات سند جاری
@@ -2498,6 +2486,9 @@
         
         // آرایه برای ذخیره کالاها
         let inventory = [];
+        
+        // آرایه برای ذخیره فاکتورها
+        let savedInvoices = [];
         
         // اطلاعات شرکت
         let companyInfo = {
@@ -2584,7 +2575,6 @@
         const saveFiscalPeriodBtn = document.getElementById('save-fiscal-period');
         const profitLossBody = document.getElementById('profit-loss-body');
         const balanceSheetBody = document.getElementById('balance-sheet-body');
-        const dashboardActions = document.querySelectorAll('.dashboard-action');
         
         // عناصر جدید
         const addPartyBtn = document.getElementById('add-party');
@@ -2612,6 +2602,8 @@
         const resetInvoiceBtn = document.getElementById('reset-invoice');
         const invoiceDiscountInput = document.getElementById('invoice-discount');
         const invoiceTaxInput = document.getElementById('invoice-tax');
+        const saveInvoiceBtn = document.getElementById('save-invoice');
+        const savedInvoicesList = document.getElementById('saved-invoices-list');
         
         // عناصر جدید برای بخش فاکتور
         const invoiceItemsContainer = document.getElementById('invoice-items-container');
@@ -2688,9 +2680,9 @@
         // مدیریت دوره مالی
         saveFiscalPeriodBtn.addEventListener('click', saveFiscalPeriod);
         
-        // مدیریت کلیک روی اکشن‌های داشبورد
-        dashboardActions.forEach(action => {
-            action.addEventListener('click', function() {
+        // مدیریت کلیک روی آیتم‌های ناوبری
+        navItems.forEach(navItem => {
+            navItem.addEventListener('click', function() {
                 const tabId = this.getAttribute('data-tab');
                 
                 // غیرفعال کردن همه آیتم‌های ناوبری
@@ -2698,7 +2690,7 @@
                 tabContents.forEach(content => content.classList.add('hidden'));
                 
                 // فعال کردن آیتم انتخاب شده
-                document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
+                this.classList.add('active');
                 document.getElementById(`${tabId}-tab`).classList.remove('hidden');
                 
                 // به‌روزرسانی عنوان صفحه
@@ -2714,11 +2706,12 @@
                     updateJournal();
                 }
                 
-                // اگر تب انبار انتخاب شده، لیست کالاها را به‌روزرسانی کن
+                // اگر تب انبار انتخاب شده، لیست کالاها و فاکتورها را به‌روزرسانی کن
                 if (tabId === 'inventory') {
                     updateInventoryList();
                     updateInvoicePartySelect();
                     updateInvoiceProductSelect();
+                    updateSavedInvoicesList();
                 }
                 
                 // اگر تب حقوق انتخاب شده، لیست پرسنل را به‌روزرسانی کن
@@ -2740,6 +2733,9 @@
         
         // مدیریت افزودن ردیف فاکتور
         addInvoiceItemBtn.addEventListener('click', addInvoiceItem);
+        
+        // مدیریت ذخیره فاکتور
+        saveInvoiceBtn.addEventListener('click', saveInvoice);
         
         // مدیریت چاپ فاکتور
         printInvoiceBtn.addEventListener('click', printInvoice);
@@ -2772,7 +2768,8 @@
                     loadSettings(),
                     loadParties(),
                     loadCompanyInfo(),
-                    loadInventory()
+                    loadInventory(),
+                    loadInvoices()
                 ]);
             }).then(() => {
                 // تنظیم تاریخ امروز
@@ -2811,6 +2808,9 @@
                 
                 // بارگذاری dropdown دفتر معین
                 updateSubsidiaryLedgerAccountSelect();
+                
+                // بارگذاری فاکتورهای ذخیره شده
+                updateSavedInvoicesList();
                 
                 // نمایش سند جاری اگر معامله‌ای وجود دارد
                 if (currentDocumentTransactions.length > 0) {
@@ -3049,47 +3049,6 @@
                     `;
                 });
                 
-                // مدیریت ناوبری
-                navItems.forEach(navItem => {
-                    navItem.addEventListener('click', function() {
-                        const tabId = this.getAttribute('data-tab');
-                        
-                        // غیرفعال کردن همه آیتم‌های ناوبری
-                        navItems.forEach(item => item.classList.remove('active'));
-                        tabContents.forEach(content => content.classList.add('hidden'));
-                        
-                        // فعال کردن آیتم انتخاب شده
-                        this.classList.add('active');
-                        document.getElementById(`${tabId}-tab`).classList.remove('hidden');
-                        
-                        // به‌روزرسانی عنوان صفحه
-                        updatePageTitle(tabId);
-                        
-                        // اگر تب آمار انتخاب شده، آمار را به‌روزرسالی کن
-                        if (tabId === 'statistics') {
-                            updateStatistics();
-                        }
-                        
-                        // اگر تب اسناد انتخاب شده، دفتر روزنامه را به‌روزرسانی کن
-                        if (tabId === 'documents') {
-                            updateJournal();
-                        }
-                        
-                        // اگر تب انبار انتخاب شده، لیست کالاها را به‌روزرسانی کن
-                        if (tabId === 'inventory') {
-                            updateInventoryList();
-                            updateInvoicePartySelect();
-                            updateInvoiceProductSelect();
-                        }
-                        
-                        // اگر تب حقوق انتخاب شده، لیست پرسنل را به‌روزرسانی کن
-                        if (tabId === 'salary') {
-                            updateEmployeesList();
-                            updateMonthlyEmployeeSelect();
-                        }
-                    });
-                });
-                
                 // رویداد تغییر حساب در دفترکل
                 ledgerAccountSelect.addEventListener('change', function() {
                     updateLedger(this.value);
@@ -3164,6 +3123,10 @@
                     
                     if (!db.objectStoreNames.contains(STORE_NAMES.INVENTORY)) {
                         db.createObjectStore(STORE_NAMES.INVENTORY, { keyPath: 'id' });
+                    }
+                    
+                    if (!db.objectStoreNames.contains(STORE_NAMES.INVOICES)) {
+                        db.createObjectStore(STORE_NAMES.INVOICES, { keyPath: 'id' });
                     }
                 };
             });
@@ -3409,6 +3372,24 @@
             });
         }
         
+        // بارگذاری فاکتورها از IndexedDB
+        function loadInvoices() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAMES.INVOICES], 'readonly');
+                const store = transaction.objectStore(STORE_NAMES.INVOICES);
+                const request = store.getAll();
+                
+                request.onsuccess = () => {
+                    savedInvoices = request.result;
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    reject(new Error('خطا در بارگذاری فاکتورها'));
+                };
+            });
+        }
+        
         // ذخیره حساب در IndexedDB
         function saveAccount(account) {
             const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -3486,6 +3467,13 @@
             store.put(product);
         }
         
+        // ذخیره فاکتور در IndexedDB
+        function saveInvoiceToDB(invoice) {
+            const transaction = db.transaction([STORE_NAMES.INVOICES], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.INVOICES);
+            store.put(invoice);
+        }
+        
         // حذف حساب از IndexedDB
         function deleteAccountFromDB(accountId) {
             const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -3526,6 +3514,13 @@
             const transaction = db.transaction([STORE_NAMES.INVENTORY], 'readwrite');
             const store = transaction.objectStore(STORE_NAMES.INVENTORY);
             store.delete(productId);
+        }
+        
+        // حذف فاکتور از IndexedDB
+        function deleteInvoiceFromDB(invoiceId) {
+            const transaction = db.transaction([STORE_NAMES.INVOICES], 'readwrite');
+            const store = transaction.objectStore(STORE_NAMES.INVOICES);
+            store.delete(invoiceId);
         }
         
         // تابع تبدیل مبلغ به عدد
@@ -3659,7 +3654,10 @@
             // به‌روزرسانی dropdown حساب‌ها در دفترکل
             let ledgerHtml = '<option value="">انتخاب حساب برای مشاهده دفترکل</option>';
             accounts.forEach(account => {
-                ledgerHtml += `<option value="${account.id}">${account.name}</option>`;
+                // فقط حساب‌هایی که مانده دارند را نمایش بده
+                if (hasAccountBalance(account.id)) {
+                    ledgerHtml += `<option value="${account.id}">${account.name}</option>`;
+                }
             });
             
             ledgerAccountSelect.innerHTML = ledgerHtml;
@@ -3674,6 +3672,151 @@
             manualAccountSelects.forEach(select => {
                 select.innerHTML = manualHtml;
             });
+        }
+        
+        // تابع بررسی مانده حساب
+        function hasAccountBalance(accountId) {
+            let balance = 0;
+            
+            // بررسی اسناد ذخیره شده
+            savedDocuments.forEach(document => {
+                document.transactions.forEach(transaction => {
+                    // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                    if (transaction.isManual) {
+                        if (transaction.accountId == accountId) {
+                            balance += (transaction.debit || 0) - (transaction.credit || 0);
+                        }
+                    } else {
+                        // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                        
+                        if (transaction.transactionType === 'receipt') {
+                            // دریافت: حساب انتخاب شده بستانکار می‌شود
+                            let debitAccount = '';
+                            
+                            // تعیین حساب بدهکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    debitAccount = 'موجودی نقد-بانک';
+                                    break;
+                                case 'credit':
+                                    debitAccount = 'حساب های دریافتنی';
+                                    break;
+                                case 'check':
+                                    debitAccount = 'اسناد دریافتنی';
+                                    break;
+                            }
+                            
+                            // پیدا کردن حساب بدهکار
+                            const debitAcc = accounts.find(acc => acc.name === debitAccount);
+                            if (debitAcc && debitAcc.id == accountId) {
+                                balance += transaction.amount;
+                            }
+                            
+                            // حساب انتخاب شده بستانکار می‌شود
+                            if (transaction.accountId == accountId) {
+                                balance -= transaction.amount;
+                            }
+                        } else if (transaction.transactionType === 'payment') {
+                            // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                            let creditAccount = '';
+                            
+                            // تعیین حساب بستانکار بر اساس نوع پرداخت
+                            switch(transaction.paymentType) {
+                                case 'cash':
+                                    creditAccount = 'موجودی نقد-بانک';
+                                    break;
+                                case 'credit':
+                                    creditAccount = 'حساب های پرداختنی';
+                                    break;
+                                case 'check':
+                                    creditAccount = 'اسناد پرداختنی';
+                                    break;
+                            }
+                            
+                            // حساب انتخاب شده بدهکار می‌شود
+                            if (transaction.accountId == accountId) {
+                                balance += transaction.amount;
+                            }
+                            
+                            // پیدا کردن حساب بستانکار
+                            const creditAcc = accounts.find(acc => acc.name === creditAccount);
+                            if (creditAcc && creditAcc.id == accountId) {
+                                balance -= transaction.amount;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // بررسی سند جاری
+            currentDocumentTransactions.forEach(transaction => {
+                // اگر سند دستی است، محاسبه مستقیم بدهکار و بستانکار
+                if (transaction.isManual) {
+                    if (transaction.accountId == accountId) {
+                        balance += (transaction.debit || 0) - (transaction.credit || 0);
+                    }
+                } else {
+                    // منطق جدید: حساب انتخاب شده در فرم برعکس نوع معامله و نوع پرداخت ثبت می‌شود
+                    
+                    if (transaction.transactionType === 'receipt') {
+                        // دریافت: حساب انتخاب شده بستانکار می‌شود
+                        let debitAccount = '';
+                        
+                        // تعیین حساب بدهکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                debitAccount = 'موجودی نقد-بانک';
+                                break;
+                            case 'credit':
+                                debitAccount = 'حساب های دریافتنی';
+                                break;
+                            case 'check':
+                                debitAccount = 'اسناد دریافتنی';
+                                break;
+                        }
+                        
+                        // پیدا کردن حساب بدهکار
+                        const debitAcc = accounts.find(acc => acc.name === debitAccount);
+                        if (debitAcc && debitAcc.id == accountId) {
+                            balance += transaction.amount;
+                        }
+                        
+                        // حساب انتخاب شده بستانکار می‌شود
+                        if (transaction.accountId == accountId) {
+                            balance -= transaction.amount;
+                        }
+                    } else if (transaction.transactionType === 'payment') {
+                        // پرداخت: حساب انتخاب شده بدهکار می‌شود
+                        let creditAccount = '';
+                        
+                        // تعیین حساب بستانکار بر اساس نوع پرداخت
+                        switch(transaction.paymentType) {
+                            case 'cash':
+                                creditAccount = 'موجودی نقد-بانک';
+                                break;
+                            case 'credit':
+                                creditAccount = 'حساب های پرداختنی';
+                                break;
+                            case 'check':
+                                creditAccount = 'اسناد پرداختنی';
+                                break;
+                        }
+                        
+                        // حساب انتخاب شده بدهکار می‌شود
+                        if (transaction.accountId == accountId) {
+                            balance += transaction.amount;
+                        }
+                        
+                        // پیدا کردن حساب بستانکار
+                        const creditAcc = accounts.find(acc => acc.name === creditAccount);
+                        if (creditAcc && creditAcc.id == accountId) {
+                            balance -= transaction.amount;
+                        }
+                    }
+                }
+            });
+            
+            return balance !== 0;
         }
         
         // تابع به‌روزرسانی dropdown طرف حساب‌ها
@@ -3930,6 +4073,56 @@
             });
             
             invoiceProductSelect.innerHTML = html;
+        }
+        
+        // تابع به‌روزرسانی لیست فاکتورهای ذخیره شده
+        function updateSavedInvoicesList() {
+            if (savedInvoices.length === 0) {
+                savedInvoicesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-invoice"></i>
+                        <p>هیچ فاکتوری ذخیره نشده است</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            savedInvoices.forEach(invoice => {
+                html += `
+                    <div class="saved-invoice-item">
+                        <div class="saved-invoice-info">
+                            <div class="saved-invoice-title">فاکتور شماره ${invoice.number}</div>
+                            <div class="saved-invoice-meta">
+                                <div class="saved-invoice-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${invoice.date}</span>
+                                </div>
+                                <div class="saved-invoice-meta-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>${invoice.partyName}</span>
+                                </div>
+                                <div class="saved-invoice-meta-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>${formatCurrency(invoice.grandTotal)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="saved-invoice-actions">
+                            <button class="document-action-btn print" onclick="printSavedInvoice(${invoice.id})">
+                                <i class="fas fa-print"></i>
+                                چاپ
+                            </button>
+                            <button class="document-action-btn delete" onclick="deleteInvoice(${invoice.id})">
+                                <i class="fas fa-trash"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            savedInvoicesList.innerHTML = html;
         }
         
         // تابع به‌روزرسانی دفتر روزنامه - بهبود یافته
@@ -5356,6 +5549,23 @@
             }
         }
         
+        // تابع حذف فاکتور
+        function deleteInvoice(invoiceId) {
+            if (confirm('آیا از حذف این فاکتور اطمینان دارید؟')) {
+                // حذف فاکتور از آرایه
+                savedInvoices = savedInvoices.filter(invoice => invoice.id !== invoiceId);
+                
+                // حذف از IndexedDB
+                deleteInvoiceFromDB(invoiceId);
+                
+                // به‌روزرسانی لیست فاکتورها
+                updateSavedInvoicesList();
+                
+                // نمایش پیام موفقیت
+                showNotification('فاکتور با موفقیت حذف شد!', 'success');
+            }
+        }
+        
         // تابع تولید سند حسابداری با منطق جدید
         function generateAccountingDocument() {
             let documentDate = getTodayPersianDate();
@@ -5779,7 +5989,8 @@
                 settings: settings,
                 parties: parties,
                 companyInfo: companyInfo,
-                inventory: inventory
+                inventory: inventory,
+                invoices: savedInvoices
             };
             
             const dataStr = JSON.stringify(data, null, 2);
@@ -5819,6 +6030,7 @@
                         parties = data.parties || [];
                         companyInfo = data.companyInfo || { name: '', phone: '', address: '' };
                         inventory = data.inventory || [];
+                        savedInvoices = data.invoices || [];
                         
                         // ذخیره در IndexedDB
                         const promises = [];
@@ -5834,6 +6046,7 @@
                         promises.push(clearStore(STORE_NAMES.PARTIES));
                         promises.push(clearStore(STORE_NAMES.COMPANY_INFO));
                         promises.push(clearStore(STORE_NAMES.INVENTORY));
+                        promises.push(clearStore(STORE_NAMES.INVOICES));
                         
                         Promise.all(promises).then(() => {
                             // ذخیره داده‌های جدید
@@ -5870,6 +6083,10 @@
                                 savePromises.push(saveProduct(product));
                             });
                             
+                            savedInvoices.forEach(invoice => {
+                                savePromises.push(saveInvoiceToDB(invoice));
+                            });
+                            
                             Promise.all(savePromises).then(() => {
                                 // به‌روزرسانی رابط کاربری
                                 updateAccountSelect();
@@ -5885,6 +6102,7 @@
                                 updatePartySelect();
                                 updateSubsidiaryLedgerAccountSelect();
                                 updateJournal();
+                                updateSavedInvoicesList();
                                 
                                 // به‌روزرسانی تنظیمات
                                 fiscalPeriodStart.value = fiscalPeriod.startDate || '';
@@ -5932,6 +6150,7 @@
                 parties = [];
                 companyInfo = { name: '', phone: '', address: '' };
                 inventory = [];
+                savedInvoices = [];
                 
                 // پاک کردن IndexedDB
                 const promises = [
@@ -5945,7 +6164,8 @@
                     clearStore(STORE_NAMES.SETTINGS),
                     clearStore(STORE_NAMES.PARTIES),
                     clearStore(STORE_NAMES.COMPANY_INFO),
-                    clearStore(STORE_NAMES.INVENTORY)
+                    clearStore(STORE_NAMES.INVENTORY),
+                    clearStore(STORE_NAMES.INVOICES)
                 ];
                 
                 Promise.all(promises).then(() => {
@@ -5965,6 +6185,7 @@
                         updatePartySelect();
                         updateSubsidiaryLedgerAccountSelect();
                         updateJournal();
+                        updateSavedInvoicesList();
                         
                         // به‌روزرسانی تنظیمات
                         fiscalPeriodStart.value = '';
@@ -6434,6 +6655,7 @@
                     
                     <div class="invoice-customer-info">
                         <div>صورتحساب آقای/خانم/شرکت: ${party.name}</div>
+                        <div>شماره تماس: ${party.phone}</div>
                         <div>آدرس: ${party.address}</div>
                     </div>
                     
@@ -6443,8 +6665,8 @@
                                 <th>ردیف</th>
                                 <th>عنوان کالا</th>
                                 <th>مقدار</th>
-                                <th>بهای واحد</th>
-                                <th>بهای کل</th>
+                                <th>بهای واحد (ریال)</th>
+                                <th>بهای کل (ریال)</th>
                                 <th>شرح</th>
                             </tr>
                         </thead>
@@ -6487,6 +6709,68 @@
             `;
             
             invoicePreview.innerHTML = html;
+        }
+        
+        // تابع ذخیره فاکتور
+        function saveInvoice() {
+            const date = invoiceDateInput.value;
+            const partyId = invoicePartySelect.value;
+            const number = invoiceNumberInput.value.trim();
+            
+            if (!date || !partyId || !number || invoiceItems.length === 0) {
+                showNotification('لطفاً تمام فیلدهای ضروری را پر کنید و حداقل یک ردیف به فاکتور اضافه کنید!', 'error');
+                return;
+            }
+            
+            const party = parties.find(p => p.id == partyId);
+            if (!party) {
+                showNotification('طرف حساب انتخاب شده معتبر نیست!', 'error');
+                return;
+            }
+            
+            // محاسبه مبالغ
+            let subtotal = 0;
+            invoiceItems.forEach(item => {
+                subtotal += item.totalPrice;
+            });
+            
+            const discountPercent = parseAmount(invoiceDiscountInput.value) || 0;
+            const taxPercent = parseAmount(invoiceTaxInput.value) || 0;
+            
+            const discountAmount = subtotal * (discountPercent / 100);
+            const taxAmount = (subtotal - discountAmount) * (taxPercent / 100);
+            const grandTotal = subtotal - discountAmount + taxAmount;
+            
+            // ایجاد فاکتور جدید
+            const newInvoice = {
+                id: Date.now(),
+                number: number,
+                date: date,
+                partyId: partyId,
+                partyName: party.name,
+                partyPhone: party.phone,
+                partyAddress: party.address,
+                items: [...invoiceItems],
+                subtotal: subtotal,
+                discountAmount: discountAmount,
+                taxAmount: taxAmount,
+                grandTotal: grandTotal
+            };
+            
+            // افزودن به آرایه فاکتورها
+            savedInvoices.push(newInvoice);
+            
+            // ذخیره در IndexedDB
+            saveInvoiceToDB(newInvoice);
+            
+            // به‌روزرسانی لیست فاکتورها
+            updateSavedInvoicesList();
+            
+            // نمایش پیام موفقیت
+            showNotification('فاکتور با موفقیت ذخیره شد!', 'success');
+            
+            // بازنشانی فرم فاکتور
+            resetInvoice();
         }
         
         // تابع چاپ فاکتور
@@ -6582,6 +6866,184 @@
                 </head>
                 <body>
                     ${invoiceContent}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        // تابع چاپ فاکتور ذخیره شده
+        function printSavedInvoice(invoiceId) {
+            const invoice = savedInvoices.find(inv => inv.id === invoiceId);
+            
+            if (!invoice) {
+                showNotification('فاکتور مورد نظر یافت نشد!', 'error');
+                return;
+            }
+            
+            let itemsHtml = '';
+            invoice.items.forEach((item, index) => {
+                itemsHtml += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.productName}</td>
+                        <td>${toPersianNumbers(item.quantity)}</td>
+                        <td>${formatCurrency(item.unitPrice)}</td>
+                        <td>${formatCurrency(item.totalPrice)}</td>
+                        <td>${item.description}</td>
+                    </tr>
+                `;
+            });
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <title>چاپ فاکتور</title>
+                    <style>
+                        body {
+                            font-family: 'Vazirmatn', 'Vazir', Tahoma, sans-serif;
+                            direction: rtl;
+                            margin: 20px;
+                            line-height: 1.6;
+                        }
+                        .invoice-preview-content {
+                            border: 1px solid #000;
+                            padding: 20px;
+                        }
+                        .invoice-header {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 20px;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 15px;
+                        }
+                        .invoice-title {
+                            text-align: center;
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                        }
+                        .invoice-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                        }
+                        .invoice-table th, .invoice-table td {
+                            border: 1px solid #000;
+                            padding: 8px;
+                            text-align: center;
+                        }
+                        .invoice-table th {
+                            background-color: #f0f0f0;
+                        }
+                        .invoice-total-section {
+                            margin-top: 20px;
+                            padding: 15px;
+                            background: rgba(0,0,0,0.05);
+                            border-radius: 10px;
+                            border: 2px solid #000;
+                        }
+                        .invoice-total-row {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 10px;
+                        }
+                        .invoice-total-label {
+                            font-weight: 600;
+                        }
+                        .invoice-total-value {
+                            font-weight: 700;
+                            font-size: 1.1rem;
+                        }
+                        .invoice-grand-total {
+                            border-top: 2px solid #000;
+                            padding-top: 10px;
+                            margin-top: 10px;
+                        }
+                        .invoice-signature {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-top: 40px;
+                        }
+                        .invoice-footer {
+                            margin-top: 30px;
+                            padding-top: 20px;
+                            border-top: 2px solid #000;
+                        }
+                        @media print {
+                            body { margin: 0; }
+                            .invoice-preview-content { border: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-preview-content">
+                        <div class="invoice-header">
+                            <div class="invoice-company-info">
+                                <div><strong>${companyInfo.name || 'نام شرکت'}</strong></div>
+                                <div>${companyInfo.phone || 'شماره تماس شرکت'}</div>
+                            </div>
+                            <div class="invoice-title">فاکتور فروش</div>
+                            <div class="invoice-details">
+                                <div>شماره فاکتور: ${invoice.number}</div>
+                                <div>تاریخ: ${invoice.date}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="invoice-customer-info">
+                            <div>صورتحساب آقای/خانم/شرکت: ${invoice.partyName}</div>
+                            <div>شماره تماس: ${invoice.partyPhone}</div>
+                            <div>آدرس: ${invoice.partyAddress}</div>
+                        </div>
+                        
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>عنوان کالا</th>
+                                    <th>مقدار</th>
+                                    <th>بهای واحد (ریال)</th>
+                                    <th>بهای کل (ریال)</th>
+                                    <th>شرح</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                        
+                        <div class="invoice-total-section" style="display: block; margin-top: 20px; padding: 15px; background: rgba(44, 90, 160, 0.05); border-radius: 10px; border: 2px solid #000;">
+                            <div class="invoice-total-row">
+                                <div class="invoice-total-label">جمع کل:</div>
+                                <div class="invoice-total-value">${formatCurrency(invoice.subtotal)} ریال</div>
+                            </div>
+                            <div class="invoice-total-row">
+                                <div class="invoice-total-label">تخفیف:</div>
+                                <div class="invoice-total-value">${formatCurrency(invoice.discountAmount)} ریال</div>
+                            </div>
+                            <div class="invoice-total-row">
+                                <div class="invoice-total-label">مالیات بر ارزش افزوده:</div>
+                                <div class="invoice-total-value">${formatCurrency(invoice.taxAmount)} ریال</div>
+                            </div>
+                            <div class="invoice-total-row invoice-grand-total">
+                                <div class="invoice-total-label">مبلغ قابل پرداخت:</div>
+                                <div class="invoice-total-value">${formatCurrency(invoice.grandTotal)} ریال</div>
+                            </div>
+                        </div>
+                        
+                        <div class="invoice-signature">
+                            <div>امضا و مهر خریدار</div>
+                            <div>امضا و مهر فروشنده</div>
+                        </div>
+                        
+                        <div class="invoice-footer">
+                            <div class="invoice-company-address">
+                                ${companyInfo.address || 'آدرس شرکت'}
+                            </div>
+                        </div>
+                    </div>
                 </body>
                 </html>
             `);
