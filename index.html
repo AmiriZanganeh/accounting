@@ -1555,6 +1555,33 @@
             display: flex;
             gap: 5px;
         }
+        
+        /* استایل‌های جدید برای فاصله‌گذاری بهتر */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .actions .btn {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -1624,13 +1651,13 @@
                         <i class="fas fa-money-bill-wave"></i>
                         <span class="nav-item-text">حقوق</span>
                     </div>
-                    <div class="nav-item" data-tab="accounts">
-                        <i class="fas fa-wallet"></i>
-                        <span class="nav-item-text">حساب</span>
-                    </div>
                     <div class="nav-item" data-tab="inventory">
                         <i class="fas fa-warehouse"></i>
                         <span class="nav-item-text">انبار</span>
+                    </div>
+                    <div class="nav-item" data-tab="accounts">
+                        <i class="fas fa-wallet"></i>
+                        <span class="nav-item-text">حساب</span>
                     </div>
                 </div>
             </div>
@@ -1787,8 +1814,26 @@
                                 </div>
                             </div>
                             
+                            <div class="section-divider"></div>
+                            
+                            <div class="saved-invoices-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-file-invoice"></i>
+                                    فاکتورهای ذخیره شده
+                                </h3>
+                                <div class="saved-invoices-list" id="saved-invoices-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-file-invoice"></i>
+                                        <p>هیچ فاکتوری ذخیره نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="journal-section">
-                                <h3>دفتر روزنامه</h3>
+                                <h3 class="section-title">
+                                    <i class="fas fa-book"></i>
+                                    دفتر روزنامه
+                                </h3>
                                 <div class="journal-table-container">
                                     <table class="journal-table">
                                         <thead>
@@ -2101,87 +2146,6 @@
                             </div>
                         </div>
                         
-                        <div id="accounts-tab" class="tab-content hidden">
-                            <div class="account-management">
-                                <h3 class="section-title">
-                                    <i class="fas fa-plus"></i>
-                                    افزودن حساب جدید
-                                </h3>
-                                <div class="account-group-form">
-                                    <div class="form-group">
-                                        <label for="new-account-name" class="form-label">نام حساب</label>
-                                        <input type="text" id="new-account-name" class="form-control" placeholder="نام حساب جدید">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account-group" class="form-label">گروه حساب</label>
-                                        <select id="account-group" class="form-control">
-                                            <option value="asset">دارایی</option>
-                                            <option value="liability">بدهی</option>
-                                            <option value="equity">حقوق صاحبان سهام</option>
-                                            <option value="income">درآمد</option>
-                                            <option value="expense">هزینه</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="account-type" class="form-label">نوع حساب</label>
-                                        <select id="account-type" class="form-control">
-                                            <option value="permanent">حساب ثابت</option>
-                                            <option value="temporary">حساب موقت</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" id="add-account" class="btn btn-success">
-                                            <i class="fas fa-plus"></i>
-                                            افزودن حساب
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="accounts-list" id="accounts-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-wallet"></i>
-                                        <p>هیچ حسابی ثبت نشده است</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="section-divider"></div>
-                            
-                            <div class="parties-section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-address-book"></i>
-                                    مدیریت طرف‌های حساب
-                                </h3>
-                                <div class="party-form">
-                                    <div class="form-group">
-                                        <label for="party-name" class="form-label">نام طرف حساب</label>
-                                        <input type="text" id="party-name" class="form-control" placeholder="نام طرف حساب">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="party-phone" class="form-label">شماره تماس</label>
-                                        <input type="text" id="party-phone" class="form-control" placeholder="شماره تماس">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="party-address" class="form-label">آدرس</label>
-                                        <textarea id="party-address" class="form-control" rows="2" placeholder="آدرس"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" id="add-party" class="btn btn-success">
-                                            <i class="fas fa-plus"></i>
-                                            افزودن طرف حساب
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="parties-list" id="parties-list">
-                                    <div class="empty-state">
-                                        <i class="fas fa-address-book"></i>
-                                        <p>هیچ طرف حسابی ثبت نشده است</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                         <div id="inventory-tab" class="tab-content hidden">
                             <div class="inventory-section">
                                 <h3 class="section-title">
@@ -2305,18 +2269,77 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div id="accounts-tab" class="tab-content hidden">
+                            <div class="account-management">
+                                <h3 class="section-title">
+                                    <i class="fas fa-plus"></i>
+                                    افزودن حساب جدید
+                                </h3>
+                                <div class="account-group-form">
+                                    <div class="form-group">
+                                        <label for="new-account-name" class="form-label">نام حساب</label>
+                                        <input type="text" id="new-account-name" class="form-control" placeholder="نام حساب جدید">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="account-group" class="form-label">گروه حساب</label>
+                                        <select id="account-group" class="form-control">
+                                            <option value="asset">دارایی</option>
+                                            <option value="liability">بدهی</option>
+                                            <option value="equity">حقوق صاحبان سهام</option>
+                                            <option value="income">درآمد</option>
+                                            <option value="expense">هزینه</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" id="add-account" class="btn btn-success">
+                                            <i class="fas fa-plus"></i>
+                                            افزودن حساب
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="accounts-list" id="accounts-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-wallet"></i>
+                                        <p>هیچ حسابی ثبت نشده است</p>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <div class="section-divider"></div>
                             
-                            <div class="saved-invoices-section">
+                            <div class="parties-section">
                                 <h3 class="section-title">
-                                    <i class="fas fa-file-invoice"></i>
-                                    فاکتورهای ذخیره شده
+                                    <i class="fas fa-address-book"></i>
+                                    مدیریت طرف‌های حساب
                                 </h3>
-                                <div class="saved-invoices-list" id="saved-invoices-list">
+                                <div class="party-form">
+                                    <div class="form-group">
+                                        <label for="party-name" class="form-label">نام طرف حساب</label>
+                                        <input type="text" id="party-name" class="form-control" placeholder="نام طرف حساب">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="party-phone" class="form-label">شماره تماس</label>
+                                        <input type="text" id="party-phone" class="form-control" placeholder="شماره تماس">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="party-address" class="form-label">آدرس</label>
+                                        <textarea id="party-address" class="form-control" rows="2" placeholder="آدرس"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" id="add-party" class="btn btn-success">
+                                            <i class="fas fa-plus"></i>
+                                            افزودن طرف حساب
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="parties-list" id="parties-list">
                                     <div class="empty-state">
-                                        <i class="fas fa-file-invoice"></i>
-                                        <p>هیچ فاکتوری ذخیره نشده است</p>
+                                        <i class="fas fa-address-book"></i>
+                                        <p>هیچ طرف حسابی ثبت نشده است</p>
                                     </div>
                                 </div>
                             </div>
@@ -2533,7 +2556,6 @@
         const addAccountBtn = document.getElementById('add-account');
         const newAccountNameInput = document.getElementById('new-account-name');
         const accountGroupSelect = document.getElementById('account-group');
-        const accountTypeSelect = document.getElementById('account-type');
         const accountsList = document.getElementById('accounts-list');
         const documentsList = document.getElementById('documents-list');
         const trialBalanceBody = document.getElementById('trial-balance-body');
@@ -2704,6 +2726,7 @@
                 // اگر تب اسناد انتخاب شده، دفتر روزنامه را به‌روزرسانی کن
                 if (tabId === 'documents') {
                     updateJournal();
+                    updateSavedInvoicesList();
                 }
                 
                 // اگر تب انبار انتخاب شده، لیست کالاها و فاکتورها را به‌روزرسانی کن
@@ -2711,7 +2734,6 @@
                     updateInventoryList();
                     updateInvoicePartySelect();
                     updateInvoiceProductSelect();
-                    updateSavedInvoicesList();
                 }
                 
                 // اگر تب حقوق انتخاب شده، لیست پرسنل را به‌روزرسانی کن
@@ -2994,7 +3016,6 @@
                 addAccountBtn.addEventListener('click', function() {
                     const accountName = newAccountNameInput.value.trim();
                     const accountGroup = accountGroupSelect.value;
-                    const accountType = accountTypeSelect.value;
                     
                     if (!accountName) {
                         showNotification('لطفاً نام حساب را وارد کنید!', 'error');
@@ -3005,8 +3026,7 @@
                     const newAccount = {
                         id: Date.now(),
                         name: accountName,
-                        group: accountGroup,
-                        type: accountType
+                        group: accountGroup
                     };
                     
                     // افزودن به آرایه حساب‌ها
@@ -3145,14 +3165,14 @@
                     // اگر حساب‌ها خالی هستند، حساب‌های پیش‌فرض را اضافه کن
                     if (accounts.length === 0) {
                         const defaultAccounts = [
-                            { id: 1, name: 'موجودی نقد-بانک', group: 'asset', isSystem: true, type: 'permanent' },
-                            { id: 2, name: 'حساب های دریافتنی', group: 'asset', isSystem: true, type: 'permanent' },
-                            { id: 3, name: 'حساب های پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
-                            { id: 4, name: 'اسناد دریافتنی', group: 'asset', isSystem: true, type: 'permanent' },
-                            { id: 5, name: 'اسناد پرداختنی', group: 'liability', isSystem: true, type: 'permanent' },
-                            { id: 8, name: 'هزینه', group: 'expense', isSystem: false, type: 'temporary' },
-                            { id: 9, name: 'درآمد', group: 'income', isSystem: false, type: 'temporary' },
-                            { id: 10, name: 'سرمایه', group: 'equity', isSystem: true, type: 'permanent' }
+                            { id: 1, name: 'موجودی نقد-بانک', group: 'asset', isSystem: true },
+                            { id: 2, name: 'حساب های دریافتنی', group: 'asset', isSystem: true },
+                            { id: 3, name: 'حساب های پرداختنی', group: 'liability', isSystem: true },
+                            { id: 4, name: 'اسناد دریافتنی', group: 'asset', isSystem: true },
+                            { id: 5, name: 'اسناد پرداختنی', group: 'liability', isSystem: true },
+                            { id: 8, name: 'هزینه', group: 'expense', isSystem: false },
+                            { id: 9, name: 'درآمد', group: 'income', isSystem: false },
+                            { id: 10, name: 'سرمایه', group: 'equity', isSystem: true }
                         ];
                         
                         const transaction = db.transaction([STORE_NAMES.ACCOUNTS], 'readwrite');
@@ -3571,15 +3591,15 @@
                     description: 'در این بخش می‌توانید حقوق پرسنل را مدیریت کنید',
                     formTitle: 'مدیریت حقوق'
                 },
-                'accounts': {
-                    title: 'مدیریت حساب‌ها',
-                    description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
-                    formTitle: 'لیست حساب‌ها'
-                },
                 'inventory': {
                     title: 'انبار و فاکتورها',
                     description: 'در این بخش می‌توانید کالاها را مدیریت و فاکتور صادر کنید',
                     formTitle: 'مدیریت انبار'
+                },
+                'accounts': {
+                    title: 'مدیریت حساب‌ها',
+                    description: 'در این بخش می‌توانید حساب‌های مالی خود را مدیریت کنید',
+                    formTitle: 'لیست حساب‌ها'
                 },
                 'dashboard': {
                     title: 'داشبورد مدیریتی',
@@ -3601,8 +3621,8 @@
                 'documents': 'file-invoice',
                 'statistics': 'chart-bar',
                 'salary': 'money-bill-wave',
-                'accounts': 'wallet',
                 'inventory': 'warehouse',
+                'accounts': 'wallet',
                 'dashboard': 'user'
             };
             return icons[tabId];
@@ -3628,15 +3648,6 @@
                 'expense': 'هزینه'
             };
             return groups[group] || group;
-        }
-        
-        // تابع دریافت متن نوع حساب
-        function getAccountTypeText(type) {
-            const types = {
-                'permanent': 'ثابت',
-                'temporary': 'موقت'
-            };
-            return types[type] || type;
         }
         
         // تابع به‌روزرسانی dropdown حساب‌ها
@@ -3870,7 +3881,7 @@
                     <div class="account-item">
                         <div>
                             <div>${account.name}</div>
-                            <small class="text-muted">${getAccountGroupText(account.group)} - ${getAccountTypeText(account.type)}</small>
+                            <small class="text-muted">${getAccountGroupText(account.group)}</small>
                         </div>
                         <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">
                             <i class="fas fa-trash"></i>
@@ -5361,7 +5372,7 @@
                 
                 // نمایش حساب‌های دارایی
                 accounts.forEach(account => {
-                    if (account.group === 'asset' && account.type === 'permanent') {
+                    if (account.group === 'asset') {
                         const netBalance = accountNetBalances[account.id] || 0;
                         if (netBalance > 0) {
                             html += `
@@ -5388,7 +5399,7 @@
                 
                 // نمایش حساب‌های بدهی
                 accounts.forEach(account => {
-                    if (account.group === 'liability' && account.type === 'permanent') {
+                    if (account.group === 'liability') {
                         const netBalance = accountNetBalances[account.id] || 0;
                         if (netBalance < 0) {
                             html += `
@@ -5405,7 +5416,7 @@
                 
                 // نمایش حساب‌های سرمایه
                 accounts.forEach(account => {
-                    if (account.group === 'equity' && account.type === 'permanent') {
+                    if (account.group === 'equity') {
                         const netBalance = accountNetBalances[account.id] || 0;
                         if (netBalance < 0) {
                             html += `
